@@ -9,9 +9,6 @@ import {
   EuiButton,
   EuiFieldText,
   EuiAvatar,
-  EuiTab,
-  EuiTabs,
-  EuiBreadcrumbs,
 } from "@elastic/eui";
 
 /* Styles */
@@ -24,21 +21,11 @@ import { Character } from "../../models/Character";
 export interface MatchupDetailViewProps {}
 
 export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () => {
-  const [value, setValue] = useState("");
   const [editing, setEditing] = useState<boolean>(false);
   const [character, setCharacter] = useState<Character>({
     _id: "mock_id",
     name: "falco",
   });
-
-  const breadcrumbs = [
-    {
-      text: "matchups",
-    },
-    {
-      text: "falco",
-    },
-  ];
 
   const mockMatchup = {
     _id: "mock_id",
