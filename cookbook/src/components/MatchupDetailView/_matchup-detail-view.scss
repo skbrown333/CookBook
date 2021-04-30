@@ -1,53 +1,88 @@
 @import "../../styles/responsive";
 
 #matchup-detail {
-  padding: 24px;
+  padding: 24px 24px 0 24px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  // overflow: auto;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 
-  .matchup-detail {
-    &__breadcrumbs {
-      position: fixed;
-      left: 20px;
+  .matchup-detail__controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+    margin-right: 0;
+
+    @include respond-to(gt-md) {
+      margin-right: 248px;
     }
+  }
 
-    &__panel {
-      margin: 12px 0;
-      width: 100%;
-      max-width: 1024px;
+  .matchup-controls {
+    &__button {
+      margin-left: 8px;
     }
+  }
 
-    &__side-nav {
-      display: none;
+  .matchup-detail__content {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: calc(100% - 72px);
 
-      @include respond-to(gt-xs) {
-        position: fixed;
-        top: 116px;
-        margin-right: calc(100vw - 260px);
+    .matchup-content {
+      &__side-nav {
+        max-height: 75%;
+        max-width: 248px;
+        margin-right: 24px;
+        margin-left: -272px;
+        transition: margin 200ms;
+
+        @include respond-to(gt-sm) {
+          margin-left: 0;
+          margin-right: 12px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-transform: capitalize;
+        }
+
+        &__items {
+          margin: 12px 0;
+        }
+      }
+
+      &__sections {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        text-transform: capitalize;
+        flex: 1;
+        height: 100%;
+        overflow: auto;
+
+        .matchup-section {
+          width: 100%;
+          margin-bottom: 14px;
+
+          &__body-input {
+            margin-top: 12px;
+          }
+
+          &__body {
+            margin-top: 12px;
+            padding: 0 12px;
+          }
+        }
       }
-    }
 
-    &__nav-items {
-      margin: 12px 0;
-    }
+      &__right {
+        display: none;
+        width: 248px;
 
-    &__body-input {
-      margin-top: 12px;
-    }
-
-    &__body {
-      margin-top: 12px;
-      padding: 0 12px;
-    }
-
-    &__edit-button {
-      margin-top: 24px;
+        @include respond-to(gt-md) {
+          display: block;
+        }
+      }
     }
   }
 }
