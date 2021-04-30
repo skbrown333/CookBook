@@ -1,0 +1,53 @@
+@import "../../styles/responsive";
+
+#matchup-detail {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // overflow: auto;
+
+  .matchup-detail {
+    &__breadcrumbs {
+      position: fixed;
+      left: 20px;
+    }
+
+    &__panel {
+      margin: 12px 0;
+      width: 100%;
+      max-width: 1024px;
+    }
+
+    &__side-nav {
+      display: none;
+
+      @include respond-to(gt-xs) {
+        position: fixed;
+        top: 116px;
+        margin-right: calc(100vw - 260px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-transform: capitalize;
+      }
+    }
+
+    &__nav-items {
+      margin: 12px 0;
+    }
+
+    &__body-input {
+      margin-top: 12px;
+    }
+
+    &__body {
+      margin-top: 12px;
+      padding: 0 12px;
+    }
+
+    &__edit-button {
+      margin-top: 24px;
+    }
+  }
+}
