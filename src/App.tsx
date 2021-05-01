@@ -14,8 +14,8 @@ import {
 /* Components */
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { HeaderBar } from "./components/Header/Header";
-import { MatchupDetailView } from "./components/MatchupDetailView/MatchupDetailView";
-import { MatchupListView } from "./components/MatchupListView/MatchupListView";
+import { GuideDetailView } from "./components/GuideDetailView/GuideDetailView";
+import { GuideListView } from "./components/GuideListView/GuideListView";
 
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
@@ -55,11 +55,11 @@ export const App: FunctionComponent = () => {
             path="/admin/create"
             component={null}
           ></ProtectedRoute>
-          <Route path="/matchups/:matchup">
-            <MatchupDetailView />
+          <Route path="/recipes/:recipe">
+            <GuideDetailView />
           </Route>
-          <Route path="/matchups">
-            <MatchupListView />
+          <Route path="/recipes">
+            <GuideListView />
           </Route>
           <Route path="/"></Route>
         </Switch>

@@ -12,31 +12,29 @@ import {
 } from "@elastic/eui";
 
 /* Styles */
-import "./_matchup-detail-view.scss";
+import "./_guide-detail-view.scss";
 
 /* Types */
-import { Matchup } from "../../models/Matchup";
-import { Character } from "../../models/Character";
+import { Guide } from "../../models/Guide";
 
-export interface MatchupDetailViewProps {}
+export interface GuideDetailViewProps {}
 
-export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () => {
+export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
   const [editing, setEditing] = useState<boolean>(false);
-  const [character, setCharacter] = useState<Character>({
-    _id: "mock_id",
-    name: "falco",
-  });
 
-  const mockMatchup = {
+  const mockGuide = {
     _id: "mock_id",
-    character: "falco",
+    title: "falco",
     sections: [
       {
+        _id: "mock_post_id",
         title: "basics",
         body: `The first key to understanding how to fight falco is that both of his primary walling options (bair and utilt) have virtually the exact same range. Meaning, if you're spacing for one you're simultaneously spacing for the other. This makes it far simpler to smother him/punish him
 \n![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
+        tags: [],
       },
       {
+        _id: "mock_post_id",
         title: "percents",
         body: `## \`No DI\`\n
 * \`40%\` Uthrow regrab
@@ -48,19 +46,23 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
 * \`~65%\` Uthrow regrab
 * \`~65%\` Uthrow dash SH uair
 * \`~105%\` Uthrow dash SH knee`,
+        tags: [],
       },
       {
+        _id: "mock_post_id",
         title: "defense-and-recovery",
         body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
+        tags: [],
       },
     ],
+    tags: [],
   };
 
-  const [matchup, setMatchup] = useState<Matchup | null>(mockMatchup);
+  const [guide, setGuide] = useState<Guide | null>(mockGuide);
 
   const buildSideNaveItems = () => {
-    if (!matchup) return;
-    return matchup.sections.map((section, index) => {
+    if (!guide) return;
+    return guide.sections.map((section, index) => {
       const { title } = section;
       return {
         name: title,
@@ -78,14 +80,14 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
   };
 
   const updateSection = (key, value, index) => {
-    if (!matchup) return;
-    const { sections } = matchup;
+    if (!guide) return;
+    const { sections } = guide;
     sections[index][key] = value;
-    setMatchup({ ...matchup });
+    setGuide({ ...guide });
   };
 
   const handleCancel = () => {
-    setMatchup({ ...mockMatchup });
+    setGuide({ ...mockGuide });
     setEditing(false);
   };
 
@@ -94,9 +96,9 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
   };
 
   const buildSections = () => {
-    if (!matchup) return;
+    if (!guide) return;
 
-    return matchup.sections.map((section, index) => {
+    return guide.sections.map((section, index) => {
       const { title, body } = section;
 
       return (
@@ -104,18 +106,18 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
           id={section.title}
           hasShadow={false}
           hasBorder
-          className="matchup-section"
+          className="guide-section"
         >
           {editing ? (
             <>
               <EuiFieldText
-                className="matchup-section__title-input"
+                className="guide-section__title-input"
                 placeholder="title"
                 value={title}
                 onChange={(e) => updateSection("title", e.target.value, index)}
               />
               <EuiMarkdownEditor
-                className="matchup-section__body-input"
+                className="guide-section__body-input"
                 aria-label="Body markdown editor"
                 value={body}
                 onChange={(value) => updateSection("body", value, index)}
@@ -124,10 +126,10 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
             </>
           ) : (
             <>
-              <div className="matchup-section__title">
+              <div className="guide-section__title">
                 <EuiMarkdownFormat>{`# **\#** **${title}** \n---`}</EuiMarkdownFormat>
               </div>
-              <div className="matchup-section__body">
+              <div className="guide-section__body">
                 <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
               </div>
             </>
@@ -138,14 +140,14 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
   };
 
   return (
-    <div id="matchup-detail" className="matchup-detail">
-      {matchup && (
+    <div id="guide-detail" className="guide-detail">
+      {guide && (
         <>
-          <div className="matchup-detail__controls">
+          <div className="guide-detail__controls">
             {editing ? (
               <>
                 <EuiButton
-                  className="matchup-controls__button"
+                  className="guide-controls__button"
                   fill
                   iconType="trash"
                   color="danger"
@@ -154,7 +156,7 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
                   Cancel
                 </EuiButton>
                 <EuiButton
-                  className="matchup-controls__button"
+                  className="guide-controls__button"
                   fill
                   iconType="save"
                   color="secondary"
@@ -165,7 +167,7 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
               </>
             ) : (
               <EuiButton
-                className="matchup-controls__button"
+                className="guide-controls__button"
                 fill
                 iconType="pencil"
                 onClick={() => setEditing(!editing)}
@@ -174,36 +176,36 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
               </EuiButton>
             )}
           </div>
-          <div className="matchup-detail__content">
+          <div className="guide-detail__content">
             <EuiPanel
-              className="matchup-content__side-nav"
+              className="guide-content__side-nav"
               hasShadow={false}
               hasBorder
             >
               <EuiAvatar
                 size="xl"
-                name={character.name}
+                name={mockGuide.title}
                 imageUrl={
                   "https://www.textures-resource.com/resources/sheet_icons/4/3300.png"
                 }
               ></EuiAvatar>
               <EuiSideNav
-                className="matchup-content__side-nav__items"
+                className="guide-content__side-nav__items"
                 aria-label="Basic example"
                 style={{ width: 192 }}
                 items={[
                   {
-                    name: character.name,
+                    name: mockGuide.title,
                     id: 0,
                     items: buildSideNaveItems(),
                   },
                 ]}
               />
             </EuiPanel>
-            <div id="sections" className="matchup-content__sections">
+            <div id="sections" className="guide-content__sections">
               {buildSections()}
             </div>
-            <div className="matchup-content__right"></div>
+            <div className="guide-content__right"></div>
           </div>
         </>
       )}
