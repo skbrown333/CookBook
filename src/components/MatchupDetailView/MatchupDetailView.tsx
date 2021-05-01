@@ -156,7 +156,7 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
                 <EuiButton
                   className="matchup-controls__button"
                   fill
-                  iconType="save"
+                  iconType="pencil"
                   color="secondary"
                   onClick={handleSave}
                 >
