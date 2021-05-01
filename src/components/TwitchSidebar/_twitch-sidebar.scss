@@ -1,0 +1,17 @@
+.twitch-stream {
+    display: flex;
+    // justify-content: space-between;
+    align-items: center;
+    width:100%;
+    a {
+        color:inherit;
+        &:hover {
+        text-decoration: none !important;
+        }
+    }
+}
+
+
+.username {
+    margin-left: 10px;
+}

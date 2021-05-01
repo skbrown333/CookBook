@@ -10,6 +10,7 @@ import {
   EuiFieldText,
   EuiAvatar,
 } from "@elastic/eui";
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar'
 
 /* Styles */
 import "./_matchup-detail-view.scss";
@@ -203,7 +204,8 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
             <div id="sections" className="matchup-content__sections">
               {buildSections()}
             </div>
-            <div className="matchup-content__right"></div>
+            {/* <div className="matchup-content__right"></div> */}
+            <TwitchSidebar></TwitchSidebar>
           </div>
         </>
       )}
