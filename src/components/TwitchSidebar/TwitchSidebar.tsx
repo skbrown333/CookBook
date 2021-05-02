@@ -18,14 +18,36 @@ import { TwitchStream } from "../../models/TwitchStream";
 export interface TwitchSidebarProps {
   className: string
 }
-
 export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   const [streams, setStreams] = useState<TwitchStream[]>([])
+
   useEffect(() => {
     liveStreams().then(data => {
       setStreams(data)
     })
   }, [])
+
+  const buildStreams = () => {
+    return streams.map(stream => {
+            if(!stream) return
+            const {_id, title, login_name, display_name, profile_image_url} = stream
+            return (
+                <EuiListGroupItem 
+                  key={_id}
+                  title={title}
+                  className="twitch-stream"
+                  id={login_name + "-stream"}
+                  label={display_name} 
+                  href={"https://www.twitch.tv/" + login_name} 
+                  target="_blank"
+                  icon={
+                    <EuiImage alt={login_name + " channel image"} size={30} src={profile_image_url} />
+                  }
+                  />
+            )
+          })
+  }
+
   return (
     <div className={props.className}>
       <EuiPanel paddingSize="m">
@@ -34,24 +56,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
       </EuiText>
       <div className="twitch-streams">
         <EuiListGroup gutterSize="none">
-        {streams.map(stream => {
-          if(!stream) return
-          const {_id, title, login_name, display_name, profile_image_url} = stream
-          return (
-              <EuiListGroupItem 
-                key={_id}
-                title={title}
-                className="twitch-stream"
-                id={login_name + "-stream"}
-                label={display_name} 
-                href={"https://www.twitch.tv/" + login_name} 
-                target="_blank"
-                icon={
-                  <EuiImage alt={login_name + " channel image"} size={30} src={profile_image_url} />
-                }
-                />
-          )
-        })}
+          {buildStreams()}
         </EuiListGroup>
       </div>
       </EuiPanel>
