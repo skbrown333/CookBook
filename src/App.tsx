@@ -26,7 +26,7 @@ import { updateUser } from "./store/actions";
 import "@elastic/eui/dist/eui_theme_amsterdam_dark.css";
 import "./App.scss";
 
-// const firebaseInstance = new Firebase();
+const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
   const dispatch = useContext(Context)[1];
@@ -46,26 +46,26 @@ export const App: FunctionComponent = () => {
   }, []);
 
   return (
-    //  <FirebaseContext.Provider value={firebaseInstance}>
-    <div id="cb-app">
-      <Router>
-        <Route path="/" component={HeaderBar} />
-        <Switch>
-          <ProtectedRoute
-            path="/admin/create"
-            component={null}
-          ></ProtectedRoute>
-          <Route path="/recipes/:recipe">
-            <GuideDetailView />
-          </Route>
-          <Route path="/recipes">
-            <GuideListView />
-          </Route>
-          <Route path="/"></Route>
-        </Switch>
-      </Router>
-    </div>
-    //   </FirebaseContext.Provider>
+    <FirebaseContext.Provider value={firebaseInstance}>
+      <div id="cb-app">
+        <Router>
+          <Route path="/" component={HeaderBar} />
+          <Switch>
+            <ProtectedRoute
+              path="/admin/create"
+              component={null}
+            ></ProtectedRoute>
+            <Route path="/recipes/:recipe">
+              <GuideDetailView />
+            </Route>
+            <Route path="/recipes">
+              <GuideListView />
+            </Route>
+            <Route path="/"></Route>
+          </Switch>
+        </Router>
+      </div>
+    </FirebaseContext.Provider>
   );
 };
 
