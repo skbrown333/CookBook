@@ -1,6 +1,6 @@
 @import "../../styles/responsive";
 
-#matchup-detail {
+#guide-detail {
   padding: 24px 24px 0 24px;
   display: flex;
   flex-direction: column;
@@ -8,7 +8,7 @@
   height: 100%;
   overflow: hidden;
 
-  .matchup-detail__controls {
+  .guide-detail__controls {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 12px;
@@ -19,19 +19,19 @@
     }
   }
 
-  .matchup-controls {
+  .guide-controls {
     &__button {
       margin-left: 8px;
     }
   }
 
-  .matchup-detail__content {
+  .guide-detail__content {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     height: calc(100% - 72px);
 
-    .matchup-content {
+    .guide-content {
       &__side-nav {
         max-height: 75%;
         max-width: 248px;
@@ -61,7 +61,7 @@
         height: 100%;
         overflow: auto;
 
-        .matchup-section {
+        .guide-section {
           width: 100%;
           margin-bottom: 14px;
 

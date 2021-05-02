@@ -2,8 +2,8 @@ import app from "firebase/app";
 import "firebase/auth";
 
 export class Firebase {
-  private auth;
-  private googleProvider;
+  auth;
+  googleProvider;
 
   constructor() {
     const config = {

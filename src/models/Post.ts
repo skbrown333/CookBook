@@ -1,4 +1,6 @@
+import { Tag } from "./Tag";
 export interface Post {
-    versus: string;
-    
+  title: string;
+  body: string;
+  tags: Array<Tag>;
 }
