@@ -1,12 +1,12 @@
+
 .twitch-stream {
     display: flex;
-    // justify-content: space-between;
     align-items: center;
     width:100%;
-    a {
+    a.euiListGroupItem__button {
         color:inherit;
         &:hover {
-        text-decoration: none !important;
+            text-decoration: none !important;
         }
     }
 }

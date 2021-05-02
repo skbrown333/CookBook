@@ -204,8 +204,7 @@ export const MatchupDetailView: FunctionComponent<MatchupDetailViewProps> = () =
             <div id="sections" className="matchup-content__sections">
               {buildSections()}
             </div>
-            {/* <div className="matchup-content__right"></div> */}
-            <TwitchSidebar></TwitchSidebar>
+            <TwitchSidebar className="matchup-content__right" />
           </div>
         </>
       )}
