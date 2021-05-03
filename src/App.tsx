@@ -17,10 +17,13 @@ import { HeaderBar } from "./components/Header/Header";
 import { GuideDetailView } from "./components/GuideDetailView/GuideDetailView";
 import { GuideListView } from "./components/GuideListView/GuideListView";
 
+/* Services */
+import { TwitchService } from "./services/TwitchService";
+
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
 import { Context } from "./store/Store";
-import { updateUser } from "./store/actions";
+import { updateUser, updateStreams } from "./store/actions";
 
 /* Styles */
 import "@elastic/eui/dist/eui_theme_amsterdam_dark.css";
@@ -30,6 +33,7 @@ const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
   const dispatch = useContext(Context)[1];
+  const twitch = new TwitchService;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -37,6 +41,7 @@ export const App: FunctionComponent = () => {
       try {
         // const user = await firebaseInstance.getCurrentUser();
         dispatch(updateUser(null));
+        dispatch(updateStreams(await twitch.getStreams()))
       } catch (err) {
       } finally {
         setIsLoading(false);

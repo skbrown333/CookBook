@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent, useContext } from "react";
 
 import {
   EuiPanel,
@@ -7,41 +7,39 @@ import {
   EuiListGroup,
   EuiListGroupItem,
 } from "@elastic/eui";
-import {  liveStreams } from './Streams'
 
 /* Styles */
 import "./_twitch-sidebar.scss";
 
-/* Types */
-import { TwitchStream } from "../../models/TwitchStream";
+/* Store */
+import { Context } from '../../store/Store'
 
 export interface TwitchSidebarProps {
   className: string
 }
 export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
-  const [streams, setStreams] = useState<TwitchStream[]>([])
-
-  useEffect(() => {
-    liveStreams().then(data => {
-      setStreams(data)
-    })
-  }, [])
+  const {streams} = useContext(Context)[0]
 
   const buildStreams = () => {
+    if(!streams) return
     return streams.map(stream => {
             if(!stream) return
-            const {_id, title, login_name, display_name, profile_image_url} = stream
+            const {
+              title,
+              user_name,
+              profile_image_url
+            } = stream
             return (
                 <EuiListGroupItem 
-                  key={_id}
+                  key={user_name}
                   title={title}
                   className="twitch-stream"
-                  id={login_name + "-stream"}
-                  label={display_name} 
-                  href={"https://www.twitch.tv/" + login_name} 
+                  id={user_name + "-stream"}
+                  label={user_name} 
+                  href={"https://www.twitch.tv/" + user_name} 
                   target="_blank"
                   icon={
-                    <EuiImage alt={login_name + " channel image"} size={30} src={profile_image_url} />
+                    <EuiImage alt={user_name + " channel image"} size={30} src={profile_image_url} />
                   }
                   />
             )

@@ -4,9 +4,14 @@ import "./index.scss";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+/* Store */
+import { Store } from "./store/Store";
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Store>
+      <App />
+    </Store>
   </React.StrictMode>,
   document.getElementById("root")
 );
