@@ -1,4 +1,6 @@
 @import "../../styles/responsive";
+@import "@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss";
+@import "@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_globals.scss";
 
 #guide-detail {
   padding: 24px 24px 0 24px;
@@ -61,17 +63,35 @@
         height: 100%;
         overflow: auto;
 
+        .euiPanel {
+          flex-grow: 0;
+
+          &--paddingMedium {
+            padding: 0;
+          }
+        }
+
         .guide-section {
           width: 100%;
           margin-bottom: 14px;
 
-          &__body-input {
-            margin-top: 12px;
+          &__title {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: lighten($color: $euiColorEmptyShade, $amount: 5%);
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: capitalize;
+            border-bottom: 1px solid $euiColorLightShade;
+
+            &--collapse {
+              margin-left: auto;
+            }
           }
 
           &__body {
-            margin-top: 12px;
-            padding: 0 12px;
+            padding: 16px;
           }
         }
       }
