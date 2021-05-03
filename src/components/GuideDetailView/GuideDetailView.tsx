@@ -67,7 +67,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
 
   const buildSideNaveItems = () => {
     if (!guide) return;
-    return guide.sections.map((section, index) => {
+    return sections.map((section, index) => {
       const { title } = section;
       return {
         name: title,
