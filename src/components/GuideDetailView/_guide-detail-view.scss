@@ -54,6 +54,10 @@
         }
       }
 
+      &__droppable {
+        width: 100%;
+      }
+
       &__sections {
         display: flex;
         flex-direction: column;

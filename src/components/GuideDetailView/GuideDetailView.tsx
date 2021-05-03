@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, ReactElement } from "react";
 
 /* Components */
 import {
@@ -10,6 +10,10 @@ import {
   EuiFieldText,
   EuiAvatar,
   EuiButtonIcon,
+  EuiDragDropContext,
+  EuiDroppable,
+  EuiDraggable,
+  euiDragDropReorder,
 } from "@elastic/eui";
 
 /* Styles */
@@ -20,10 +24,7 @@ import { Guide } from "../../models/Guide";
 
 export interface GuideDetailViewProps {}
 
-export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
-  const [editing, setEditing] = useState<boolean>(false);
-  const [collapsed, setCollapsed] = useState<Object>({});
-
+export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
   const mockGuide = {
     _id: "mock_id",
     title: "falco",
@@ -59,7 +60,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
     ],
     tags: [],
   };
-
+  const [editing, setEditing] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<Array<boolean>>([]);
+  const [sections, setSections] = useState<any>(mockGuide.sections);
   const [guide, setGuide] = useState<Guide | null>(mockGuide);
 
   const buildSideNaveItems = () => {
@@ -89,27 +92,45 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
   };
 
   const handleCancel = () => {
+    setSections([...mockGuide.sections]);
     setGuide({ ...mockGuide });
+    setCollapsed([]);
     setEditing(false);
   };
 
   const handleSave = () => {
+    setCollapsed([]);
     setEditing(false);
   };
 
   const handleCollapse = (index) => {
     collapsed[index] = collapsed[index] ? !collapsed[index] : true;
-    setCollapsed({ ...collapsed });
+    setCollapsed([...collapsed]);
+  };
+
+  const handleDragEnd = (result) => {
+    const { source, destination } = result;
+
+    if (source && destination) {
+      const items = euiDragDropReorder(
+        sections,
+        source.index,
+        destination.index
+      );
+      setCollapsed([
+        ...euiDragDropReorder(collapsed, source.index, destination.index),
+      ]);
+      setSections([...items]);
+    }
   };
 
   const buildSections = () => {
-    if (!guide) return;
+    if (!guide) return [<></>];
 
-    return guide.sections.map((section, index) => {
+    return sections.map((section, index) => {
       const { title, body } = section;
       const isCollapsed = collapsed[index] && collapsed[index] === true;
-
-      return (
+      const sectionPanel = (
         <EuiPanel
           id={section.title}
           hasShadow={false}
@@ -153,6 +174,20 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
             </div>
           )}
         </EuiPanel>
+      );
+
+      return editing ? (
+        <EuiDraggable
+          spacing="m"
+          key={index}
+          index={index}
+          draggableId={index.toString()}
+          isDragDisabled={!editing}
+        >
+          {sectionPanel}
+        </EuiDraggable>
+      ) : (
+        sectionPanel
       );
     });
   };
@@ -221,7 +256,19 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
               />
             </EuiPanel>
             <div id="sections" className="guide-content__sections">
-              {buildSections()}
+              {editing ? (
+                <EuiDragDropContext onDragEnd={handleDragEnd}>
+                  <EuiDroppable
+                    droppableId="DROPPABLE_AREA"
+                    spacing="m"
+                    className="guide-content__droppable"
+                  >
+                    {buildSections()}
+                  </EuiDroppable>
+                </EuiDragDropContext>
+              ) : (
+                buildSections()
+              )}
             </div>
             <div className="guide-content__right"></div>
           </div>
