@@ -38,7 +38,6 @@
         max-width: 248px;
         margin-right: 24px;
         margin-left: -272px;
-        transition: margin 200ms;
 
         @include respond-to(gt-sm) {
           margin-left: 0;

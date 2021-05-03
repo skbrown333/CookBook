@@ -196,7 +196,10 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     <div id="guide-detail" className="guide-detail">
       {guide && (
         <>
-          <div className="guide-detail__controls">
+          <div
+            className="guide-detail__controls"
+            style={editing ? { paddingRight: 8 } : {}}
+          >
             {editing ? (
               <>
                 <EuiButton
@@ -232,6 +235,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
           <div className="guide-detail__content">
             <EuiPanel
               className="guide-content__side-nav"
+              style={editing ? { marginTop: 8 } : {}}
               hasShadow={false}
               hasBorder
             >
