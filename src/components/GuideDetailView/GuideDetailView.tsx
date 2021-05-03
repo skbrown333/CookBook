@@ -10,7 +10,7 @@ import {
   EuiFieldText,
   EuiAvatar,
 } from "@elastic/eui";
-import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar'
+import { TwitchSidebar } from "../TwitchSidebar/TwitchSidebar";
 
 /* Styles */
 import "./_guide-detail-view.scss";

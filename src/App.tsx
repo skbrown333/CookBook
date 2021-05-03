@@ -33,7 +33,7 @@ const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
   const dispatch = useContext(Context)[1];
-  const twitch = new TwitchService;
+  const twitch = new TwitchService();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export const App: FunctionComponent = () => {
       try {
         // const user = await firebaseInstance.getCurrentUser();
         dispatch(updateUser(null));
-        dispatch(updateStreams(await twitch.getStreams()))
+        dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
       } finally {
         setIsLoading(false);

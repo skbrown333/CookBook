@@ -1,17 +1,15 @@
-
 .twitch-stream {
-    display: flex;
-    align-items: center;
-    width:100%;
-    a.euiListGroupItem__button {
-        color:inherit;
-        &:hover {
-            text-decoration: none !important;
-        }
+  display: flex;
+  align-items: center;
+  width: 100%;
+  a.euiListGroupItem__button {
+    color: inherit;
+    &:hover {
+      text-decoration: none !important;
     }
+  }
 }
 
-
 .username {
-    margin-left: 10px;
+  margin-left: 10px;
 }
