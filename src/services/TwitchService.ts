@@ -31,7 +31,6 @@ export class TwitchService {
   }
 
   async getStreams(): Promise<any> {
-    console.log("hfjdlkh");
     const stream_ids = Object.keys(this.streams).join("&user_id=");
     const url = `https://api.twitch.tv/helix/streams?user_id=${stream_ids}`;
     let live = [];

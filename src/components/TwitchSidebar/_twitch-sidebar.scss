@@ -1,3 +1,5 @@
+@import "../../styles/responsive";
+
 .twitch-stream {
   display: flex;
   align-items: center;
@@ -7,6 +9,15 @@
     &:hover {
       text-decoration: none !important;
     }
+  }
+}
+.matchup-content__right {
+  margin-left: 12px;
+  display: none;
+  width: 248px;
+
+  @include respond-to(gt-sm) {
+    display: block;
   }
 }
 

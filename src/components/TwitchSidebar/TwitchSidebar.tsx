@@ -48,7 +48,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
 
   return (
     <div className={props.className}>
-      <EuiPanel paddingSize="m">
+      <EuiPanel paddingSize="m" hasShadow={false} hasBorder>
         <EuiText>
           <h4>Live Twitch Streams</h4>
         </EuiText>
