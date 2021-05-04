@@ -24,7 +24,9 @@ import { Guide } from "../../models/Guide";
 
 export interface GuideDetailViewProps {}
 
+
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
+
   const mockGuide = {
     _id: "mock_id",
     title: "falco",
@@ -130,8 +132,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     return sections.map((section, index) => {
       const { title, body } = section;
       const isCollapsed = collapsed[index] && collapsed[index] === true;
+
       const sectionPanel = (
-        <EuiPanel
+       <EuiPanel
           id={section.title}
           hasShadow={false}
           hasBorder
