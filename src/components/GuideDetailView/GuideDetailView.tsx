@@ -109,7 +109,6 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
     setEditing(false);
     if (!guide) return;
     mockGuide.sections = guide.sections;
-    console.log(mockGuide.sections);
   };
 
   const handleCollapse = (index) => {
