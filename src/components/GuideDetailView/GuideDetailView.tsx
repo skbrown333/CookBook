@@ -11,6 +11,7 @@ import {
   EuiAvatar,
   EuiButtonIcon,
 } from "@elastic/eui";
+import { TwitchSidebar } from "../TwitchSidebar/TwitchSidebar";
 
 /* Styles */
 import "./_guide-detail-view.scss";
@@ -70,7 +71,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
         name: title,
         id: index,
         onClick: () => {
-          let div = document.getElementById(section.title);
+          let div = document.getElementById(title);
           if (div && document) {
             let topPos = div.offsetTop - 200;
             let sectionsDiv = document.getElementById("sections");
@@ -223,7 +224,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
             <div id="sections" className="guide-content__sections">
               {buildSections()}
             </div>
-            <div className="guide-content__right"></div>
+            <TwitchSidebar className="matchup-content__right" />
           </div>
         </>
       )}
