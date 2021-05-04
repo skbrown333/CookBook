@@ -38,7 +38,6 @@
         max-width: 248px;
         margin-right: 24px;
         margin-left: -272px;
-        transition: margin 200ms;
 
         @include respond-to(gt-sm) {
           margin-left: 0;
@@ -52,6 +51,10 @@
         &__items {
           margin: 12px 0;
         }
+      }
+
+      &__droppable {
+        width: 100%;
       }
 
       &__sections {
@@ -77,7 +80,7 @@
           &__title {
             display: flex;
             align-items: center;
-            padding: 4px 16px;
+            padding: 8px 16px;
             background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
             font-size: 24px;
             font-weight: 600;
