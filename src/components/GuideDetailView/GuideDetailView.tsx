@@ -9,6 +9,7 @@ import {
   EuiButton,
   EuiFieldText,
   EuiAvatar,
+  EuiButtonIcon,
 } from "@elastic/eui";
 import { TwitchSidebar } from "../TwitchSidebar/TwitchSidebar";
 
@@ -22,6 +23,7 @@ export interface GuideDetailViewProps {}
 
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
   const [editing, setEditing] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<Object>({});
 
   const mockGuide = {
     _id: "mock_id",
@@ -96,11 +98,17 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
     setEditing(false);
   };
 
+  const handleCollapse = (index) => {
+    collapsed[index] = collapsed[index] ? !collapsed[index] : true;
+    setCollapsed({ ...collapsed });
+  };
+
   const buildSections = () => {
     if (!guide) return;
 
     return guide.sections.map((section, index) => {
       const { title, body } = section;
+      const isCollapsed = collapsed[index] && collapsed[index] === true;
 
       return (
         <EuiPanel
@@ -108,32 +116,42 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = () => {
           hasShadow={false}
           hasBorder
           className="guide-section"
+          key={index}
         >
-          {editing ? (
-            <>
+          <div className="guide-section__title">
+            {editing ? (
               <EuiFieldText
-                className="guide-section__title-input"
                 placeholder="title"
                 value={title}
                 onChange={(e) => updateSection("title", e.target.value, index)}
               />
-              <EuiMarkdownEditor
-                className="guide-section__body-input"
-                aria-label="Body markdown editor"
-                value={body}
-                onChange={(value) => updateSection("body", value, index)}
-                height={400}
-              />
-            </>
-          ) : (
-            <>
-              <div className="guide-section__title">
-                <EuiMarkdownFormat>{`# **\#** **${title}** \n---`}</EuiMarkdownFormat>
-              </div>
-              <div className="guide-section__body">
+            ) : (
+              <div>{title}</div>
+            )}
+            <EuiButtonIcon
+              aria-label="collapse-icon"
+              iconType={isCollapsed ? "arrowDown" : "arrowUp"}
+              iconSize="l"
+              size="m"
+              className="guide-section__title--collapse"
+              onClick={() => {
+                handleCollapse(index);
+              }}
+            ></EuiButtonIcon>
+          </div>
+          {!isCollapsed && (
+            <div className="guide-section__body">
+              {editing ? (
+                <EuiMarkdownEditor
+                  aria-label="Body markdown editor"
+                  value={body}
+                  onChange={(value) => updateSection("body", value, index)}
+                  height={400}
+                />
+              ) : (
                 <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
-              </div>
-            </>
+              )}
+            </div>
           )}
         </EuiPanel>
       );
