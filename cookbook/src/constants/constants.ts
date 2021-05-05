@@ -14,9 +14,7 @@ export const ENV = env;
  * FUNCTIONS
  */
 export const FUNCTIONS = {
-  loginWithDiscord: isLocal
-    ? "http://localhost:5001/cookbook-1d93f/us-central1/loginWithDiscord"
-    : "https://us-central1-cookbook-1d93f.cloudfunctions.net/loginWithDiscord",
+  loginWithDiscord: `https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/loginWithDiscord`,
 };
 
 /**
