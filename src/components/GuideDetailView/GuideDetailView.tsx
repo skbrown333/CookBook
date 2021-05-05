@@ -22,13 +22,17 @@ import "./_guide-detail-view.scss";
 
 /* Types */
 import { Guide } from "../../models/Guide";
+import { Tag } from "../../models/Tag";
+
+/* Constants */
+import { newSection } from "../../constants/constants";
 
 export interface GuideDetailViewProps {}
 
 
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
 
-  const mockGuide = {
+  const mockGuide: Guide = {
     _id: "mock_id",
     title: "falco",
     sections: [
@@ -37,7 +41,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
         title: "basics",
         body: `The first key to understanding how to fight falco is that both of his primary walling options (bair and utilt) have virtually the exact same range. Meaning, if you're spacing for one you're simultaneously spacing for the other. This makes it far simpler to smother him/punish him
 \n![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
-        tags: [],
+        tags: Array<Tag>(),
       },
       {
         _id: "mock_post_id",
@@ -52,16 +56,16 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
 * \`~65%\` Uthrow regrab
 * \`~65%\` Uthrow dash SH uair
 * \`~105%\` Uthrow dash SH knee`,
-        tags: [],
+        tags: Array<Tag>(),
       },
       {
         _id: "mock_post_id",
         title: "defense-and-recovery",
-        body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
-        tags: [],
+        body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) `,
+        tags: Array<Tag>(),
       },
     ],
-    tags: [],
+    tags: Array<Tag>(),
   };
   const [editing, setEditing] = useState<boolean>(false);
   const [collapsed, setCollapsed] = useState<Array<boolean>>([]);
@@ -94,6 +98,13 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     setGuide({ ...guide });
   };
 
+  const addSection = () => {
+    if (!guide) return;
+    const { sections } = guide;
+    sections.unshift(newSection);
+    setGuide({ ...guide });
+  };
+
   const handleCancel = () => {
     setSections([...mockGuide.sections]);
     setGuide({ ...mockGuide });
@@ -104,6 +115,8 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
   const handleSave = () => {
     setCollapsed([]);
     setEditing(false);
+    if (!guide) return;
+    mockGuide.sections = guide.sections;
   };
 
   const handleCollapse = (index) => {
@@ -206,6 +219,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
           >
             {editing ? (
               <>
+                <EuiButton
+                  className="guide-controls__button"
+                  fill
+                  iconType="plus"
+                  color="primary"
+                  onClick={addSection}
+                >
+                  Add
+                </EuiButton>
                 <EuiButton
                   className="guide-controls__button"
                   fill
