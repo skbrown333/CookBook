@@ -16,6 +16,7 @@ import {
   euiDragDropReorder,
 } from "@elastic/eui";
 import { TwitchSidebar } from "../TwitchSidebar/TwitchSidebar";
+import { TagSection } from "../TagSection/TagSection";
 
 /* Styles */
 import "./_guide-detail-view.scss";
@@ -25,9 +26,7 @@ import { Guide } from "../../models/Guide";
 
 export interface GuideDetailViewProps {}
 
-
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
-
   const mockGuide = {
     _id: "mock_id",
     title: "falco",
@@ -131,11 +130,11 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     if (!guide) return [<></>];
 
     return sections.map((section, index) => {
-      const { title, body } = section;
+      const { title, body, tags } = section;
       const isCollapsed = collapsed[index] && collapsed[index] === true;
 
       const sectionPanel = (
-       <EuiPanel
+        <EuiPanel
           id={section.title}
           hasShadow={false}
           hasBorder
@@ -173,8 +172,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
                   height={400}
                 />
               ) : (
-                <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+                <>
+                  <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+                </>
               )}
+              <TagSection
+                className="guide-section__tags"
+                tags={tags}
+                editing={editing}
+              ></TagSection>
             </div>
           )}
         </EuiPanel>
