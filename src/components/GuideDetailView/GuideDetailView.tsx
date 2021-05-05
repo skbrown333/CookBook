@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, ReactElement } from "react";
+import React, {
+  FunctionComponent,
+  useState,
+  ReactElement,
+  useContext,
+} from "react";
 
 /* Components */
 import {
@@ -14,6 +19,7 @@ import {
   EuiDroppable,
   EuiDraggable,
   euiDragDropReorder,
+  EuiButtonEmpty,
 } from "@elastic/eui";
 import { TwitchSidebar } from "../TwitchSidebar/TwitchSidebar";
 import { TagSection } from "../TagSection/TagSection";
@@ -24,9 +30,14 @@ import "./_guide-detail-view.scss";
 /* Types */
 import { Guide } from "../../models/Guide";
 
+/* Store */
+// import { Context } from "../../store/Store";
+
 export interface GuideDetailViewProps {}
 
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
+  // const tag_store = useContext(Context)[0].tags;
+
   const mockGuide = {
     _id: "mock_id",
     title: "falco",
@@ -174,11 +185,18 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
               ) : (
                 <>
                   <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+                  <div className="tag-holder guide-section__tags">
+                    {tags.map((tag) => (
+                      <EuiButtonEmpty className="tag" size="s" color="text">
+                        #{tag.label}
+                      </EuiButtonEmpty>
+                    ))}
+                  </div>
                 </>
               )}
               <TagSection
                 className="guide-section__tags"
-                tags={tags}
+                intial_tags={tags}
                 editing={editing}
               ></TagSection>
             </div>

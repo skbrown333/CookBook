@@ -6,6 +6,8 @@ export const Reducer = (state, action) => {
       return { ...state, user: action.payload };
     case Actions.UPDATE_STREAMS:
       return { ...state, streams: action.payload };
+    case Actions.UPDATE_TAGS:
+      return { ...state, tags: action.payload };
     default:
       return state;
   }

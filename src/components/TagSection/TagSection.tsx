@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 /* Components */
 import { EuiButtonEmpty, EuiComboBox } from "@elastic/eui";
@@ -6,23 +6,31 @@ import { EuiButtonEmpty, EuiComboBox } from "@elastic/eui";
 /* Styles */
 import "./_tag-section.scss";
 
-/* Services */
-import { TagService } from "../../services/TagService";
-
 /* Models */
 import { Tag } from "../../models/Tag";
 
+/* Store */
+import { Context } from "../../store/Store";
+
+/* Actions */
+import { updateTags } from "../../store/actions";
+
 export interface TagSectionProps {
-  tags?: Array<Tag>;
+  initial_tags: Array<Tag>;
   className: string;
   editing: boolean;
 }
 
 export function TagSection(props) {
-  const tag_service = new TagService();
-  const tags = tag_service.getTags();
+  const { tags } = useContext(Context)[0];
+  const dispatch = useContext(Context)[1];
   const [selectedOptions, setSelected] = useState(Array<Tag>());
-  const [options, setOptions] = useState(selectedOptions);
+  const [options, setOptions] = useState(tags);
+
+  useEffect(() => {
+    console.log("effect");
+    dispatch(updateTags(options));
+  }, [options]);
 
   const onChange = (selectedOptions) => {
     setSelected(selectedOptions);
@@ -41,34 +49,21 @@ export function TagSection(props) {
       label: searchValue,
     };
 
-    console.log("out");
-    if (!tag_service.tagExists(normalizedSearchValue)) {
+    if (options.some((tag) => tag.label != normalizedSearchValue)) {
       console.log("adding value");
-      tag_service.addTag(normalizedSearchValue);
-      setOptions(tag_service.getTags());
+      setOptions([...options, newOption]);
     }
 
     setSelected([...selectedOptions, newOption]);
   };
-
-  if (props.editing)
-    return (
-      <EuiComboBox
-        placeholder="add tags"
-        options={tags}
-        selectedOptions={selectedOptions}
-        onChange={onChange}
-        onCreateOption={onCreateOption}
-        isClearable={true}
-      />
-    );
   return (
-    <div className={"tag-holder " + props.className}>
-      {options.map((tag) => (
-        <EuiButtonEmpty className="tag" size="s" color="text">
-          #{tag.label}
-        </EuiButtonEmpty>
-      ))}
-    </div>
+    <EuiComboBox
+      placeholder="add tags"
+      options={options}
+      selectedOptions={selectedOptions}
+      onChange={onChange}
+      onCreateOption={onCreateOption}
+      isClearable={true}
+    />
   );
 }
