@@ -29,9 +29,7 @@ import { newSection } from "../../constants/constants";
 
 export interface GuideDetailViewProps {}
 
-
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
-
   const mockGuide: Guide = {
     _id: "mock_id",
     title: "falco",
@@ -148,7 +146,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
       const isCollapsed = collapsed[index] && collapsed[index] === true;
 
       const sectionPanel = (
-       <EuiPanel
+        <EuiPanel
           id={section.title}
           hasShadow={false}
           hasBorder

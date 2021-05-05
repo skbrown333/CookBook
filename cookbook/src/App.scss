@@ -4,4 +4,11 @@
   height: 100%;
   width: 100%;
   padding-top: 48px;
+
+  .login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
 }
