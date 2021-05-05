@@ -69,6 +69,7 @@ export class Firebase {
         redirectUrl: `${ENV.base_url}/login`,
       },
     });
+    console.log(res);
     return res.data;
   };
 
