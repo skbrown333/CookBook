@@ -1,0 +1,9 @@
+{
+  "discord": {
+    "id": "839128161806974976",
+    "secret": "7XyL2qb2NIlLoyQzioxelvxcumKAYR6b"
+  },
+  "fb": {
+    "service_account": "firebase-adminsdk-s2rb6@cookbook-1d93f.iam.gserviceaccount.com"
+  }
+}

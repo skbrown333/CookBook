@@ -9,6 +9,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 
 /* Components */
@@ -16,9 +17,13 @@ import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { HeaderBar } from "./components/Header/Header";
 import { GuideDetailView } from "./components/GuideDetailView/GuideDetailView";
 import { GuideListView } from "./components/GuideListView/GuideListView";
+import { EuiLoadingSpinner } from "@elastic/eui";
 
 /* Services */
 import { TwitchService } from "./services/TwitchService";
+
+/* Constants */
+import { ENV, DISCORD } from "./constants/constants";
 
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
@@ -39,8 +44,8 @@ export const App: FunctionComponent = () => {
   useEffect(() => {
     async function init() {
       try {
-        // const user = await firebaseInstance.getCurrentUser();
-        dispatch(updateUser(null));
+        const user = await firebaseInstance.getCurrentUser();
+        dispatch(updateUser(user));
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
       } finally {
@@ -52,14 +57,20 @@ export const App: FunctionComponent = () => {
 
   return (
     <FirebaseContext.Provider value={firebaseInstance}>
-      <div id="cb-app">
-        <Router>
+      <Router>
+        <div id="cb-app">
           <Route path="/" component={HeaderBar} />
           <Switch>
             <ProtectedRoute
               path="/admin/create"
               component={null}
             ></ProtectedRoute>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/logout">
+              <Logout />
+            </Route>
             <Route path="/recipes/:recipe">
               <GuideDetailView />
             </Route>
@@ -68,21 +79,55 @@ export const App: FunctionComponent = () => {
             </Route>
             <Route path="/"></Route>
           </Switch>
-        </Router>
-      </div>
+        </div>
+      </Router>
     </FirebaseContext.Provider>
+  );
+};
+
+export const Login: FunctionComponent = () => {
+  let search = window.location.search;
+  let params = new URLSearchParams(search);
+  let code = params.get("code");
+
+  async function login() {
+    if (!code) return;
+    try {
+      const res = await firebaseInstance.loginWithDiscord(code);
+      await firebaseInstance.signInWithCustomToken(res.result);
+      window.location.href = `${ENV.base_url}`;
+    } catch (err) {
+      console.log("err: ", err);
+      window.location.href = `${ENV.base_url}`;
+    }
+  }
+
+  useEffect(() => {
+    if (!code) {
+      window.location.href = DISCORD.authUrl;
+    } else {
+      login();
+    }
+  }, []);
+
+  return (
+    <div className="login">
+      <EuiLoadingSpinner size="xl" />
+    </div>
   );
 };
 
 export const Logout: FunctionComponent = () => {
   const dispatch = useContext(Context)[1];
+
   useEffect(() => {
     async function init() {
-      //  await firebaseInstance.signOut();
+      await firebaseInstance.signOut();
       dispatch(updateUser(null));
+      window.location.href = `${ENV.base_url}`;
     }
     init();
   }, []);
 
-  return <Redirect to="/" />;
+  return null;
 };
