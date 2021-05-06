@@ -132,6 +132,27 @@
           &__body {
             padding: 16px;
 
+            &.editing {
+              padding: 0;
+
+              .euiMarkdownEditorToolbar {
+                border-radius: 0;
+              }
+
+              .euiMarkdownEditorPreview,
+              .euiMarkdownEditorFooter {
+                border-radius: 0;
+              }
+
+              .euiMarkdownEditorFooter {
+                border-radius: 0;
+              }
+            }
+
+            @include respond-to(gt-xs) {
+              padding: 16px;
+            }
+
             .euiMarkdownFormat {
               p {
                 display: flex;

@@ -175,7 +175,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
             ></EuiButtonIcon>
           </div>
           {!isCollapsed && (
-            <div className="guide-section__body">
+            <div className={`guide-section__body${editing ? " editing" : ""}`}>
               {editing ? (
                 <EuiMarkdownEditor
                   aria-label="Body markdown editor"
