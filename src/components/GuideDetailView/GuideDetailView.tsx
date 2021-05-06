@@ -340,7 +340,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
                 buildSections()
               )}
             </div>
-            <TwitchSidebar className="matchup-content__right" />
+            <TwitchSidebar className="guide-content__right" />
           </div>
         </>
       )}

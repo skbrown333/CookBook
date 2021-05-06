@@ -173,10 +173,12 @@
       }
 
       &__right {
+        margin-top: 8px;
+        margin-left: 12px;
         display: none;
         width: 248px;
 
-        @include respond-to(gt-md) {
+        @include respond-to(gt-sm) {
           display: block;
         }
       }
