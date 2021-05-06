@@ -31,8 +31,7 @@
   .guide-detail__controls--mobile {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 12px;
-    margin-right: 8px;
+    margin: 4px 8px 12px 0;
 
     @include respond-to(gt-xs) {
       display: none;
