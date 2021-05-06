@@ -1,5 +1,6 @@
 import app from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 
 export class Firebase {
   auth;
@@ -21,6 +22,9 @@ export class Firebase {
     this.googleProvider = new app.auth.GoogleAuthProvider();
   }
 
+  getTags = async () => {
+    return await app.firestore().collection("tags").get();
+  };
   /**
    * Creates a new user with the provided email and password
    *

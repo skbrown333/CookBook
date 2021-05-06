@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 
 /* Components */
-import { EuiButtonEmpty, EuiComboBox } from "@elastic/eui";
+import { EuiComboBox } from "@elastic/eui";
 
 /* Styles */
 import "./_tag-section.scss";
@@ -10,10 +10,7 @@ import "./_tag-section.scss";
 import { Tag } from "../../models/Tag";
 
 /* Store */
-import { Context } from "../../store/Store";
-
-/* Actions */
-import { updateTags } from "../../store/actions";
+import FirebaseContext from "../../firebase/context";
 
 export interface TagSectionProps {
   initial_tags: Array<Tag>;
@@ -22,15 +19,23 @@ export interface TagSectionProps {
 }
 
 export function TagSection(props) {
-  const { tags } = useContext(Context)[0];
-  const dispatch = useContext(Context)[1];
-  const [selectedOptions, setSelected] = useState(Array<Tag>());
-  const [options, setOptions] = useState(tags);
+  const firebase = useContext(FirebaseContext);
+  const [selectedOptions, setSelected] = useState(props.tags);
+  const [options, setOptions] = useState(Array<any>());
 
   useEffect(() => {
-    console.log("effect");
-    dispatch(updateTags(options));
-  }, [options]);
+    console.log("running");
+    fetchTags();
+  }, []);
+
+  const fetchTags = async () => {
+    let x = await firebase?.getTags();
+    let tags = Array<string>();
+    x?.forEach((doc) => {
+      tags.push(doc.data().value);
+    });
+    setOptions(tags);
+  };
 
   const onChange = (selectedOptions) => {
     setSelected(selectedOptions);
@@ -43,19 +48,14 @@ export function TagSection(props) {
       return;
     }
 
-    const newOption = {
-      _id: "mock_tag_id",
-      value: searchValue,
-      label: searchValue,
-    };
-
-    if (options.some((tag) => tag.label != normalizedSearchValue)) {
+    if (options.some((tag) => tag != normalizedSearchValue)) {
       console.log("adding value");
-      setOptions([...options, newOption]);
+      setOptions(options.concat(normalizedSearchValue));
     }
 
-    setSelected([...selectedOptions, newOption]);
+    setSelected(selectedOptions.concat(normalizedSearchValue));
   };
+
   return (
     <EuiComboBox
       placeholder="add tags"
