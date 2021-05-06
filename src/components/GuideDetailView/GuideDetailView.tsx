@@ -256,6 +256,48 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
               </EuiButton>
             )}
           </div>
+          <div className="guide-detail__controls--mobile">
+            {editing ? (
+              <>
+                <EuiButtonIcon
+                  className="guide-controls__button--mobile"
+                  display="fill"
+                  iconType="plus"
+                  color="primary"
+                  onClick={addSection}
+                  size="m"
+                  iconSize="l"
+                />
+                <EuiButtonIcon
+                  className="guide-controls__button--mobile"
+                  display="fill"
+                  iconType="trash"
+                  color="danger"
+                  onClick={handleCancel}
+                  size="m"
+                  iconSize="l"
+                />
+                <EuiButtonIcon
+                  className="guide-controls__button--mobile"
+                  display="fill"
+                  iconType="save"
+                  color="success"
+                  onClick={handleSave}
+                  size="m"
+                  iconSize="l"
+                />
+              </>
+            ) : (
+              <EuiButtonIcon
+                className="guide-controls__button--mobile"
+                display="fill"
+                iconType="pencil"
+                size="m"
+                iconSize="l"
+                onClick={() => setEditing(!editing)}
+              />
+            )}
+          </div>
           <div className="guide-detail__content">
             <EuiPanel
               className="guide-content__side-nav"
