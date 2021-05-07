@@ -26,7 +26,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
         name: title,
         id: index,
         onClick: () => {
-          let div = document.getElementById(title);
+          let div = document.getElementById(`section-${index}`);
           if (div && document) {
             let topPos = div.offsetTop - 200;
             let sectionsDiv = document.getElementById("sections");
