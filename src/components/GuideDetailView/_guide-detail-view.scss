@@ -14,7 +14,13 @@
   }
 
   .guide-detail__controls {
-    display: none;
+    display: flex;
+    justify-content: flex-end;
+    margin: 4px 8px 12px 0;
+
+    @include respond-to(gt-sm) {
+      margin-right: 260px;
+    }
 
     @include respond-to(gt-xs) {
       display: flex;
@@ -33,20 +39,13 @@
     justify-content: flex-end;
     margin: 4px 8px 12px 0;
 
-    @include respond-to(gt-xs) {
-      display: none;
-    }
-
-    @include respond-to(gt-md) {
-      margin-right: 248px;
+    @include respond-to(gt-sm) {
+      margin-right: 260px;
     }
   }
 
   .guide-controls {
     &__button {
-      margin-left: 8px;
-    }
-    &__button--mobile {
       margin-left: 8px;
     }
   }

@@ -217,50 +217,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
           >
             {editing ? (
               <>
-                <EuiButton
-                  className="guide-controls__button"
-                  iconType="trash"
-                  fill
-                  color="danger"
-                  onClick={handleCancel}
-                >
-                  Cancel
-                </EuiButton>
-                <EuiButton
-                  className="guide-controls__button"
-                  fill
-                  iconType="save"
-                  color="secondary"
-                  onClick={handleSave}
-                >
-                  Save
-                </EuiButton>
-                <EuiButton
-                  className="guide-controls__button"
-                  fill
-                  iconType="plus"
-                  color="secondary"
-                  onClick={addSection}
-                >
-                  Add
-                </EuiButton>
-              </>
-            ) : (
-              <EuiButton
-                className="guide-controls__button"
-                fill
-                iconType="pencil"
-                onClick={() => setEditing(!editing)}
-              >
-                Edit Page
-              </EuiButton>
-            )}
-          </div>
-          <div className="guide-detail__controls--mobile">
-            {editing ? (
-              <>
                 <EuiButtonIcon
-                  className="guide-controls__button--mobile"
+                  aria-label="cancel"
+                  className="guide-controls__button"
                   display="fill"
                   iconType="trash"
                   color="danger"
@@ -269,7 +228,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
                   iconSize="l"
                 />
                 <EuiButtonIcon
-                  className="guide-controls__button--mobile"
+                  className="guide-controls__button"
                   display="fill"
                   iconType="save"
                   color="success"
@@ -278,7 +237,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
                   iconSize="l"
                 />
                 <EuiButtonIcon
-                  className="guide-controls__button--mobile"
+                  className="guide-controls__button"
                   display="fill"
                   iconType="plus"
                   color="success"
@@ -289,7 +248,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
               </>
             ) : (
               <EuiButtonIcon
-                className="guide-controls__button--mobile"
+                className="guide-controls__button"
                 display="fill"
                 iconType="pencil"
                 size="m"
