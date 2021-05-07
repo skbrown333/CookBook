@@ -62,6 +62,7 @@ export function TagSection(props) {
 
   return (
     <EuiComboBox
+      fullWidth
       placeholder="add tags"
       options={options}
       onFocus={onFocus}
