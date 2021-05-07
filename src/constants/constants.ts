@@ -14,9 +14,7 @@ env.isLocal = isLocal;
 export const ENV = env;
 
 export const cookbook_id = "T4zKc3d28ITpz31iiRY3";
-import { Post } from "../models/Post";
-import { Tag } from "../models/Tag";
-=======
+
 /**
  * FUNCTIONS
  */
