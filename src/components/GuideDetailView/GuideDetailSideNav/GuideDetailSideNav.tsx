@@ -44,17 +44,20 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
       hasShadow={false}
       hasBorder
     >
-      <div className="side-nav__header">{title}</div>
-      <div className="side-nav__content">
+      <div className="side-nav__header">
         <EuiAvatar
-          size="xl"
+          size="m"
+          className="side-nav__header__avatar"
           name={title}
           imageUrl={
             "https://www.textures-resource.com/resources/sheet_icons/4/3300.png"
           }
         ></EuiAvatar>
+        {title}
+      </div>
+      <div className="side-nav__content">
         <EuiSideNav
-          className="guide-content__side-nav__items"
+          className="side-nav-content__items"
           aria-label="Basic example"
           style={{ width: 192 }}
           items={[
