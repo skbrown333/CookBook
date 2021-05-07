@@ -34,7 +34,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     Array(mockGuide.sections.length).fill(false)
   );
   const [sections, setSections] = useState<any>();
-  const [guide, setGuide] = useState<Guide | null>(mockGuide);
+  const [guide, setGuide] = useState<Guide | null>(
+    JSON.parse(JSON.stringify(mockGuide))
+  );
 
   useEffect(() => {
     if (guide) {
@@ -63,17 +65,17 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
   };
 
   const handleCancel = () => {
-    setSections([...mockGuide.sections]);
-    setGuide({ ...mockGuide });
+    setGuide(JSON.parse(JSON.stringify(mockGuide)));
     setCollapsed(Array(mockGuide.sections.length).fill(false));
     setEditing(false);
   };
 
   const handleSave = () => {
-    setCollapsed(Array(mockGuide.sections.length).fill(false));
-    setEditing(false);
     if (!guide) return;
-    mockGuide.sections = guide.sections;
+    setCollapsed(Array(sections.length).fill(false));
+    setEditing(false);
+    guide.sections = guide.sections;
+    setGuide({ ...guide });
   };
 
   const handleCollapse = (index) => {
