@@ -14,6 +14,7 @@ env.isLocal = isLocal;
 
 export const ENV = env;
 
+export const cookbook_id = "T4zKc3d28ITpz31iiRY3";
 /**
  * FUNCTIONS
  */

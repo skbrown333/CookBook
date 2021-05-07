@@ -103,7 +103,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     if (!guide) return [<></>];
 
     return sections.map((section, index) => {
-      const { title, body } = section;
+      const { title, body, tags } = section;
       const isCollapsed = collapsed[index] && collapsed[index] === true;
 
       return editing ? (
@@ -119,6 +119,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
             body={body}
             index={index}
             editing={editing}
+            tags={tags}
             isCollapsed={isCollapsed}
             handleCollapse={handleCollapse}
             updateSection={updateSection}
@@ -130,6 +131,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
           body={body}
           index={index}
           editing={editing}
+          tags={tags}
           isCollapsed={isCollapsed}
           handleCollapse={handleCollapse}
           updateSection={updateSection}

@@ -7,10 +7,16 @@ import {
   EuiMarkdownEditor,
   EuiMarkdownFormat,
   EuiPanel,
+  EuiSpacer,
+  EuiBadge,
 } from "@elastic/eui";
+import { TagSection } from "../../TagSection/TagSection";
 
 /* Styles */
 import "./_guide-detail-section.scss";
+
+/*Models*/
+import { Tag } from "../../../models/Tag";
 
 export interface GuideDetailSectionProps {
   title: string;
@@ -18,6 +24,7 @@ export interface GuideDetailSectionProps {
   index: number;
   isCollapsed: boolean;
   body: string;
+  tags: Array<Tag>;
   updateSection: (key: string, value: string, index: number) => void;
   handleCollapse: (index: number) => void;
 }
@@ -28,6 +35,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   index,
   isCollapsed,
   body,
+  tags,
   updateSection,
   handleCollapse,
 }) => {
@@ -63,14 +71,31 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
       {!isCollapsed && (
         <div className={`guide-section__body${editing ? " editing" : ""}`}>
           {editing ? (
-            <EuiMarkdownEditor
-              aria-label="Body markdown editor"
-              value={body}
-              onChange={(value) => updateSection("body", value, index)}
-              height={400}
-            />
+            <>
+              <EuiMarkdownEditor
+                aria-label="Body markdown editor"
+                value={body}
+                onChange={(value) => updateSection("body", value, index)}
+                height={400}
+              />
+              <TagSection
+                className="guide-section__tags"
+                initial_tags={tags}
+                TagUpdate={(tags) => updateSection("tags", tags, index)}
+              ></TagSection>
+            </>
           ) : (
-            <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+            <>
+              <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+              <EuiSpacer size="s" />
+              <div className="tag-holder guide-section__tags">
+                {tags.map((tag) => (
+                  <EuiBadge className="tag" color="hollow">
+                    #{tag.label}
+                  </EuiBadge>
+                ))}
+              </div>
+            </>
           )}
         </div>
       )}
