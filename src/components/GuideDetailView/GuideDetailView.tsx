@@ -219,17 +219,8 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
               <>
                 <EuiButton
                   className="guide-controls__button"
-                  fill
-                  iconType="plus"
-                  color="primary"
-                  onClick={addSection}
-                >
-                  Add
-                </EuiButton>
-                <EuiButton
-                  className="guide-controls__button"
-                  fill
                   iconType="trash"
+                  fill
                   color="danger"
                   onClick={handleCancel}
                 >
@@ -243,6 +234,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
                   onClick={handleSave}
                 >
                   Save
+                </EuiButton>
+                <EuiButton
+                  className="guide-controls__button"
+                  fill
+                  iconType="plus"
+                  color="secondary"
+                  onClick={addSection}
+                >
+                  Add
                 </EuiButton>
               </>
             ) : (
@@ -262,15 +262,6 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
                 <EuiButtonIcon
                   className="guide-controls__button--mobile"
                   display="fill"
-                  iconType="plus"
-                  color="primary"
-                  onClick={addSection}
-                  size="m"
-                  iconSize="l"
-                />
-                <EuiButtonIcon
-                  className="guide-controls__button--mobile"
-                  display="fill"
                   iconType="trash"
                   color="danger"
                   onClick={handleCancel}
@@ -283,6 +274,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
                   iconType="save"
                   color="success"
                   onClick={handleSave}
+                  size="m"
+                  iconSize="l"
+                />
+                <EuiButtonIcon
+                  className="guide-controls__button--mobile"
+                  display="fill"
+                  iconType="plus"
+                  color="success"
+                  onClick={addSection}
                   size="m"
                   iconSize="l"
                 />
