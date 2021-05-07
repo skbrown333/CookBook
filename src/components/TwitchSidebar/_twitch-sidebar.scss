@@ -8,15 +8,6 @@
     color: inherit;
   }
 }
-.matchup-content__right {
-  margin-left: 12px;
-  display: none;
-  width: 248px;
-
-  @include respond-to(gt-sm) {
-    display: block;
-  }
-}
 
 .username {
   margin-left: 10px;

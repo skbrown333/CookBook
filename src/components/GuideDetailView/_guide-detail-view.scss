@@ -1,28 +1,35 @@
 @import "../../styles/responsive";
-@import "@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss";
 
 #guide-detail {
-  padding: 24px 24px 0 24px;
+  padding: 12px 4px;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   overflow: hidden;
 
+  @include respond-to(gt-sm) {
+    padding: 24px 24px 0 24px;
+  }
+
   .guide-detail__controls {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 12px;
-    margin-right: 0;
+    margin: 4px 8px 12px 0;
 
-    @include respond-to(gt-md) {
-      margin-right: 248px;
+    @include respond-to(gt-sm) {
+      margin-right: 260px;
     }
-  }
 
-  .guide-controls {
-    &__button {
-      margin-left: 8px;
+    @include respond-to(gt-xs) {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+      margin-right: 0;
+    }
+
+    @include respond-to(gt-sm) {
+      margin-right: 260px;
     }
   }
 
@@ -30,29 +37,10 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    height: calc(100% - 72px);
+    height: 100%;
+    padding-bottom: 64px;
 
     .guide-content {
-      &__side-nav {
-        max-height: 75%;
-        max-width: 248px;
-        margin-right: 24px;
-        margin-left: -272px;
-
-        @include respond-to(gt-sm) {
-          margin-left: 0;
-          margin-right: 12px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-transform: capitalize;
-        }
-
-        &__items {
-          margin: 12px 0;
-        }
-      }
-
       &__droppable {
         width: 100%;
       }
@@ -72,37 +60,14 @@
             padding: 0;
           }
         }
-
-        .guide-section {
-          width: 100%;
-          margin-bottom: 14px;
-
-          &__title {
-            display: flex;
-            align-items: center;
-            padding: 8px 16px;
-            background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
-            font-size: 24px;
-            font-weight: 600;
-            text-transform: capitalize;
-            border-bottom: 1px solid $euiColorLightShade;
-
-            &--collapse {
-              margin-left: auto;
-            }
-          }
-
-          &__body {
-            padding: 16px;
-          }
-        }
       }
 
       &__right {
+        margin-left: 12px;
         display: none;
         width: 248px;
 
-        @include respond-to(gt-md) {
+        @include respond-to(gt-sm) {
           display: block;
         }
       }
