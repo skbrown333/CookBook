@@ -49,9 +49,8 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
           size="m"
           className="side-nav__header__avatar"
           name={title}
-          imageUrl={
-            "https://www.textures-resource.com/resources/sheet_icons/4/3300.png"
-          }
+          color={null}
+          imageUrl={"https://ssb.wiki.gallery/images/d/d6/FalcoHeadSSBM.png"}
         ></EuiAvatar>
         {title}
       </div>
