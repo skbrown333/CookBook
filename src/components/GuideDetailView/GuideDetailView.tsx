@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, ReactElement } from "react";
+import React, {
+  FunctionComponent,
+  useState,
+  useEffect,
+  ReactElement,
+} from "react";
 
 /* Components */
 import {
@@ -25,9 +30,17 @@ export interface GuideDetailViewProps {}
 
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
   const [editing, setEditing] = useState<boolean>(false);
-  const [collapsed, setCollapsed] = useState<Array<boolean>>([]);
-  const [sections, setSections] = useState<any>(mockGuide.sections);
+  const [collapsed, setCollapsed] = useState<Array<boolean>>(
+    Array(mockGuide.sections.length).fill(false)
+  );
+  const [sections, setSections] = useState<any>();
   const [guide, setGuide] = useState<Guide | null>(mockGuide);
+
+  useEffect(() => {
+    if (guide) {
+      setSections(guide.sections);
+    }
+  }, [guide]);
 
   const updateSection = (key, value, index) => {
     if (!guide) return;
@@ -43,19 +56,21 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
   const handleAddSection = () => {
     if (!guide) return;
     const { sections } = guide;
-    sections.unshift(newSection);
+    sections.unshift({ ...newSection });
+    collapsed.unshift(false);
+    setCollapsed([...collapsed]);
     setGuide({ ...guide });
   };
 
   const handleCancel = () => {
     setSections([...mockGuide.sections]);
     setGuide({ ...mockGuide });
-    setCollapsed([]);
+    setCollapsed(Array(mockGuide.sections.length).fill(false));
     setEditing(false);
   };
 
   const handleSave = () => {
-    setCollapsed([]);
+    setCollapsed(Array(mockGuide.sections.length).fill(false));
     setEditing(false);
     if (!guide) return;
     mockGuide.sections = guide.sections;
@@ -123,7 +138,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
 
   return (
     <div id="guide-detail" className="guide-detail">
-      {guide && (
+      {guide && sections && (
         <>
           <div
             className="guide-detail__controls"
