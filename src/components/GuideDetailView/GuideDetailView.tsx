@@ -19,7 +19,8 @@ import {
   EuiDroppable,
   EuiDraggable,
   euiDragDropReorder,
-  EuiButtonEmpty,
+  EuiBadge,
+  EuiSpacer,
 } from "@elastic/eui";
 import { TwitchSidebar } from "../TwitchSidebar/TwitchSidebar";
 import { TagSection } from "../TagSection/TagSection";
@@ -47,7 +48,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
         title: "basics",
         body: `The first key to understanding how to fight falco is that both of his primary walling options (bair and utilt) have virtually the exact same range. Meaning, if you're spacing for one you're simultaneously spacing for the other. This makes it far simpler to smother him/punish him
 \n![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
-        tags: [],
+        tags: [{ _id: "x", value: "fake_tag", label: "fake_tag" }],
       },
       {
         _id: "mock_post_id",
@@ -74,6 +75,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     tags: [],
   };
   const [editing, setEditing] = useState<boolean>(false);
+  const [editState, setEditState] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState<Array<boolean>>([]);
   const [sections, setSections] = useState<any>(mockGuide.sections);
   const [guide, setGuide] = useState<Guide | null>(mockGuide);
@@ -176,29 +178,33 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
           {!isCollapsed && (
             <div className="guide-section__body">
               {editing ? (
-                <EuiMarkdownEditor
-                  aria-label="Body markdown editor"
-                  value={body}
-                  onChange={(value) => updateSection("body", value, index)}
-                  height={400}
-                />
+                <>
+                  <EuiMarkdownEditor
+                    aria-label="Body markdown editor"
+                    value={body}
+                    onChange={(value) => updateSection("body", value, index)}
+                    height={400}
+                  />
+                  <TagSection
+                    className="guide-section__tags"
+                    initial_tags={tags}
+                    editState={editState}
+                    TagUpdate={(tags) => updateSection("tags", tags, index)}
+                  ></TagSection>
+                </>
               ) : (
                 <>
                   <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+                  <EuiSpacer size="s" />
                   <div className="tag-holder guide-section__tags">
                     {tags.map((tag) => (
-                      <EuiButtonEmpty className="tag" size="s" color="text">
+                      <EuiBadge className="tag" color="hollow">
                         #{tag.label}
-                      </EuiButtonEmpty>
+                      </EuiBadge>
                     ))}
                   </div>
                 </>
               )}
-              <TagSection
-                className="guide-section__tags"
-                intial_tags={tags}
-                editing={editing}
-              ></TagSection>
             </div>
           )}
         </EuiPanel>

@@ -1,5 +1,3 @@
-import { initial_tags } from "../constants/constants";
-
 export interface AppContext {
   user?: any;
   streams?: any;
@@ -9,5 +7,5 @@ export interface AppContext {
 export const InitialState: AppContext = {
   user: null,
   streams: null,
-  tags: initial_tags,
+  tags: null,
 };

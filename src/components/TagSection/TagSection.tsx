@@ -15,51 +15,56 @@ import FirebaseContext from "../../firebase/context";
 export interface TagSectionProps {
   initial_tags: Array<Tag>;
   className: string;
-  editing: boolean;
 }
 
 export function TagSection(props) {
   const firebase = useContext(FirebaseContext);
-  const [selectedOptions, setSelected] = useState(props.tags);
+  const [selectedOptions, setSelected] = useState(props.initial_tags);
   const [options, setOptions] = useState(Array<any>());
-
-  useEffect(() => {
-    console.log("running");
-    fetchTags();
-  }, []);
 
   const fetchTags = async () => {
     let x = await firebase?.getTags();
-    let tags = Array<string>();
+    let tags = Array<Object>();
     x?.forEach((doc) => {
-      tags.push(doc.data().value);
+      tags.push({ label: doc.data().value });
     });
     setOptions(tags);
   };
 
+  const onFocus = () => {
+    fetchTags();
+  };
+
   const onChange = (selectedOptions) => {
     setSelected(selectedOptions);
+    props.TagUpdate(selectedOptions);
   };
 
   const onCreateOption = (searchValue) => {
     const normalizedSearchValue = searchValue.trim().toLowerCase();
+    const newOption = {
+      _id: "mock_tag_id",
+      label: normalizedSearchValue,
+      value: normalizedSearchValue,
+    };
 
     if (!normalizedSearchValue) {
       return;
     }
 
     if (options.some((tag) => tag != normalizedSearchValue)) {
-      console.log("adding value");
-      setOptions(options.concat(normalizedSearchValue));
+      setOptions([...options, newOption]);
+      firebase?.addTag(normalizedSearchValue);
     }
 
-    setSelected(selectedOptions.concat(normalizedSearchValue));
+    setSelected([...selectedOptions, newOption]);
   };
 
   return (
     <EuiComboBox
       placeholder="add tags"
       options={options}
+      onFocus={onFocus}
       selectedOptions={selectedOptions}
       onChange={onChange}
       onCreateOption={onCreateOption}
