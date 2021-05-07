@@ -38,10 +38,7 @@
     flex-direction: row;
     align-items: flex-start;
     height: 100%;
-
-    @include respond-to(gt-xs) {
-      height: calc(100% - 72px);
-    }
+    padding-bottom: 64px;
 
     .guide-content {
       &__droppable {
