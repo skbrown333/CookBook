@@ -30,6 +30,10 @@ import "./_guide-detail-view.scss";
 
 /* Types */
 import { Guide } from "../../models/Guide";
+import { Tag } from "../../models/Tag";
+
+/* Constants */
+import { newSection } from "../../constants/constants";
 
 /* Store */
 // import { Context } from "../../store/Store";
@@ -39,7 +43,7 @@ export interface GuideDetailViewProps {}
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
   // const tag_store = useContext(Context)[0].tags;
 
-  const mockGuide = {
+  const mockGuide: Guide = {
     _id: "mock_id",
     title: "falco",
     sections: [
@@ -63,16 +67,16 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
 * \`~65%\` Uthrow regrab
 * \`~65%\` Uthrow dash SH uair
 * \`~105%\` Uthrow dash SH knee`,
-        tags: [],
+        tags: Array<Tag>(),
       },
       {
         _id: "mock_post_id",
         title: "defense-and-recovery",
-        body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
-        tags: [],
+        body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) `,
+        tags: Array<Tag>(),
       },
     ],
-    tags: [],
+    tags: Array<Tag>(),
   };
   const [editing, setEditing] = useState<boolean>(false);
   const [editState, setEditState] = useState<string | null>(null);
@@ -106,6 +110,13 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     setGuide({ ...guide });
   };
 
+  const addSection = () => {
+    if (!guide) return;
+    const { sections } = guide;
+    sections.unshift(newSection);
+    setGuide({ ...guide });
+  };
+
   const handleCancel = () => {
     setSections([...mockGuide.sections]);
     setGuide({ ...mockGuide });
@@ -116,6 +127,8 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
   const handleSave = () => {
     setCollapsed([]);
     setEditing(false);
+    if (!guide) return;
+    mockGuide.sections = guide.sections;
   };
 
   const handleCollapse = (index) => {
@@ -236,6 +249,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
           >
             {editing ? (
               <>
+                <EuiButton
+                  className="guide-controls__button"
+                  fill
+                  iconType="plus"
+                  color="primary"
+                  onClick={addSection}
+                >
+                  Add
+                </EuiButton>
                 <EuiButton
                   className="guide-controls__button"
                   fill
