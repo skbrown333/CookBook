@@ -1,5 +1,4 @@
 @import "../../styles/responsive";
-@import "@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss";
 
 #guide-detail {
   padding: 12px 4px;
@@ -34,22 +33,6 @@
     }
   }
 
-  .guide-detail__controls--mobile {
-    display: flex;
-    justify-content: flex-end;
-    margin: 4px 8px 12px 0;
-
-    @include respond-to(gt-sm) {
-      margin-right: 260px;
-    }
-  }
-
-  .guide-controls {
-    &__button {
-      margin-left: 8px;
-    }
-  }
-
   .guide-detail__content {
     display: flex;
     flex-direction: row;
@@ -61,26 +44,6 @@
     }
 
     .guide-content {
-      &__side-nav {
-        max-height: 75%;
-        max-width: 248px;
-        margin-right: 24px;
-        margin-left: -272px;
-
-        @include respond-to(gt-sm) {
-          margin-left: 0;
-          margin-right: 12px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-transform: capitalize;
-        }
-
-        &__items {
-          margin: 12px 0;
-        }
-      }
-
       &__droppable {
         width: 100%;
       }
@@ -98,75 +61,6 @@
 
           &--paddingMedium {
             padding: 0;
-          }
-        }
-
-        .guide-section {
-          width: 100%;
-          margin-bottom: 14px;
-
-          &__title {
-            display: flex;
-            align-items: center;
-            padding: 8px 16px;
-            background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
-            font-size: 24px;
-            font-weight: 600;
-            text-transform: capitalize;
-            border-bottom: 1px solid $euiColorLightShade;
-
-            .euiFormControlLayout {
-              max-width: 200px;
-
-              @include respond-to(gt-sm) {
-                max-width: 400px;
-              }
-            }
-
-            &--collapse {
-              margin-left: auto;
-            }
-          }
-
-          &__body {
-            padding: 16px;
-
-            &.editing {
-              padding: 0;
-
-              .euiMarkdownEditorToolbar {
-                border-radius: 0;
-              }
-
-              .euiMarkdownEditorPreview,
-              .euiMarkdownEditorFooter {
-                border-radius: 0;
-              }
-
-              .euiMarkdownEditorFooter {
-                border-radius: 0;
-              }
-            }
-
-            @include respond-to(gt-xs) {
-              padding: 16px;
-            }
-
-            .euiMarkdownFormat {
-              p {
-                display: flex;
-                flex-direction: column;
-
-                @include respond-to(gt-sm) {
-                  flex-direction: row;
-                  flex-wrap: wrap;
-                }
-              }
-
-              img {
-                margin: 4px 2px;
-              }
-            }
           }
         }
       }

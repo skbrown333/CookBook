@@ -1,0 +1,21 @@
+@import "../../../styles/responsive";
+
+.guide-content__side-nav {
+  max-height: 75%;
+  max-width: 248px;
+  margin-right: 24px;
+  margin-left: -272px;
+
+  @include respond-to(gt-sm) {
+    margin-left: 0;
+    margin-right: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-transform: capitalize;
+  }
+
+  &__items {
+    margin: 12px 0;
+  }
+}
