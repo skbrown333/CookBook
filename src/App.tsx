@@ -28,7 +28,7 @@ import { ENV, DISCORD } from "./constants/constants";
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
 import { Context } from "./store/Store";
-import { updateUser, updateStreams, updateTags } from "./store/actions";
+import { updateUser, updateStreams } from "./store/actions";
 
 /* Styles */
 import "@elastic/eui/dist/eui_theme_amsterdam_dark.css";
@@ -47,7 +47,6 @@ export const App: FunctionComponent = () => {
         const user = await firebaseInstance.getCurrentUser();
         dispatch(updateUser(user));
         dispatch(updateStreams(await twitch.getStreams()));
-        // dispatch(updateTags(null));
       } catch (err) {
       } finally {
         setIsLoading(false);

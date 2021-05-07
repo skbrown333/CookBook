@@ -35,13 +35,9 @@ import { Tag } from "../../models/Tag";
 /* Constants */
 import { newSection } from "../../constants/constants";
 
-/* Store */
-// import { Context } from "../../store/Store";
-
 export interface GuideDetailViewProps {}
 
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): ReactElement => {
-
   const mockGuide: Guide = {
     _id: "mock_id",
     title: "falco",
