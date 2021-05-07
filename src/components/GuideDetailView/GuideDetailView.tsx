@@ -74,7 +74,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     if (!guide) return;
     setCollapsed(Array(sections.length).fill(false));
     setEditing(false);
-    guide.sections = guide.sections;
+    guide.sections = sections;
     setGuide({ ...guide });
   };
 
