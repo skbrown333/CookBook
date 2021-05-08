@@ -31,6 +31,10 @@
   &__body {
     padding: 16px;
 
+    .euiComboBox .euiComboBox__inputWrap {
+      border-radius: 0;
+    }
+
     &.editing {
       padding: 0;
 
