@@ -121,12 +121,16 @@ export class Firebase {
     return new Promise((resolve, reject) => {
       this.auth.onAuthStateChanged(async (user) => {
         if (user) {
-          const doc = await this.firestore
-            .collection("user_profiles")
-            .doc(user.uid)
-            .get();
+          try {
+            const doc = await this.firestore
+              .collection("user_profiles")
+              .doc(user.uid)
+              .get();
 
-          resolve(doc.data());
+            resolve(doc.data());
+          } catch (err) {
+            reject(Error("Error Fetching User"));
+          }
         } else {
           reject(Error("Error fetching user"));
         }

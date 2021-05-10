@@ -90,8 +90,6 @@ export const Login: FunctionComponent = () => {
   let params = new URLSearchParams(search);
   let code = params.get("code");
   let baseUrl = window.location.origin;
-  console.log(baseUrl);
-  console.log(FUNCTIONS.loginWithDiscord);
   async function login() {
     if (!code) return;
     try {
@@ -129,7 +127,7 @@ export const Logout: FunctionComponent = () => {
     async function init() {
       await firebaseInstance.signOut();
       dispatch(updateUser(null));
-      window.location.href = `${ENV.base_url}`;
+      window.location.href = window.location.origin;
     }
     init();
   }, []);
