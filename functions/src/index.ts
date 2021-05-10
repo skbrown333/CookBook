@@ -8,7 +8,7 @@ admin.initializeApp({
   serviceAccountId: functions.config().fb.service_account,
 });
 
-export const loginWithDiscord = functions.https.onCall(async (data) => {
+export const loginWithDiscord = functions.https.onCall(async (data: any) => {
   const { code, redirectUrl } = data;
   const clientId = functions.config().discord.id;
   const clientSecret = functions.config().discord.secret;
