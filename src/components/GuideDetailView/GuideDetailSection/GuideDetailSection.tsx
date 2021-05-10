@@ -27,6 +27,7 @@ export interface GuideDetailSectionProps {
   tags: Array<Tag>;
   updateSection: (key: string, value: string, index: number) => void;
   handleCollapse: (index: number) => void;
+  handleDelete: (index: number) => void;
 }
 
 export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
@@ -38,6 +39,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   tags,
   updateSection,
   handleCollapse,
+  handleDelete,
 }) => {
   return (
     <EuiPanel
@@ -49,13 +51,27 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
     >
       <div className="guide-section__title">
         {editing ? (
-          <EuiFieldText
-            placeholder="title"
-            value={title}
-            onChange={(e) => updateSection("title", e.target.value, index)}
-          />
+          <>
+            <EuiFieldText
+              placeholder="title"
+              value={title}
+              onChange={(e) => updateSection("title", e.target.value, index)}
+            />
+            <EuiButtonIcon
+              aria-label="delete-icon"
+              title="delete section"
+              iconType="trash"
+              iconSize="l"
+              size="m"
+              color="danger"
+              className="guide-section__title--delete"
+              onClick={() => {
+                handleDelete(index);
+              }}
+            />
+          </>
         ) : (
-          <div>{title}</div>
+          <div className="guide-section__title--text">{title}</div>
         )}
         <EuiButtonIcon
           aria-label="collapse-icon"
