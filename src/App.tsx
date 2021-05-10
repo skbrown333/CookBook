@@ -23,7 +23,7 @@ import { EuiLoadingSpinner } from "@elastic/eui";
 import { TwitchService } from "./services/TwitchService";
 
 /* Constants */
-import { ENV, DISCORD } from "./constants/constants";
+import { ENV, DISCORD, FUNCTIONS } from "./constants/constants";
 
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
@@ -91,6 +91,7 @@ export const Login: FunctionComponent = () => {
   let code = params.get("code");
   let baseUrl = window.location.origin;
   console.log(baseUrl);
+  console.log(FUNCTIONS.loginWithDiscord);
   async function login() {
     if (!code) return;
     try {
