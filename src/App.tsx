@@ -90,7 +90,7 @@ export const Login: FunctionComponent = () => {
   let params = new URLSearchParams(search);
   let code = params.get("code");
   let baseUrl = window.location.origin;
-
+  console.log(baseUrl);
   async function login() {
     if (!code) return;
     try {
