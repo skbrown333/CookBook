@@ -95,11 +95,11 @@ export class Firebase {
    * @param code {String} - autho code needed to get user
    */
 
-  loginWithDiscord = async (code: string) => {
+  loginWithDiscord = async (code: string, url: string) => {
     const res = await axios.post(FUNCTIONS.loginWithDiscord, {
       data: {
         code,
-        redirectUrl: `${ENV.base_url}/login`,
+        redirectUrl: url,
       },
     });
     return res.data;

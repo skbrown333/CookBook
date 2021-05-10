@@ -93,7 +93,10 @@ export const Login: FunctionComponent = () => {
   async function login() {
     if (!code) return;
     try {
-      const res = await firebaseInstance.loginWithDiscord(code);
+      const res = await firebaseInstance.loginWithDiscord(
+        code,
+        window.location.href
+      );
       await firebaseInstance.signInWithCustomToken(res.result);
       window.location.href = `${ENV.base_url}`;
     } catch (err) {
