@@ -89,19 +89,20 @@ export const Login: FunctionComponent = () => {
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let code = params.get("code");
+  let baseUrl = window.location.origin;
 
   async function login() {
     if (!code) return;
     try {
       const res = await firebaseInstance.loginWithDiscord(
         code,
-        window.location.href
+        `${baseUrl}/login`
       );
       await firebaseInstance.signInWithCustomToken(res.result);
-      window.location.href = `${ENV.base_url}`;
+      window.location.href = baseUrl;
     } catch (err) {
       console.log("err: ", err);
-      window.location.href = `${ENV.base_url}`;
+      window.location.href = baseUrl;
     }
   }
 
