@@ -5,8 +5,18 @@ import React, {
   useContext,
 } from "react";
 
+import { Link } from "react-router-dom";
+
 /* Components */
-import { EuiHeader, EuiHeaderSectionItemButton } from "@elastic/eui";
+import {
+  EuiHeader,
+  EuiHeaderLink,
+  EuiHeaderLinks,
+  EuiHeaderLogo,
+  EuiHeaderSectionItem,
+  EuiHeaderSectionItemButton,
+  EuiButton,
+} from "@elastic/eui";
 import { EuiIcon, EuiAvatar } from "@elastic/eui";
 import { Firebase, FirebaseContext } from "../../firebase";
 import { DISCORD } from "../../constants/constants";
@@ -16,6 +26,7 @@ export interface HeaderBarProps {}
 export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
   const [user, setUser] = useState<any>(null);
   const context = useContext<Firebase | null>(FirebaseContext);
+
   useEffect(() => {
     init();
     async function init() {
@@ -35,28 +46,51 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
       position="fixed"
       sections={[
         {
-          items: [],
+          items: [
+            <Link to="/">
+              <EuiHeaderLogo iconType="https://ssb.wiki.gallery/images/5/5f/CaptainFalconHeadSSBM.png">
+                cookbook.gg
+              </EuiHeaderLogo>
+            </Link>,
+          ],
           borders: "right",
         },
         {
           items: [
-            <EuiHeaderSectionItemButton
-              aria-label="2 Notifications"
-              notification={"2"}
+            <EuiHeaderLinks
+              aria-label="App navigation dark theme example"
+              popoverBreakpoints="none"
             >
-              <EuiIcon type="cheer" size="m" />
-            </EuiHeaderSectionItemButton>,
-            <EuiHeaderSectionItemButton aria-label="Account menu">
-              {user && (
-                <EuiAvatar
-                  imageUrl={DISCORD.getAvatarUrl(user.id, user.avatar)}
-                  name={`${user.username}#${user.discriminator}`}
-                  size="m"
-                />
-              )}
-            </EuiHeaderSectionItemButton>,
+              <Link to="/recipes">
+                <EuiHeaderLink iconType="discoverApp" color="success">
+                  Guides
+                </EuiHeaderLink>
+              </Link>
+            </EuiHeaderLinks>,
+            ...(user
+              ? [
+                  <EuiHeaderSectionItemButton aria-label="Account menu">
+                    <EuiAvatar
+                      imageUrl={DISCORD.getAvatarUrl(user.id, user.avatar)}
+                      name={`${user.username}#${user.discriminator}`}
+                      size="m"
+                    />
+                  </EuiHeaderSectionItemButton>,
+                  <EuiHeaderLinks
+                    aria-label="App navigation dark theme example"
+                    popoverBreakpoints="all"
+                  >
+                    <Link to="/settings">
+                      <EuiHeaderLink iconType="managementApp">
+                        Settings
+                      </EuiHeaderLink>
+                    </Link>
+                  </EuiHeaderLinks>,
+                ]
+              : []),
+            ,
           ],
-          borders: "none",
+          borders: "left",
         },
       ]}
     />
