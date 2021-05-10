@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "cookbook-1d93f"
+    "default": "cookbook-1d93f",
+    "dev": "devcookbook-dfe31"
   }
 }
