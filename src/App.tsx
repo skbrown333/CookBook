@@ -23,7 +23,7 @@ import { EuiLoadingSpinner } from "@elastic/eui";
 import { TwitchService } from "./services/TwitchService";
 
 /* Constants */
-import { ENV, DISCORD } from "./constants/constants";
+import { ENV, DISCORD, FUNCTIONS } from "./constants/constants";
 
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
@@ -89,16 +89,19 @@ export const Login: FunctionComponent = () => {
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let code = params.get("code");
-
+  let baseUrl = window.location.origin;
   async function login() {
     if (!code) return;
     try {
-      const res = await firebaseInstance.loginWithDiscord(code);
+      const res = await firebaseInstance.loginWithDiscord(
+        code,
+        `${baseUrl}/login`
+      );
       await firebaseInstance.signInWithCustomToken(res.result);
-      window.location.href = `${ENV.base_url}`;
+      window.location.href = baseUrl;
     } catch (err) {
       console.log("err: ", err);
-      window.location.href = `${ENV.base_url}`;
+      window.location.href = baseUrl;
     }
   }
 
@@ -124,7 +127,7 @@ export const Logout: FunctionComponent = () => {
     async function init() {
       await firebaseInstance.signOut();
       dispatch(updateUser(null));
-      window.location.href = `${ENV.base_url}`;
+      window.location.href = window.location.origin;
     }
     init();
   }, []);
