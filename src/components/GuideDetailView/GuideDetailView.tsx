@@ -33,21 +33,13 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
   const [collapsed, setCollapsed] = useState<Array<boolean>>(
     Array(mockGuide.sections.length).fill(false)
   );
-  const [sections, setSections] = useState<any>();
   const [guide, setGuide] = useState<Guide | null>(
     JSON.parse(JSON.stringify(mockGuide))
   );
 
-  useEffect(() => {
-    if (guide) {
-      setSections(guide.sections);
-    }
-  }, [guide]);
-
   const updateSection = (key, value, index) => {
     if (!guide) return;
-    const { sections } = guide;
-    sections[index][key] = value;
+    guide.sections[index][key] = value;
     setGuide({ ...guide });
   };
 
@@ -70,11 +62,25 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
     setEditing(false);
   };
 
+  const handleDelete = (index) => {
+    if (!guide) return;
+    let { sections } = guide;
+    console.log("delete " + index);
+    setCollapsed(
+      collapsed
+        .slice(0, index)
+        .concat(collapsed.slice(index + 1, collapsed.length))
+    );
+    guide.sections = sections
+      .slice(0, index)
+      .concat(sections.slice(index + 1, sections.length));
+    setGuide({ ...guide });
+  };
+
   const handleSave = () => {
     if (!guide) return;
-    setCollapsed(Array(sections.length).fill(false));
+    setCollapsed(Array(guide.sections.length).fill(false));
     setEditing(false);
-    guide.sections = sections;
     setGuide({ ...guide });
   };
 
@@ -85,7 +91,8 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
 
   const handleDragEnd = (result) => {
     const { source, destination } = result;
-
+    if (!guide) return;
+    let { sections } = guide;
     if (source && destination) {
       const items = euiDragDropReorder(
         sections,
@@ -95,14 +102,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
       setCollapsed([
         ...euiDragDropReorder(collapsed, source.index, destination.index),
       ]);
-      setSections([...items]);
+      guide.sections = [...items];
+      setGuide({ ...guide });
     }
   };
 
   const buildSections = () => {
     if (!guide) return [<></>];
 
-    return sections.map((section, index) => {
+    return guide.sections.map((section, index) => {
       const { title, body, tags } = section;
       const isCollapsed = collapsed[index] && collapsed[index] === true;
 
@@ -122,6 +130,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
             tags={tags}
             isCollapsed={isCollapsed}
             handleCollapse={handleCollapse}
+            handleDelete={handleDelete}
             updateSection={updateSection}
           />
         </EuiDraggable>
@@ -134,6 +143,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
           tags={tags}
           isCollapsed={isCollapsed}
           handleCollapse={handleCollapse}
+          handleDelete={handleDelete}
           updateSection={updateSection}
         />
       );
@@ -142,7 +152,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
 
   return (
     <div id="guide-detail" className="guide-detail">
-      {guide && sections && (
+      {guide && guide.sections && (
         <>
           <div
             className="guide-detail__controls"
@@ -161,7 +171,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> = (): Reac
             <GuideDetailSideNav
               editing={editing}
               title={mockGuide.title}
-              sections={sections}
+              sections={guide.sections}
             />
             <div id="sections" className="guide-content__sections">
               {editing ? (
