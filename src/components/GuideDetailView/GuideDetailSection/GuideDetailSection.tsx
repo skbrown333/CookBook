@@ -1,7 +1,11 @@
+/*EXPERIMENT*/
 import React, { FunctionComponent } from "react";
 
 /* Components */
 import {
+  getDefaultEuiMarkdownParsingPlugins,
+  getDefaultEuiMarkdownProcessingPlugins,
+  getDefaultEuiMarkdownUiPlugins,
   EuiButtonIcon,
   EuiFieldText,
   EuiMarkdownEditor,
@@ -41,6 +45,65 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   handleCollapse,
   handleDelete,
 }) => {
+  // example plugin parser
+  function GifMarkdownParser() {
+    // @ts-ignore
+    const Parser = this.Parser;
+    const tokenizers = Parser.prototype.inlineTokenizers;
+    const methods = Parser.prototype.inlineMethods;
+
+    // function to parse a matching string
+    function tokenizeGif(eat, value, silent) {
+      const tokenMatch = value.match(/^gif:(.*)/);
+
+      if (!tokenMatch) return false; // no match
+      const [, url] = tokenMatch;
+      const gfyTransform = (url) => {
+        let splitUrl = url.split("/");
+        let [, , gfy, path] = splitUrl;
+        splitUrl[3] = path + "-size_restricted.gif";
+        splitUrl[2] = "thumbs." + gfy;
+        return splitUrl.join("/");
+      };
+      const fixedUrl = url.includes("gfy") ? gfyTransform(url) : url;
+
+      if (silent) {
+        return true;
+      }
+
+      // must consume the exact & entire match string
+      return eat(tokenMatch.input)({
+        type: "gifPlugin",
+        gif: { fixedUrl }, // configuration is passed to the renderer
+      });
+    }
+
+    // function to detect where the next emoji match might be found
+    tokenizeGif.locator = (value, fromIndex) => {
+      return value.indexOf("gfy", fromIndex);
+    };
+
+    // define the emoji plugin and inject it just before the existing text plugin
+    tokenizers.giffer = tokenizeGif;
+    methods.unshift("giffer");
+  }
+
+  // add the parser for `emojiPlugin`
+  const parsingList = getDefaultEuiMarkdownParsingPlugins();
+  parsingList.push(GifMarkdownParser);
+  // example plugin processor
+
+  // receives the configuration from the parser and renders
+  const GifMarkdownRenderer = ({ gif }) => {
+    return <span>![]({gif.fixedUrl})</span>;
+  };
+
+  // add the renderer for `emojiPlugin`
+  const processingList = getDefaultEuiMarkdownProcessingPlugins();
+  processingList[1][1].components.gifPlugin = GifMarkdownRenderer;
+
+  // const exampleUiPlugins = getDefaultEuiMarkdownUiPlugins();
+  // exampleUiPlugins.push(myPluginUI);
   return (
     <EuiPanel
       id={`section-${index}`}
@@ -93,6 +156,9 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
                 value={body}
                 onChange={(value) => updateSection("body", value, index)}
                 height={400}
+                // uiPlugins={exampleUiPlugins}
+                parsingPluginList={parsingList}
+                processingPluginList={processingList}
               />
               <TagSection
                 className="guide-section__tags"
@@ -102,7 +168,12 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
             </>
           ) : (
             <>
-              <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+              <EuiMarkdownFormat
+                parsingPluginList={parsingList}
+                processingPluginList={processingList}
+              >
+                {body}
+              </EuiMarkdownFormat>
               <EuiSpacer size="s" />
               <div className="tag-holder guide-section__tags">
                 {tags.map((tag) => (
