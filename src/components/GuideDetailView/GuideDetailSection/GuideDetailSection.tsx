@@ -96,7 +96,6 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
                 value={body}
                 onChange={(value) => updateSection("body", value, index)}
                 height={400}
-                // uiPlugins={exampleUiPlugins}
                 parsingPluginList={parsingList}
                 processingPluginList={processingList}
                 uiPlugins={uiList}
