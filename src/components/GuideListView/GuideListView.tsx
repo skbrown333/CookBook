@@ -44,8 +44,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   ]);
 
   const buildGuides = () => {
-    return guides.map((guide) => {
-      return <GuideCard guide={guide} />;
+    return guides.map((guide, index) => {
+      return <GuideCard guide={guide} index={index} />;
     });
   };
   return (

@@ -12,9 +12,13 @@ import "./_guide-card.scss";
 
 export interface GuideCardProps {
   guide: Guide;
+  index: number;
 }
 
-export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
+export const GuideCard: FunctionComponent<GuideCardProps> = ({
+  guide,
+  index,
+}) => {
   const history = useHistory();
   const { title } = guide;
 
@@ -28,6 +32,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
       hasShadow={false}
       hasBorder
       onClick={redirectToGuide}
+      key={index}
     >
       <div className="guide-card__header">
         <EuiAvatar
