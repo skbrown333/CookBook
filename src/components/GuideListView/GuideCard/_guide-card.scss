@@ -2,12 +2,15 @@
 @import "@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss";
 
 .guide-card {
-  max-width: 300px;
   margin: 8px;
   min-width: 300px;
   min-height: 150px;
   max-height: 150px;
   cursor: pointer;
+
+  @include respond-to(gt-xs) {
+    max-width: 300px;
+  }
 
   &.euiPanel {
     flex-grow: 0;
