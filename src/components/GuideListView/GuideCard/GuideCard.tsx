@@ -45,6 +45,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
         </div>
         <div className="guide-card__content__footer">
           <EuiBadge color="hollow">matchup</EuiBadge>
+          <EuiBadge color="hollow">falco</EuiBadge>
         </div>
       </div>
     </EuiPanel>
