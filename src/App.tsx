@@ -4,13 +4,7 @@ import React, {
   useState,
   FunctionComponent,
 } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 /* Components */
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
@@ -23,7 +17,7 @@ import { EuiLoadingSpinner } from "@elastic/eui";
 import { TwitchService } from "./services/TwitchService";
 
 /* Constants */
-import { ENV, DISCORD, FUNCTIONS } from "./constants/constants";
+import { DISCORD } from "./constants/constants";
 
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
