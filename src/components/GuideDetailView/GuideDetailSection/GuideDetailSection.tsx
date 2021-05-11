@@ -95,7 +95,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
 
   // receives the configuration from the parser and renders
   const GifMarkdownRenderer = ({ gif }) => {
-    return <span>![]({gif.fixedUrl})</span>;
+    return <img src={gif.fixedUrl} />;
   };
 
   // add the renderer for `emojiPlugin`
