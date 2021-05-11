@@ -2,7 +2,22 @@
 import {
   getDefaultEuiMarkdownParsingPlugins,
   getDefaultEuiMarkdownProcessingPlugins,
+  getDefaultEuiMarkdownUiPlugins,
 } from "@elastic/eui";
+
+const GifPlugin = {
+  name: "GifPlugin",
+  button: {
+    label: "gif",
+    iconType: "visMetric",
+  },
+  editor: function GifAdder({ onSave }) {
+    onSave(`gif:`, {
+      block: true,
+    });
+    return null;
+  },
+};
 
 function GifMarkdownParser() {
   // @ts-ignore
@@ -15,11 +30,14 @@ function GifMarkdownParser() {
 
     if (!tokenMatch) return false; // no match
     const [, url] = tokenMatch;
+
     const gfyTransform = (url) => {
+      const [thumb, size] = ["thumbs.", "-size_restricted.gif"];
+      if (url.includes(thumb) && url.includes(size)) return url;
       let splitUrl = url.split("/");
       let [, , gfy, path] = splitUrl;
-      splitUrl[3] = path + "-size_restricted.gif";
-      splitUrl[2] = "thumbs." + gfy;
+      splitUrl[3] = path + size;
+      splitUrl[2] = thumb + gfy;
       return splitUrl.join("/");
     };
     const fixedUrl = url.includes("gfy") ? gfyTransform(url) : url;
@@ -42,12 +60,14 @@ function GifMarkdownParser() {
   methods.unshift("giffer");
 }
 
-export const parsingList = getDefaultEuiMarkdownParsingPlugins();
-parsingList.push(GifMarkdownParser);
-
 const GifMarkdownRenderer = ({ gif }) => {
   return <img src={gif.fixedUrl} />;
 };
 
 export const processingList = getDefaultEuiMarkdownProcessingPlugins();
+export const UiList = getDefaultEuiMarkdownUiPlugins();
+export const parsingList = getDefaultEuiMarkdownParsingPlugins();
+
 processingList[1][1].components.gifPlugin = GifMarkdownRenderer;
+parsingList.push(GifMarkdownParser);
+UiList.push(GifPlugin);
