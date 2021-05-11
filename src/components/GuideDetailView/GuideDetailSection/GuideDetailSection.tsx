@@ -19,11 +19,7 @@ import "./_guide-detail-section.scss";
 import { Tag } from "../../../models/Tag";
 
 /* Plugins */
-import {
-  parsingList,
-  processingList,
-  UiList,
-} from "../../../plugins/GifParser";
+import { parsingList, processingList, uiList } from "../../../plugins";
 
 export interface GuideDetailSectionProps {
   title: string;
@@ -103,7 +99,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
                 // uiPlugins={exampleUiPlugins}
                 parsingPluginList={parsingList}
                 processingPluginList={processingList}
-                uiPlugins={UiList}
+                uiPlugins={uiList}
               />
               <TagSection
                 className="guide-section__tags"

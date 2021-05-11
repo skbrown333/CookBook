@@ -1,10 +1,3 @@
-/* Components */
-import {
-  getDefaultEuiMarkdownParsingPlugins,
-  getDefaultEuiMarkdownProcessingPlugins,
-  getDefaultEuiMarkdownUiPlugins,
-} from "@elastic/eui";
-
 const GifPlugin = {
   name: "GifPlugin",
   button: {
@@ -13,7 +6,7 @@ const GifPlugin = {
   },
   editor: function GifAdder({ onSave }) {
     onSave(`gif:`, {
-      block: true,
+      block: false,
     });
     return null;
   },
@@ -26,7 +19,7 @@ function GifMarkdownParser() {
   const methods = Parser.prototype.inlineMethods;
 
   function tokenizeGif(eat, value, silent) {
-    const tokenMatch = value.match(/^gif:(.*)/);
+    const tokenMatch = value.match(/^gif:(.*)[\s\n\r]/);
 
     if (!tokenMatch) return false; // no match
     const [, url] = tokenMatch;
@@ -61,13 +54,12 @@ function GifMarkdownParser() {
 }
 
 const GifMarkdownRenderer = ({ gif }) => {
-  return <img src={gif.fixedUrl} />;
+  return <img className="markdown__gif" src={gif.fixedUrl} />;
 };
 
-export const processingList = getDefaultEuiMarkdownProcessingPlugins();
-export const UiList = getDefaultEuiMarkdownUiPlugins();
-export const parsingList = getDefaultEuiMarkdownParsingPlugins();
-
-processingList[1][1].components.gifPlugin = GifMarkdownRenderer;
-parsingList.push(GifMarkdownParser);
-UiList.push(GifPlugin);
+export const gifPlug = {
+  name: "gifPlugin",
+  render: GifMarkdownRenderer,
+  parse: GifMarkdownParser,
+  ui: GifPlugin,
+};
