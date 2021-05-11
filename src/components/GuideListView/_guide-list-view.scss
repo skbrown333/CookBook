@@ -1,0 +1,12 @@
+.guide-list {
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+  }
+}
