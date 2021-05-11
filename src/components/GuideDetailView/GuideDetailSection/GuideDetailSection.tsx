@@ -1,11 +1,7 @@
-/*EXPERIMENT*/
 import React, { FunctionComponent } from "react";
 
 /* Components */
 import {
-  getDefaultEuiMarkdownParsingPlugins,
-  getDefaultEuiMarkdownProcessingPlugins,
-  getDefaultEuiMarkdownUiPlugins,
   EuiButtonIcon,
   EuiFieldText,
   EuiMarkdownEditor,
@@ -21,6 +17,9 @@ import "./_guide-detail-section.scss";
 
 /*Models*/
 import { Tag } from "../../../models/Tag";
+
+/* Plugins */
+import { parsingList, processingList } from "../../../plugins/GifParser";
 
 export interface GuideDetailSectionProps {
   title: string;
@@ -45,65 +44,6 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   handleCollapse,
   handleDelete,
 }) => {
-  // example plugin parser
-  function GifMarkdownParser() {
-    // @ts-ignore
-    const Parser = this.Parser;
-    const tokenizers = Parser.prototype.inlineTokenizers;
-    const methods = Parser.prototype.inlineMethods;
-
-    // function to parse a matching string
-    function tokenizeGif(eat, value, silent) {
-      const tokenMatch = value.match(/^gif:(.*)/);
-
-      if (!tokenMatch) return false; // no match
-      const [, url] = tokenMatch;
-      const gfyTransform = (url) => {
-        let splitUrl = url.split("/");
-        let [, , gfy, path] = splitUrl;
-        splitUrl[3] = path + "-size_restricted.gif";
-        splitUrl[2] = "thumbs." + gfy;
-        return splitUrl.join("/");
-      };
-      const fixedUrl = url.includes("gfy") ? gfyTransform(url) : url;
-
-      if (silent) {
-        return true;
-      }
-
-      // must consume the exact & entire match string
-      return eat(tokenMatch.input)({
-        type: "gifPlugin",
-        gif: { fixedUrl }, // configuration is passed to the renderer
-      });
-    }
-
-    // function to detect where the next emoji match might be found
-    tokenizeGif.locator = (value, fromIndex) => {
-      return value.indexOf("gfy", fromIndex);
-    };
-
-    // define the emoji plugin and inject it just before the existing text plugin
-    tokenizers.giffer = tokenizeGif;
-    methods.unshift("giffer");
-  }
-
-  // add the parser for `emojiPlugin`
-  const parsingList = getDefaultEuiMarkdownParsingPlugins();
-  parsingList.push(GifMarkdownParser);
-  // example plugin processor
-
-  // receives the configuration from the parser and renders
-  const GifMarkdownRenderer = ({ gif }) => {
-    return <img src={gif.fixedUrl} />;
-  };
-
-  // add the renderer for `emojiPlugin`
-  const processingList = getDefaultEuiMarkdownProcessingPlugins();
-  processingList[1][1].components.gifPlugin = GifMarkdownRenderer;
-
-  // const exampleUiPlugins = getDefaultEuiMarkdownUiPlugins();
-  // exampleUiPlugins.push(myPluginUI);
   return (
     <EuiPanel
       id={`section-${index}`}
