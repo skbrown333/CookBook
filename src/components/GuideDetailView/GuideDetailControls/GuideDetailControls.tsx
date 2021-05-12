@@ -14,56 +14,60 @@ export interface GuideDetailControlsProps {
   handleSetEditing: (isEditing: boolean) => void;
 }
 
-export const GuideDetailControls: FunctionComponent<GuideDetailControlsProps> = ({
-  editing,
-  handleCancel,
-  handleAddSection,
-  handleSave,
-  handleSetEditing,
-}) => {
-  return (
-    <>
-      {editing ? (
-        <>
+export const GuideDetailControls: FunctionComponent<GuideDetailControlsProps> =
+  ({
+    editing,
+    handleCancel,
+    handleAddSection,
+    handleSave,
+    handleSetEditing,
+  }) => {
+    return (
+      <>
+        {editing ? (
+          <>
+            <EuiButtonIcon
+              aria-label="cancel"
+              className="guide-controls__button"
+              display="fill"
+              iconType="cross"
+              color="danger"
+              onClick={handleCancel}
+              size="m"
+              iconSize="l"
+            />
+            <EuiButtonIcon
+              aria-label="save"
+              className="guide-controls__button"
+              display="fill"
+              iconType="save"
+              color="success"
+              onClick={handleSave}
+              size="m"
+              iconSize="l"
+            />
+            <EuiButtonIcon
+              aria-label="add"
+              className="guide-controls__button"
+              display="fill"
+              iconType="plus"
+              color="success"
+              onClick={handleAddSection}
+              size="m"
+              iconSize="l"
+            />
+          </>
+        ) : (
           <EuiButtonIcon
-            aria-label="cancel"
+            aria-label="edit"
             className="guide-controls__button"
             display="fill"
-            iconType="cross"
-            color="danger"
-            onClick={handleCancel}
+            iconType="pencil"
             size="m"
             iconSize="l"
+            onClick={() => handleSetEditing(!editing)}
           />
-          <EuiButtonIcon
-            className="guide-controls__button"
-            display="fill"
-            iconType="save"
-            color="success"
-            onClick={handleSave}
-            size="m"
-            iconSize="l"
-          />
-          <EuiButtonIcon
-            className="guide-controls__button"
-            display="fill"
-            iconType="plus"
-            color="success"
-            onClick={handleAddSection}
-            size="m"
-            iconSize="l"
-          />
-        </>
-      ) : (
-        <EuiButtonIcon
-          className="guide-controls__button"
-          display="fill"
-          iconType="pencil"
-          size="m"
-          iconSize="l"
-          onClick={() => handleSetEditing(!editing)}
-        />
-      )}
-    </>
-  );
-};
+        )}
+      </>
+    );
+  };

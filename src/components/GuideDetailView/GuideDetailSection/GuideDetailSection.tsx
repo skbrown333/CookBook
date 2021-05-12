@@ -18,6 +18,9 @@ import "./_guide-detail-section.scss";
 /*Models*/
 import { Tag } from "../../../models/Tag";
 
+/* Plugins */
+import { parsingList, processingList, uiList } from "../../../plugins";
+
 export interface GuideDetailSectionProps {
   title: string;
   editing: boolean;
@@ -93,6 +96,9 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
                 value={body}
                 onChange={(value) => updateSection("body", value, index)}
                 height={400}
+                parsingPluginList={parsingList}
+                processingPluginList={processingList}
+                uiPlugins={uiList}
               />
               <TagSection
                 className="guide-section__tags"
@@ -102,7 +108,12 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
             </>
           ) : (
             <>
-              <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+              <EuiMarkdownFormat
+                parsingPluginList={parsingList}
+                processingPluginList={processingList}
+              >
+                {body}
+              </EuiMarkdownFormat>
               <EuiSpacer size="s" />
               <div className="tag-holder guide-section__tags">
                 {tags.map((tag) => (
