@@ -87,7 +87,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                     </Link>
                   </EuiHeaderLinks>,
                 ]
-              : []),
+              : [<></>]),
             ,
           ],
           borders: "left",

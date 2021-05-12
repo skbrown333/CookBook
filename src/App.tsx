@@ -11,7 +11,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { HeaderBar } from "./components/Header/Header";
 import { GuideDetailView } from "./components/GuideDetailView/GuideDetailView";
 import { GuideListView } from "./components/GuideListView/GuideListView";
-import { EuiLoadingSpinner } from "@elastic/eui";
+import { EuiLoadingSpinner, EuiGlobalToastList } from "@elastic/eui";
 
 /* Services */
 import { TwitchService } from "./services/TwitchService";
@@ -22,7 +22,7 @@ import { DISCORD } from "./constants/constants";
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
 import { Context } from "./store/Store";
-import { updateUser, updateStreams } from "./store/actions";
+import { updateUser, updateStreams, updateToasts } from "./store/actions";
 
 /* Styles */
 import "@elastic/eui/dist/eui_theme_amsterdam_dark.css";
@@ -31,7 +31,8 @@ import "./App.scss";
 const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
-  const dispatch = useContext(Context)[1];
+  const [state, dispatch] = useContext(Context);
+  const { toasts } = state;
   const twitch = new TwitchService();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,6 +49,12 @@ export const App: FunctionComponent = () => {
     }
     init();
   }, []);
+
+  const removeToast = (removedToast) => {
+    dispatch(
+      updateToasts(toasts.filter((toast) => toast.id !== removedToast.id))
+    );
+  };
 
   return (
     <FirebaseContext.Provider value={firebaseInstance}>
@@ -73,6 +80,11 @@ export const App: FunctionComponent = () => {
             </Route>
             <Route path="/"></Route>
           </Switch>
+          <EuiGlobalToastList
+            toasts={toasts}
+            toastLifeTimeMs={6000}
+            dismissToast={removeToast}
+          />
         </div>
       </Router>
     </FirebaseContext.Provider>

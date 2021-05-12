@@ -32,6 +32,9 @@ import "./_guide-list-view.scss";
 import { CharacterSelect } from "../CharacterSelect/CharacterSelect";
 
 import { Firebase, FirebaseContext } from "../../firebase";
+import { Context } from "../../store/Store";
+import { updateToasts } from "../../store/actions";
+import { CHARACTERS } from "../../utils/CharacterIcons";
 
 export interface GuideListViewProps {}
 
@@ -43,6 +46,7 @@ export interface AddForm {
 }
 
 export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
+  const [state, dispatch] = useContext(Context);
   const [guides, setGuides] = useState<Guide[]>([]);
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [guide, setGuide] = useState<AddForm>({});
@@ -94,8 +98,29 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       setGuides(await firebase?.getGuides());
       setGuide({});
       setShowAdd(false);
+      dispatch(
+        updateToasts(
+          state.toasts.concat({
+            title: guide.title,
+            color: "success",
+            iconType: guide.character ? CHARACTERS[guide.character] : null,
+            toastLifeTimeMs: 5000,
+            text: <p>Guide succesfully created</p>,
+          })
+        )
+      );
     } catch (err) {
-      console.log(err);
+      dispatch(
+        updateToasts(
+          state.toasts.concat({
+            title: "Error creating guide",
+            color: "danger",
+            iconType: "alert",
+            toastLifeTimeMs: 5000,
+            text: <p>{err.message}</p>,
+          })
+        )
+      );
     }
   };
   const handleCancel = () => {
