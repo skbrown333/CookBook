@@ -36,11 +36,11 @@ export const DISCORD = {
 };
 
 const sampleBody = `
- ## gfycat template 
-    must start with 'thumbs' and end with '-size_restricted.gif'
-    ![](https://thumbs.gfycat.com/FlakyExaltedHairstreak-size_restricted.gif) 
- ## gif template 
-    ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) 
+  place both on their own lines with a full line of space on top and bottom
+ ## gif template
+    gif:gifUrl
+ ## video template 
+    vid:youtube/clipUrl
  `;
 
 export const newSection: Post = {
