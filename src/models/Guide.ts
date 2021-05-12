@@ -6,4 +6,6 @@ export interface Guide {
   title: string;
   sections: Array<Post>;
   tags: Array<Tag>;
+  character?: string;
+  description?: string;
 }

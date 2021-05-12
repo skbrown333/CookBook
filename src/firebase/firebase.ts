@@ -39,6 +39,14 @@ export class Firebase {
     await app.firestore().collection(`cookbooks/${book_id}/tags`);
 
   /**
+   * returns guide object for a cookbook
+   *
+   * @param book_id {String} - id of desired cookbook
+   */
+  guidesObject = async (book_id: string) =>
+    await app.firestore().collection(`cookbooks/${book_id}/guides`);
+
+  /**
    * Retrieves all tags in specified cookbook
    */
   getTags = async () => {
@@ -62,6 +70,32 @@ export class Firebase {
         console.error("Error adding document: ", error);
       });
   };
+
+  /**
+   * Create a guide
+   *
+   * @param guide {Object} - guide to add
+   */
+  addGuide = async (guide) => {
+    const guidesRef = await this.guidesObject(cookbook_id);
+    await guidesRef.add(guide);
+  };
+
+  /**
+   * Gets all the guides in a cookbook
+   *
+   * @returns Array {Object} all guides in a cookbook
+   */
+  getGuides = async () => {
+    const guidesRef = await this.guidesObject(cookbook_id);
+    const snapshot = await guidesRef.get();
+    const guides: any = [];
+    snapshot.forEach((doc: any) => {
+      guides.push(doc.data());
+    });
+    return guides;
+  };
+
   /**
    * Creates a new user with the provided email and password
    *

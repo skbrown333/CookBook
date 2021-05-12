@@ -15,7 +15,7 @@ env.twitch_parent = isLocal ? "localhost" : "cookbook.gg";
 
 export const ENV = env;
 
-export const cookbook_id = "T4zKc3d28ITpz31iiRY3";
+export const cookbook_id = "2HaBbzCBse8OhpO07Iuh";
 /**
  * FUNCTIONS
  */

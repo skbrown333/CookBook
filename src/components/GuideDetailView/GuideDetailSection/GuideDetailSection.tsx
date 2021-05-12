@@ -10,7 +10,7 @@ import {
   EuiSpacer,
   EuiBadge,
 } from "@elastic/eui";
-import { TagSection } from "../../TagSection/TagSection";
+import { TagInput } from "../../TagInput/TagInput";
 
 /* Styles */
 import "./_guide-detail-section.scss";
@@ -100,11 +100,11 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
                 processingPluginList={processingList}
                 uiPlugins={uiList}
               />
-              <TagSection
+              <TagInput
                 className="guide-section__tags"
-                initial_tags={tags}
-                TagUpdate={(tags) => updateSection("tags", tags, index)}
-              ></TagSection>
+                initialTags={tags}
+                handleUpdate={(tags) => updateSection("tags", tags, index)}
+              ></TagInput>
             </>
           ) : (
             <>

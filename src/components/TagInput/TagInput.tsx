@@ -1,10 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  FunctionComponent,
+} from "react";
 
 /* Components */
 import { EuiComboBox } from "@elastic/eui";
 
 /* Styles */
-import "./_tag-section.scss";
+import "./_tag-input.scss";
 
 /* Models */
 import { Tag } from "../../models/Tag";
@@ -12,32 +17,43 @@ import { Tag } from "../../models/Tag";
 /* Store */
 import FirebaseContext from "../../firebase/context";
 
-export interface TagSectionProps {
-  initial_tags: Array<Tag>;
-  className: string;
+export interface TagInputProps {
+  initialTags: Array<Tag>;
+  className?: string;
+  handleUpdate: (options) => void;
 }
 
-export function TagSection(props) {
+export const TagInput: FunctionComponent<TagInputProps> = ({
+  initialTags,
+  handleUpdate,
+}) => {
   const firebase = useContext(FirebaseContext);
-  const [selectedOptions, setSelected] = useState(props.initial_tags);
+  const [selectedOptions, setSelected] = useState(initialTags);
   const [options, setOptions] = useState(Array<any>());
+  const [loading, setLoading] = useState(false);
 
   const fetchTags = async () => {
-    let x = await firebase?.getTags();
-    let tags = Array<Object>();
-    x?.forEach((doc) => {
-      tags.push({ label: doc.data().value });
-    });
-    setOptions(tags);
+    try {
+      let x = await firebase?.getTags();
+      let tags = Array<Object>();
+      x?.forEach((doc) => {
+        tags.push({ label: doc.data().value });
+      });
+      setOptions(tags);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onFocus = () => {
+    setLoading(true);
     fetchTags();
   };
 
   const onChange = (selectedOptions) => {
     setSelected(selectedOptions);
-    props.TagUpdate(selectedOptions);
+    handleUpdate(selectedOptions);
   };
 
   const onCreateOption = (searchValue) => {
@@ -70,6 +86,8 @@ export function TagSection(props) {
       onChange={onChange}
       onCreateOption={onCreateOption}
       isClearable={true}
+      isLoading={loading}
+      isDisabled={true}
     />
   );
-}
+};
