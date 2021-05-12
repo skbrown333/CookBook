@@ -43,8 +43,12 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
         <div className="guide-card__content__description">{description}</div>
         <div className="guide-card__content__footer">
           {tags &&
-            tags.map((tag) => {
-              return <EuiBadge color="hollow">{tag.label}</EuiBadge>;
+            tags.map((tag, index) => {
+              return (
+                <EuiBadge key={`tag-${index}`} color="hollow">
+                  {tag.label}
+                </EuiBadge>
+              );
             })}
         </div>
       </div>
