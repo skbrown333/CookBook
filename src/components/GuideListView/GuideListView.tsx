@@ -59,7 +59,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     <EuiForm id="addGuideForm" component="form">
       <EuiFormRow label="Title">
         <EuiFieldText
-          name="first"
           value={guide.title}
           required
           onChange={(e) => setGuide({ ...guide, ...{ title: e.target.value } })}
@@ -67,7 +66,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       </EuiFormRow>
       <EuiFormRow label="Description (optional)">
         <EuiTextArea
-          name="first"
           resize="none"
           value={guide.description || ""}
           onChange={(e) =>
