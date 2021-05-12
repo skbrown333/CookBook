@@ -16,8 +16,8 @@ export const parsingList = getDefaultEuiMarkdownParsingPlugins();
 export const uiList = getDefaultEuiMarkdownUiPlugins();
 
 plugs.forEach((plug) => {
-  const { name, render, parse, ui } = plug;
+  const { name, render, parse } = plug;
   processingList[1][1].components[name] = render;
   parsingList.push(parse);
-  uiList.push(ui);
+  // uiList.push(ui);
 });

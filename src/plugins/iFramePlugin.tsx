@@ -16,19 +16,19 @@ function formattedUrl(url) {
   }
 }
 
-const IFramePlugin = {
-  name: "IFramePlugin",
-  button: {
-    label: "iframe",
-    iconType: "play",
-  },
-  editor: function iFrameAdder({ onSave }) {
-    onSave(`vid:`, {
-      block: true,
-    });
-    return null;
-  },
-};
+// const IFramePlugin = {
+//   name: "IFramePlugin",
+//   button: {
+//     label: "iframe",
+//     iconType: "play",
+//   },
+//   editor: function iFrameAdder({ onSave }) {
+//     onSave(`vid:`, {
+//       block: true,
+//     });
+//     return null;
+//   },
+// };
 
 function iFrameParser() {
   // @ts-ignore
@@ -79,5 +79,5 @@ export const vidPlug = {
   name: "IFramePlugin",
   render: iFramePluginRenderer,
   parse: iFrameParser,
-  ui: IFramePlugin,
+  // ui: IFramePlugin,
 };

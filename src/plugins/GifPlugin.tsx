@@ -1,16 +1,16 @@
-const GifPlugin = {
-  name: "GifPlugin",
-  button: {
-    label: "gif",
-    iconType: "visMetric",
-  },
-  editor: function GifAdder({ onSave }) {
-    onSave(`gif:`, {
-      block: false,
-    });
-    return null;
-  },
-};
+// const GifPlugin = {
+//   name: "GifPlugin",
+//   button: {
+//     label: "gif",
+//     iconType: "visMetric",
+//   },
+//   editor: function GifAdder({ onSave }) {
+//     onSave(`gif:`, {
+//       block: false,
+//     });
+//     return null;
+//   },
+// };
 
 function GifMarkdownParser() {
   // @ts-ignore
@@ -61,5 +61,5 @@ export const gifPlug = {
   name: "gifPlugin",
   render: GifMarkdownRenderer,
   parse: GifMarkdownParser,
-  ui: GifPlugin,
+  // ui: GifPlugin,
 };
