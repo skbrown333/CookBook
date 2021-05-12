@@ -19,7 +19,7 @@ function GifMarkdownParser() {
   const methods = Parser.prototype.inlineMethods;
 
   function tokenizeGif(eat, value, silent) {
-    const tokenMatch = value.match(/^gif:(.*)[\s\n\r]/);
+    const tokenMatch = value.match(/gif:(.*)\s*/);
 
     if (!tokenMatch) return false; // no match
     const [, url] = tokenMatch;

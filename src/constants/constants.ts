@@ -11,6 +11,7 @@ let isLocal = NODE_ENV === "development";
 let env: any = {};
 env.base_url = isLocal ? "http://localhost:3000" : "https://cookbook.gg";
 env.isLocal = isLocal;
+env.twitch_parent = isLocal ? "localhost" : "cookbook.gg";
 
 export const ENV = env;
 

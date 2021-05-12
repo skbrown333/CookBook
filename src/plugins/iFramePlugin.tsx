@@ -1,9 +1,11 @@
+import { EuiAspectRatio } from "@elastic/eui";
+
 import { ENV } from "../constants/constants";
 
 function formattedUrl(url) {
   const urlEnd = url.split("/").pop();
   if (url.includes("twitch")) {
-    return `https://clips.twitch.tv/embed?clip=${urlEnd}&parent=${ENV.base_url}`;
+    return `https://clips.twitch.tv/embed?clip=${urlEnd}&parent=${ENV.twitch_parent}`;
   }
   if (url.includes("youtube")) {
     const ytbReg = /watch\?v=(\w*)/;
@@ -22,7 +24,7 @@ const IFramePlugin = {
   },
   editor: function iFrameAdder({ onSave }) {
     onSave(`vid:`, {
-      block: false,
+      block: true,
     });
     return null;
   },
@@ -35,7 +37,7 @@ function iFrameParser() {
   const methods = Parser.prototype.inlineMethods;
 
   function tokenizeIframe(eat, value, silent) {
-    const tokenMatch = value.match(/^vid:(.*)/);
+    const tokenMatch = value.match(/vid:(.*)\s*/);
 
     if (!tokenMatch) return false; // no match
     const [, url] = tokenMatch;
@@ -61,13 +63,15 @@ function iFrameParser() {
 
 const iFramePluginRenderer = ({ fixedUrl }) => {
   return (
-    <iframe
-      className="markdown__video"
-      frameBorder="0"
-      allowFullScreen={true}
-      scrolling="no"
-      src={fixedUrl}
-    ></iframe>
+    <EuiAspectRatio width={16} height={9}>
+      <iframe
+        className="markdown__video"
+        frameBorder="0"
+        allowFullScreen={true}
+        scrolling="no"
+        src={fixedUrl}
+      />
+    </EuiAspectRatio>
   );
 };
 
