@@ -1,6 +1,7 @@
 import { Guide } from "../models/Guide";
 import { Post } from "../models/Post";
 import { Tag } from "../models/Tag";
+import { CHARACTERS as characterIcons } from "./CharacterIcons";
 
 /**
  * ENV
@@ -15,7 +16,6 @@ env.twitch_parent = isLocal ? "localhost" : "cookbook.gg";
 
 export const ENV = env;
 
-export const cookbook_id = "T4zKc3d28ITpz31iiRY3";
 /**
  * FUNCTIONS
  */
@@ -35,6 +35,25 @@ export const DISCORD = {
   },
 };
 
+/**
+ * Characters
+ */
+
+export const CHARACTERS = characterIcons;
+
+/**
+ * Firestore
+ */
+
+export const FIRESTORE = {
+  collections: {
+    guides: "guides",
+    tags: "tags",
+    posts: "posts",
+    cookbooks: "cookbooks",
+  },
+};
+
 const sampleBody = `
   place both on their own lines with a full line of space on top and bottom
  ## gif template
@@ -51,7 +70,6 @@ export const newSection: Post = {
 };
 
 export const mockGuide: Guide = {
-  _id: "mock_id",
   title: "falco",
   sections: [
     {

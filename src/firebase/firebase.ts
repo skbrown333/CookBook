@@ -5,8 +5,7 @@ import "firebase/functions";
 import axios from "axios";
 
 /* Constants */
-import { ENV, FUNCTIONS } from "../constants/constants";
-import { cookbook_id } from "../constants/constants";
+import { FUNCTIONS } from "../constants/constants";
 
 export class Firebase {
   auth;
@@ -30,38 +29,35 @@ export class Firebase {
     this.googleProvider = new app.auth.GoogleAuthProvider();
   }
 
-  /**
-   * returns tag object for a cookbook
-   *
-   * @param book_id {String} - id of desired cookbook
-   */
-  tagsObject = async (book_id: string) =>
-    await app.firestore().collection(`cookbooks/${book_id}/tags`);
-
-  /**
-   * Retrieves all tags in specified cookbook
-   */
-  getTags = async () => {
-    return await (await this.tagsObject(cookbook_id)).get();
+  add = async (cookbook, collection, data) => {
+    const collectionRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+    await collectionRef.add(data);
   };
 
-  /**
-   * Add tag to to specified cookbook
-   *
-   * @param tag {String} - tag value
-   */
-  addTag = async (tag: string) => {
-    const upload = { value: tag };
-    const tagsRef = await this.tagsObject(cookbook_id);
-    tagsRef
-      .add(upload)
-      .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      });
+  getAll = async (cookbook, collection) => {
+    const collectionRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+    const snapshot = await collectionRef.get();
+    const docs: any = [];
+    snapshot.forEach((doc: any) => {
+      docs.push(doc.data());
+    });
+    return docs;
   };
+
+  getByValue = async (collection, key, value) => {
+    const collectionRef = app.firestore().collection(collection);
+    const snapshot = await collectionRef.where(key, "==", value).get();
+    const docs: any = [];
+    snapshot.forEach((doc: any) => {
+      docs.push({ ...doc.data(), ...{ id: doc.id } });
+    });
+    return docs;
+  };
+
   /**
    * Creates a new user with the provided email and password
    *

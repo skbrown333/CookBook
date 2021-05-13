@@ -1,6 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { useHistory } from "react-router-dom";
 
+/* Constants */
+import { CHARACTERS } from "../../../constants/constants";
+
 /* Models */
 import { Guide } from "../../../models/Guide";
 
@@ -16,8 +19,7 @@ export interface GuideCardProps {
 
 export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
   const history = useHistory();
-  const { title } = guide;
-
+  const { title, character, tags, description } = guide;
   const redirectToGuide = () => {
     history.push(`/recipes/${guide.title}`);
   };
@@ -31,21 +33,25 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
     >
       <div className="guide-card__header">
         <EuiAvatar
-          size="m"
           className="guide-card__header__avatar"
           name={title}
           color={null}
-          imageUrl={"https://ssb.wiki.gallery/images/d/d6/FalcoHeadSSBM.png"}
+          iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
+          iconSize="xl"
         ></EuiAvatar>
         {title}
       </div>
       <div className="guide-card__content">
-        <div className="guide-card__content__description">
-          A matchup guide for falco.
-        </div>
+        <div className="guide-card__content__description">{description}</div>
         <div className="guide-card__content__footer">
-          <EuiBadge color="hollow">matchup</EuiBadge>
-          <EuiBadge color="hollow">falco</EuiBadge>
+          {tags &&
+            tags.map((tag, index) => {
+              return (
+                <EuiBadge key={`tag-${index}`} color="hollow">
+                  {tag.label}
+                </EuiBadge>
+              );
+            })}
         </div>
       </div>
     </EuiPanel>
