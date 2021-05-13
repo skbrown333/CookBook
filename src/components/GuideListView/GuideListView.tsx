@@ -106,16 +106,11 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       <EuiFormRow label="Tags (optional)">
         <TagInput
           initialTags={[]}
-          // handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
-          handleUpdate={(tags) => handleGuideTags(guide, tags)}
+          handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
         />
       </EuiFormRow>
     </EuiForm>
   );
-
-  const handleGuideTags = (guide, tags) => {
-    setGuide({ ...guide, ...{ tags: tags } });
-  };
 
   const createGuide = async (newGuide) => {
     const { character, description, tags, title } = newGuide;
