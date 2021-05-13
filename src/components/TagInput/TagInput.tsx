@@ -69,7 +69,6 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   };
 
   const onFocus = () => {
-    //breaks selecting tags
     if (!options.length) {
       setLoading(true);
       fetchTags();
