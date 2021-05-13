@@ -31,7 +31,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   const firebase = useContext(FirebaseContext);
   const [selected, setSelected] = useState(initialTags);
   const [options, setOptions] = useState(Array<any>());
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { cookbook } = state;
   const toast = new ToastService();
 
@@ -40,7 +40,6 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
       let x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
       let tags = Array<Object>();
       x?.forEach((doc) => {
-        // console.log(doc);
         const { id, ref } = doc;
         tags.push({
           _id: id,
@@ -49,9 +48,10 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
         });
       });
       setOptions(tags);
-      setLoading(false);
     } catch (err) {
       toast.errorToast("Error fetching tags", err.message);
+    } finally {
+      setLoading(false);
     }
   };
   const createTag = async (newOption) => {
@@ -73,8 +73,10 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const onFocus = () => {
     //breaks selecting tags
-    // setLoading(true);
-    fetchTags();
+    if (!options.length) {
+      setLoading(true);
+      fetchTags();
+    }
   };
 
   const onChange = (selected) => {
