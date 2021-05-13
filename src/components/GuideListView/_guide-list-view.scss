@@ -1,0 +1,22 @@
+.guide-list {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__controls {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 12px;
+    padding-bottom: 12px;
+    padding-top: 4px;
+  }
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 400px);
+    grid-gap: 10px;
+    max-width: 100%;
+    justify-content: center;
+  }
+}

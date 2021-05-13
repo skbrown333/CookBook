@@ -1,0 +1,11 @@
+.character-select {
+  &__character {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    img {
+      margin-right: 12px;
+    }
+  }
+}

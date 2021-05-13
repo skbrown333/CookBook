@@ -1,6 +1,7 @@
 import { Guide } from "../models/Guide";
 import { Post } from "../models/Post";
 import { Tag } from "../models/Tag";
+import { CHARACTERS as characterIcons } from "./CharacterIcons";
 
 /**
  * ENV
@@ -11,10 +12,10 @@ let isLocal = NODE_ENV === "development";
 let env: any = {};
 env.base_url = isLocal ? "http://localhost:3000" : "https://cookbook.gg";
 env.isLocal = isLocal;
+env.twitch_parent = isLocal ? "localhost" : "cookbook.gg";
 
 export const ENV = env;
 
-export const cookbook_id = "T4zKc3d28ITpz31iiRY3";
 /**
  * FUNCTIONS
  */
@@ -34,12 +35,31 @@ export const DISCORD = {
   },
 };
 
+/**
+ * Characters
+ */
+
+export const CHARACTERS = characterIcons;
+
+/**
+ * Firestore
+ */
+
+export const FIRESTORE = {
+  collections: {
+    guides: "guides",
+    tags: "tags",
+    posts: "posts",
+    cookbooks: "cookbooks",
+  },
+};
+
 const sampleBody = `
- ## gfycat template 
-    must start with 'thumbs' and end with '-size_restricted.gif'
-    ![](https://thumbs.gfycat.com/FlakyExaltedHairstreak-size_restricted.gif) 
- ## gif template 
-    ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) 
+  place both on their own lines with a full line of space on top and bottom
+ ## gif template
+    gif:gifUrl
+ ## video template 
+    vid:youtube/clipUrl
  `;
 
 export const newSection: Post = {
@@ -50,7 +70,6 @@ export const newSection: Post = {
 };
 
 export const mockGuide: Guide = {
-  _id: "mock_id",
   title: "falco",
   sections: [
     {

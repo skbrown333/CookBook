@@ -5,6 +5,11 @@
   width: 100%;
   margin-bottom: 14px;
 
+  .euiAspectRatio {
+    width: 100%;
+    height: 100%;
+  }
+
   &__title {
     display: flex;
     align-items: center;
@@ -15,16 +20,17 @@
     text-transform: capitalize;
     border-bottom: 1px solid $euiColorLightShade;
 
+    &--text {
+      margin-right: auto;
+    }
+
     .euiFormControlLayout {
       max-width: 200px;
+      margin-right: auto;
 
       @include respond-to(gt-sm) {
         max-width: 400px;
       }
-    }
-
-    &--collapse {
-      margin-left: auto;
     }
   }
 

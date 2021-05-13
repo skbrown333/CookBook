@@ -10,13 +10,16 @@ import {
   EuiSpacer,
   EuiBadge,
 } from "@elastic/eui";
-import { TagSection } from "../../TagSection/TagSection";
+import { TagInput } from "../../TagInput/TagInput";
 
 /* Styles */
 import "./_guide-detail-section.scss";
 
 /*Models*/
 import { Tag } from "../../../models/Tag";
+
+/* Plugins */
+import { parsingList, processingList, uiList } from "../../../plugins";
 
 export interface GuideDetailSectionProps {
   title: string;
@@ -27,6 +30,7 @@ export interface GuideDetailSectionProps {
   tags: Array<Tag>;
   updateSection: (key: string, value: string, index: number) => void;
   handleCollapse: (index: number) => void;
+  handleDelete: (index: number) => void;
 }
 
 export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
@@ -38,6 +42,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   tags,
   updateSection,
   handleCollapse,
+  handleDelete,
 }) => {
   return (
     <EuiPanel
@@ -49,13 +54,27 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
     >
       <div className="guide-section__title">
         {editing ? (
-          <EuiFieldText
-            placeholder="title"
-            value={title}
-            onChange={(e) => updateSection("title", e.target.value, index)}
-          />
+          <>
+            <EuiFieldText
+              placeholder="title"
+              value={title}
+              onChange={(e) => updateSection("title", e.target.value, index)}
+            />
+            <EuiButtonIcon
+              aria-label="delete-icon"
+              title="delete section"
+              iconType="trash"
+              iconSize="l"
+              size="m"
+              color="danger"
+              className="guide-section__title--delete"
+              onClick={() => {
+                handleDelete(index);
+              }}
+            />
+          </>
         ) : (
-          <div>{title}</div>
+          <div className="guide-section__title--text">{title}</div>
         )}
         <EuiButtonIcon
           aria-label="collapse-icon"
@@ -77,16 +96,24 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
                 value={body}
                 onChange={(value) => updateSection("body", value, index)}
                 height={400}
+                parsingPluginList={parsingList}
+                processingPluginList={processingList}
+                uiPlugins={uiList}
               />
-              <TagSection
+              <TagInput
                 className="guide-section__tags"
-                initial_tags={tags}
-                TagUpdate={(tags) => updateSection("tags", tags, index)}
-              ></TagSection>
+                initialTags={tags}
+                handleUpdate={(tags) => updateSection("tags", tags, index)}
+              ></TagInput>
             </>
           ) : (
             <>
-              <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+              <EuiMarkdownFormat
+                parsingPluginList={parsingList}
+                processingPluginList={processingList}
+              >
+                {body}
+              </EuiMarkdownFormat>
               <EuiSpacer size="s" />
               <div className="tag-holder guide-section__tags">
                 {tags.map((tag) => (

@@ -4,31 +4,30 @@ import React, {
   useState,
   FunctionComponent,
 } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 /* Components */
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { HeaderBar } from "./components/Header/Header";
 import { GuideDetailView } from "./components/GuideDetailView/GuideDetailView";
 import { GuideListView } from "./components/GuideListView/GuideListView";
-import { EuiLoadingSpinner } from "@elastic/eui";
+import { EuiLoadingSpinner, EuiGlobalToastList } from "@elastic/eui";
 
 /* Services */
 import { TwitchService } from "./services/TwitchService";
 
 /* Constants */
-import { ENV, DISCORD, FUNCTIONS } from "./constants/constants";
+import { DISCORD, FIRESTORE } from "./constants/constants";
 
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
 import { Context } from "./store/Store";
-import { updateUser, updateStreams } from "./store/actions";
+import {
+  updateUser,
+  updateStreams,
+  updateToasts,
+  updateCookbook,
+} from "./store/actions";
 
 /* Styles */
 import "@elastic/eui/dist/eui_theme_amsterdam_dark.css";
@@ -37,48 +36,85 @@ import "./App.scss";
 const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
-  const dispatch = useContext(Context)[1];
+  const [state, dispatch] = useContext(Context);
+  const { toasts } = state;
   const twitch = new TwitchService();
   const [isLoading, setIsLoading] = useState(true);
+  const { cookbook } = state;
 
   useEffect(() => {
     async function init() {
       try {
-        const user = await firebaseInstance.getCurrentUser();
-        dispatch(updateUser(user));
+        const cookbooks = await firebaseInstance.getByValue(
+          FIRESTORE.collections.cookbooks,
+          "name",
+          "falcon"
+        );
+        dispatch(updateCookbook(cookbooks[0]));
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
+        dispatch(
+          updateToasts(
+            state.toasts.concat({
+              title: "Error",
+              color: "danger",
+              iconType: "alert",
+              toastLifeTimeMs: 5000,
+              text: <p>{err.message}</p>,
+            })
+          )
+        );
       } finally {
         setIsLoading(false);
       }
+      try {
+        const user = await firebaseInstance.getCurrentUser();
+        dispatch(updateUser(user));
+      } catch (err) {}
     }
     init();
   }, []);
+
+  const removeToast = (removedToast) => {
+    dispatch(
+      updateToasts(toasts.filter((toast) => toast.id !== removedToast.id))
+    );
+  };
 
   return (
     <FirebaseContext.Provider value={firebaseInstance}>
       <Router>
         <div id="cb-app">
-          <Route path="/" component={HeaderBar} />
-          <Switch>
-            <ProtectedRoute
-              path="/admin/create"
-              component={null}
-            ></ProtectedRoute>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/logout">
-              <Logout />
-            </Route>
-            <Route path="/recipes/:recipe">
-              <GuideDetailView />
-            </Route>
-            <Route path="/recipes">
-              <GuideListView />
-            </Route>
-            <Route path="/"></Route>
-          </Switch>
+          {cookbook && (
+            <>
+              <Route path="/" component={HeaderBar} />
+              <Switch>
+                <ProtectedRoute
+                  path="/admin/create"
+                  component={null}
+                ></ProtectedRoute>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <Route path="/logout">
+                  <Logout />
+                </Route>
+                <Route path="/recipes/:recipe">
+                  <GuideDetailView />
+                </Route>
+                <Route path="/recipes">
+                  <GuideListView />
+                </Route>
+                <Route path="/"></Route>
+              </Switch>
+            </>
+          )}
+
+          <EuiGlobalToastList
+            toasts={toasts}
+            toastLifeTimeMs={6000}
+            dismissToast={removeToast}
+          />
         </div>
       </Router>
     </FirebaseContext.Provider>
@@ -86,10 +122,12 @@ export const App: FunctionComponent = () => {
 };
 
 export const Login: FunctionComponent = () => {
+  const [state, dispatch] = useContext(Context);
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let code = params.get("code");
   let baseUrl = window.location.origin;
+
   async function login() {
     if (!code) return;
     try {
@@ -100,7 +138,17 @@ export const Login: FunctionComponent = () => {
       await firebaseInstance.signInWithCustomToken(res.result);
       window.location.href = baseUrl;
     } catch (err) {
-      console.log("err: ", err);
+      dispatch(
+        updateToasts(
+          state.toasts.concat({
+            title: "Error creating guide",
+            color: "danger",
+            iconType: "alert",
+            toastLifeTimeMs: 5000,
+            text: <p>{err.message}</p>,
+          })
+        )
+      );
       window.location.href = baseUrl;
     }
   }
@@ -121,13 +169,27 @@ export const Login: FunctionComponent = () => {
 };
 
 export const Logout: FunctionComponent = () => {
-  const dispatch = useContext(Context)[1];
+  const [state, dispatch] = useContext(Context);
 
   useEffect(() => {
     async function init() {
-      await firebaseInstance.signOut();
-      dispatch(updateUser(null));
-      window.location.href = window.location.origin;
+      try {
+        await firebaseInstance.signOut();
+        dispatch(updateUser(null));
+        window.location.href = window.location.origin;
+      } catch (err) {
+        dispatch(
+          updateToasts(
+            state.toasts.concat({
+              title: "Error logging out",
+              color: "danger",
+              iconType: "alert",
+              toastLifeTimeMs: 5000,
+              text: <p>{err.message}</p>,
+            })
+          )
+        );
+      }
     }
     init();
   }, []);
