@@ -45,14 +45,12 @@ export const App: FunctionComponent = () => {
   useEffect(() => {
     async function init() {
       try {
-        const user = await firebaseInstance.getCurrentUser();
         const cookbooks = await firebaseInstance.getByValue(
           FIRESTORE.collections.cookbooks,
           "name",
           "falcon"
         );
         dispatch(updateCookbook(cookbooks[0]));
-        dispatch(updateUser(user));
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
         dispatch(
@@ -69,6 +67,10 @@ export const App: FunctionComponent = () => {
       } finally {
         setIsLoading(false);
       }
+      try {
+        const user = await firebaseInstance.getCurrentUser();
+        dispatch(updateUser(user));
+      } catch (err) {}
     }
     init();
   }, []);

@@ -39,19 +39,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
       try {
         const user = await context.getCurrentUser();
         setUser(user);
-      } catch (err) {
-        dispatch(
-          updateToasts(
-            state.toasts.concat({
-              title: "Error getting user",
-              color: "danger",
-              iconType: "alert",
-              toastLifeTimeMs: 5000,
-              text: <p>{err.message}</p>,
-            })
-          )
-        );
-      }
+      } catch (err) {}
     }
   }, []);
 
