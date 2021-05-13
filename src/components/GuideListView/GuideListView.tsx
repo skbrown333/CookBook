@@ -41,6 +41,13 @@ import { CHARACTERS } from "../../constants/constants";
 
 export interface GuideListViewProps {}
 
+const emptyGuide: Guide = {
+  title: "",
+  description: "",
+  character: undefined,
+  sections: [],
+  tags: [],
+};
 export interface AddForm {
   title?: string;
   description?: string;
@@ -52,7 +59,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [state, dispatch] = useContext(Context);
   const [guides, setGuides] = useState<Guide[]>([]);
   const [showAdd, setShowAdd] = useState<boolean>(false);
-  const [guide, setGuide] = useState<AddForm>({});
+  const [guide, setGuide] = useState<Guide>(emptyGuide);
+  const [creating, setCreating] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
 
   useEffect(() => {
@@ -111,9 +119,10 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const handleSave = async (event) => {
     event?.preventDefault();
     try {
+      setCreating(true);
       await firebase?.addGuide(guide);
       setGuides(await firebase?.getGuides());
-      setGuide({});
+      setGuide(emptyGuide);
       setShowAdd(false);
       dispatch(
         updateToasts(
@@ -138,11 +147,13 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
           })
         )
       );
+    } finally {
+      setCreating(false);
     }
   };
   const handleCancel = () => {
     setShowAdd(false);
-    setGuide({});
+    setGuide(emptyGuide);
   };
 
   const buildGuides = () => {
@@ -183,6 +194,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
                 onClick={handleSave}
                 fill
                 disabled={!guide.title || guide.title.length === 0}
+                isLoading={creating}
               >
                 Save
               </EuiButton>
