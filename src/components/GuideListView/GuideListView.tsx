@@ -106,28 +106,46 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       <EuiFormRow label="Tags (optional)">
         <TagInput
           initialTags={[]}
-          handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
+          // handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
+          handleUpdate={(tags) => handleGuideTags(guide, tags)}
         />
       </EuiFormRow>
     </EuiForm>
   );
 
+  const handleGuideTags = (guide, tags) => {
+    setGuide({ ...guide, ...{ tags: tags } });
+  };
+
+  const createGuide = async (newGuide) => {
+    const { character, description, tags, title } = newGuide;
+    try {
+      await firebase?.add(cookbook.id, FIRESTORE.collections.guides, {
+        character,
+        description,
+        sections: [],
+        tags,
+        title,
+      });
+      toast.successToast(
+        guide.title,
+        "Guide succesfully created",
+        character ? CHARACTERS[character] : null
+      );
+    } catch (err) {
+      toast.errorToast("Failed to create guide", err.message);
+    }
+  };
   const handleSave = async (event) => {
     event?.preventDefault();
     try {
       setCreating(true);
+      await createGuide(guide);
       setGuides(
         await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
       );
       setGuide(emptyGuide);
       setShowAdd(false);
-      toast.successToast(
-        guide.title,
-        "Guide succesfully created",
-        guide.character ? CHARACTERS[guide.character] : null
-      );
-    } catch (err) {
-      toast.errorToast("Error creating guide", err.msg);
     } finally {
       setCreating(false);
     }
