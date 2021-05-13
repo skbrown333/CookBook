@@ -39,6 +39,9 @@ import { updateToasts } from "../../store/actions";
 /* Constants */
 import { CHARACTERS, FIRESTORE } from "../../constants/constants";
 
+/* Services */
+import { ToastService } from "../../services/ToastService";
+
 export interface GuideListViewProps {}
 
 const emptyGuide: Guide = {
@@ -63,6 +66,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [creating, setCreating] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook, toasts } = state;
+  const toast = new ToastService();
 
   useEffect(() => {
     async function init() {
@@ -129,29 +133,13 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       );
       setGuide(emptyGuide);
       setShowAdd(false);
-      dispatch(
-        updateToasts(
-          toasts.concat({
-            title: guide.title,
-            color: "success",
-            iconType: guide.character ? CHARACTERS[guide.character] : null,
-            toastLifeTimeMs: 5000,
-            text: <p>Guide succesfully created</p>,
-          })
-        )
+      toast.successToast(
+        guide.title,
+        "Guide succesfully created",
+        guide.character ? CHARACTERS[guide.character] : null
       );
     } catch (err) {
-      dispatch(
-        updateToasts(
-          toasts.concat({
-            title: "Error creating guide",
-            color: "danger",
-            iconType: "alert",
-            toastLifeTimeMs: 5000,
-            text: <p>{err.message}</p>,
-          })
-        )
-      );
+      toast.errorToast("Error creating guide", err.msg);
     } finally {
       setCreating(false);
     }
