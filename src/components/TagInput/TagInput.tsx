@@ -18,6 +18,7 @@ import { Tag } from "../../models/Tag";
 import FirebaseContext from "../../firebase/context";
 import { Context } from "../../store/Store";
 import { updateToasts } from "../../store/actions";
+import { FIRESTORE } from "../../constants/constants";
 
 export interface TagInputProps {
   initialTags: Array<Tag>;
@@ -34,10 +35,11 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   const [selectedOptions, setSelected] = useState(initialTags);
   const [options, setOptions] = useState(Array<any>());
   const [loading, setLoading] = useState(false);
+  const { cookbook } = state;
 
   const fetchTags = async () => {
     try {
-      let x = await firebase?.getTags();
+      let x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
       let tags = Array<Object>();
       x?.forEach((doc) => {
         tags.push({ label: doc.data().value });
@@ -83,7 +85,9 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
     if (options.some((tag) => tag != normalizedSearchValue)) {
       setOptions([...options, newOption]);
-      firebase?.addTag(normalizedSearchValue);
+      firebase?.add(cookbook.id, FIRESTORE.collections.tags, {
+        value: normalizedSearchValue,
+      });
     }
 
     setSelected([...selectedOptions, newOption]);

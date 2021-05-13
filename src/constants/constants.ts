@@ -16,7 +16,6 @@ env.twitch_parent = isLocal ? "localhost" : "cookbook.gg";
 
 export const ENV = env;
 
-export const cookbook_id = "2HaBbzCBse8OhpO07Iuh";
 /**
  * FUNCTIONS
  */
@@ -41,6 +40,19 @@ export const DISCORD = {
  */
 
 export const CHARACTERS = characterIcons;
+
+/**
+ * Firestore
+ */
+
+export const FIRESTORE = {
+  collections: {
+    guides: "guides",
+    tags: "tags",
+    posts: "posts",
+    cookbooks: "cookbooks",
+  },
+};
 
 const sampleBody = `
   place both on their own lines with a full line of space on top and bottom

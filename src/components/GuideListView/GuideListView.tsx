@@ -37,7 +37,7 @@ import { Context } from "../../store/Store";
 import { updateToasts } from "../../store/actions";
 
 /* Constants */
-import { CHARACTERS } from "../../constants/constants";
+import { CHARACTERS, FIRESTORE } from "../../constants/constants";
 
 export interface GuideListViewProps {}
 
@@ -62,15 +62,18 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
+  const { cookbook, toasts } = state;
 
   useEffect(() => {
     async function init() {
       try {
-        setGuides(await firebase?.getGuides());
+        setGuides(
+          await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
+        );
       } catch (err) {
         dispatch(
           updateToasts(
-            state.toasts.concat({
+            toasts.concat({
               title: "Error getting guides",
               color: "danger",
               iconType: "alert",
@@ -120,13 +123,15 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     event?.preventDefault();
     try {
       setCreating(true);
-      await firebase?.addGuide(guide);
-      setGuides(await firebase?.getGuides());
+      await firebase?.add(cookbook.id, FIRESTORE.collections.guides, guide);
+      setGuides(
+        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
+      );
       setGuide(emptyGuide);
       setShowAdd(false);
       dispatch(
         updateToasts(
-          state.toasts.concat({
+          toasts.concat({
             title: guide.title,
             color: "success",
             iconType: guide.character ? CHARACTERS[guide.character] : null,
@@ -138,7 +143,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     } catch (err) {
       dispatch(
         updateToasts(
-          state.toasts.concat({
+          toasts.concat({
             title: "Error creating guide",
             color: "danger",
             iconType: "alert",

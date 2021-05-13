@@ -17,12 +17,17 @@ import { EuiLoadingSpinner, EuiGlobalToastList } from "@elastic/eui";
 import { TwitchService } from "./services/TwitchService";
 
 /* Constants */
-import { DISCORD } from "./constants/constants";
+import { DISCORD, FIRESTORE } from "./constants/constants";
 
 /* Store */
 import { Firebase, FirebaseContext } from "./firebase";
 import { Context } from "./store/Store";
-import { updateUser, updateStreams, updateToasts } from "./store/actions";
+import {
+  updateUser,
+  updateStreams,
+  updateToasts,
+  updateCookbook,
+} from "./store/actions";
 
 /* Styles */
 import "@elastic/eui/dist/eui_theme_amsterdam_dark.css";
@@ -35,11 +40,18 @@ export const App: FunctionComponent = () => {
   const { toasts } = state;
   const twitch = new TwitchService();
   const [isLoading, setIsLoading] = useState(true);
+  const { cookbook } = state;
 
   useEffect(() => {
     async function init() {
       try {
         const user = await firebaseInstance.getCurrentUser();
+        const cookbooks = await firebaseInstance.getByValue(
+          FIRESTORE.collections.cookbooks,
+          "name",
+          "falcon"
+        );
+        dispatch(updateCookbook(cookbooks[0]));
         dispatch(updateUser(user));
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
@@ -71,26 +83,31 @@ export const App: FunctionComponent = () => {
     <FirebaseContext.Provider value={firebaseInstance}>
       <Router>
         <div id="cb-app">
-          <Route path="/" component={HeaderBar} />
-          <Switch>
-            <ProtectedRoute
-              path="/admin/create"
-              component={null}
-            ></ProtectedRoute>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/logout">
-              <Logout />
-            </Route>
-            <Route path="/recipes/:recipe">
-              <GuideDetailView />
-            </Route>
-            <Route path="/recipes">
-              <GuideListView />
-            </Route>
-            <Route path="/"></Route>
-          </Switch>
+          {cookbook && (
+            <>
+              <Route path="/" component={HeaderBar} />
+              <Switch>
+                <ProtectedRoute
+                  path="/admin/create"
+                  component={null}
+                ></ProtectedRoute>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <Route path="/logout">
+                  <Logout />
+                </Route>
+                <Route path="/recipes/:recipe">
+                  <GuideDetailView />
+                </Route>
+                <Route path="/recipes">
+                  <GuideListView />
+                </Route>
+                <Route path="/"></Route>
+              </Switch>
+            </>
+          )}
+
           <EuiGlobalToastList
             toasts={toasts}
             toastLifeTimeMs={6000}
