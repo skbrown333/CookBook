@@ -24,6 +24,7 @@ import sheik from "../images/sheik.png";
 import yoshi from "../images/yoshi.png";
 import young_link from "../images/younglink.png";
 import zelda from "../images/zelda.png";
+import wireframe from "../images/wireframe.png";
 
 export const CHARACTERS = {
   bowser,
@@ -52,4 +53,5 @@ export const CHARACTERS = {
   yoshi,
   young_link,
   zelda,
+  wireframe,
 };

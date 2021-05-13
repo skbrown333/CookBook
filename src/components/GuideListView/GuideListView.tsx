@@ -44,7 +44,7 @@ export interface GuideListViewProps {}
 const emptyGuide: Guide = {
   title: "",
   description: "",
-  character: undefined,
+  character: null,
   sections: [],
   tags: [],
 };

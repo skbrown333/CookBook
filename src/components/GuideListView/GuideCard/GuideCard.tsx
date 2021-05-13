@@ -36,7 +36,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
           className="guide-card__header__avatar"
           name={title}
           color={null}
-          iconType={character ? CHARACTERS[character] : undefined}
+          iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
           iconSize="xl"
         ></EuiAvatar>
         {title}
