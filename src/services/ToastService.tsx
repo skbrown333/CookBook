@@ -17,7 +17,7 @@ export class ToastService {
   successToast(
     title,
     text = "",
-    iconType = "alert",
+    iconType = "bell",
     color = "success",
     toastLifeTimeMs = 5000
   ): void {
