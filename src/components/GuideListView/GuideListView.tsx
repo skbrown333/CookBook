@@ -31,10 +31,13 @@ import { TagInput } from "../TagInput/TagInput";
 import "./_guide-list-view.scss";
 import { CharacterSelect } from "../CharacterSelect/CharacterSelect";
 
+/* Context */
 import { Firebase, FirebaseContext } from "../../firebase";
 import { Context } from "../../store/Store";
 import { updateToasts } from "../../store/actions";
-import { CHARACTERS } from "../../utils/CharacterIcons";
+
+/* Constants */
+import { CHARACTERS } from "../../constants/constants";
 
 export interface GuideListViewProps {}
 
@@ -54,7 +57,21 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
 
   useEffect(() => {
     async function init() {
-      setGuides(await firebase?.getGuides());
+      try {
+        setGuides(await firebase?.getGuides());
+      } catch (err) {
+        dispatch(
+          updateToasts(
+            state.toasts.concat({
+              title: "Error getting guides",
+              color: "danger",
+              iconType: "alert",
+              toastLifeTimeMs: 5000,
+              text: <p>{err.message}</p>,
+            })
+          )
+        );
+      }
     }
     init();
   }, []);

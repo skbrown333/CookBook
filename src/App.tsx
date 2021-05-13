@@ -43,6 +43,17 @@ export const App: FunctionComponent = () => {
         dispatch(updateUser(user));
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
+        dispatch(
+          updateToasts(
+            state.toasts.concat({
+              title: "Error",
+              color: "danger",
+              iconType: "alert",
+              toastLifeTimeMs: 5000,
+              text: <p>{err.message}</p>,
+            })
+          )
+        );
       } finally {
         setIsLoading(false);
       }
@@ -92,10 +103,12 @@ export const App: FunctionComponent = () => {
 };
 
 export const Login: FunctionComponent = () => {
+  const [state, dispatch] = useContext(Context);
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let code = params.get("code");
   let baseUrl = window.location.origin;
+
   async function login() {
     if (!code) return;
     try {
@@ -106,7 +119,17 @@ export const Login: FunctionComponent = () => {
       await firebaseInstance.signInWithCustomToken(res.result);
       window.location.href = baseUrl;
     } catch (err) {
-      console.log("err: ", err);
+      dispatch(
+        updateToasts(
+          state.toasts.concat({
+            title: "Error creating guide",
+            color: "danger",
+            iconType: "alert",
+            toastLifeTimeMs: 5000,
+            text: <p>{err.message}</p>,
+          })
+        )
+      );
       window.location.href = baseUrl;
     }
   }
@@ -127,13 +150,27 @@ export const Login: FunctionComponent = () => {
 };
 
 export const Logout: FunctionComponent = () => {
-  const dispatch = useContext(Context)[1];
+  const [state, dispatch] = useContext(Context);
 
   useEffect(() => {
     async function init() {
-      await firebaseInstance.signOut();
-      dispatch(updateUser(null));
-      window.location.href = window.location.origin;
+      try {
+        await firebaseInstance.signOut();
+        dispatch(updateUser(null));
+        window.location.href = window.location.origin;
+      } catch (err) {
+        dispatch(
+          updateToasts(
+            state.toasts.concat({
+              title: "Error logging out",
+              color: "danger",
+              iconType: "alert",
+              toastLifeTimeMs: 5000,
+              text: <p>{err.message}</p>,
+            })
+          )
+        );
+      }
     }
     init();
   }, []);

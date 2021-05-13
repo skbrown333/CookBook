@@ -1,6 +1,7 @@
 import { Guide } from "../models/Guide";
 import { Post } from "../models/Post";
 import { Tag } from "../models/Tag";
+import { CHARACTERS as characterIcons } from "./CharacterIcons";
 
 /**
  * ENV
@@ -34,6 +35,12 @@ export const DISCORD = {
     return `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`;
   },
 };
+
+/**
+ * Characters
+ */
+
+export const CHARACTERS = characterIcons;
 
 const sampleBody = `
   place both on their own lines with a full line of space on top and bottom

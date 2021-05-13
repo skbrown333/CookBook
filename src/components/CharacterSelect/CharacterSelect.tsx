@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 
 /* Components */
 import { EuiSuperSelect } from "@elastic/eui";
-import { CHARACTERS } from "../../utils/CharacterIcons";
+import { CHARACTERS } from "../../constants/CharacterIcons";
 
 /* Styles */
 import "./_character-select.scss";

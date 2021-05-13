@@ -16,6 +16,8 @@ import { Tag } from "../../models/Tag";
 
 /* Store */
 import FirebaseContext from "../../firebase/context";
+import { Context } from "../../store/Store";
+import { updateToasts } from "../../store/actions";
 
 export interface TagInputProps {
   initialTags: Array<Tag>;
@@ -27,6 +29,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   initialTags,
   handleUpdate,
 }) => {
+  const [state, dispatch] = useContext(Context);
   const firebase = useContext(FirebaseContext);
   const [selectedOptions, setSelected] = useState(initialTags);
   const [options, setOptions] = useState(Array<any>());
@@ -42,7 +45,17 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
       setOptions(tags);
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      dispatch(
+        updateToasts(
+          state.toasts.concat({
+            title: "Error fetching tags",
+            color: "danger",
+            iconType: "alert",
+            toastLifeTimeMs: 5000,
+            text: <p>{err.message}</p>,
+          })
+        )
+      );
     }
   };
 

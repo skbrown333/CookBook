@@ -1,6 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { useHistory } from "react-router-dom";
 
+/* Constants */
+import { CHARACTERS } from "../../../constants/constants";
+
 /* Models */
 import { Guide } from "../../../models/Guide";
 
@@ -9,7 +12,6 @@ import { EuiPanel, EuiAvatar, EuiBadge } from "@elastic/eui";
 
 /* Styles */
 import "./_guide-card.scss";
-import { CHARACTERS } from "../../../utils/CharacterIcons";
 
 export interface GuideCardProps {
   guide: Guide;

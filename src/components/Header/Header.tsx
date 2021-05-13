@@ -13,19 +13,24 @@ import {
   EuiHeaderLink,
   EuiHeaderLinks,
   EuiHeaderLogo,
-  EuiHeaderSectionItem,
   EuiHeaderSectionItemButton,
-  EuiButton,
 } from "@elastic/eui";
-import { EuiIcon, EuiAvatar } from "@elastic/eui";
+import { EuiAvatar } from "@elastic/eui";
+
+/* Context */
 import { Firebase, FirebaseContext } from "../../firebase";
+import { Context } from "../../store/Store";
+import { updateToasts } from "../../store/actions";
+
+/* Constants */
 import { DISCORD } from "../../constants/constants";
 
 export interface HeaderBarProps {}
 
 export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
-  const [user, setUser] = useState<any>(null);
   const context = useContext<Firebase | null>(FirebaseContext);
+  const [state, dispatch] = useContext(Context);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     init();
@@ -35,7 +40,17 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
         const user = await context.getCurrentUser();
         setUser(user);
       } catch (err) {
-        console.log(err);
+        dispatch(
+          updateToasts(
+            state.toasts.concat({
+              title: "Error getting user",
+              color: "danger",
+              iconType: "alert",
+              toastLifeTimeMs: 5000,
+              text: <p>{err.message}</p>,
+            })
+          )
+        );
       }
     }
   }, []);
