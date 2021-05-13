@@ -67,18 +67,12 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const { cookbook } = state;
   const toast = new ToastService();
 
-  const getGuides = async () => {
-    const guides = await firebase?.getAll(
-      cookbook.id,
-      FIRESTORE.collections.guides
-    );
-    return guides.map((guide) => guide.data());
-  };
-
   useEffect(() => {
     async function init() {
       try {
-        setGuides(await getGuides());
+        setGuides(
+          await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
+        );
       } catch (err) {
         toast.errorToast("Error getting guides", err.message);
       }
@@ -122,8 +116,9 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     event?.preventDefault();
     try {
       setCreating(true);
-      await firebase?.add(cookbook.id, FIRESTORE.collections.guides, guide);
-      setGuides(await getGuides());
+      setGuides(
+        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
+      );
       setGuide(emptyGuide);
       setShowAdd(false);
       toast.successToast(

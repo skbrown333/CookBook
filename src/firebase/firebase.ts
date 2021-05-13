@@ -43,7 +43,7 @@ export class Firebase {
     const snapshot = await collectionRef.get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
-      docs.push(doc);
+      docs.push(doc.data());
     });
     return docs;
   };
