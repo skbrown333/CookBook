@@ -34,7 +34,6 @@ import { CharacterSelect } from "../CharacterSelect/CharacterSelect";
 /* Context */
 import { Firebase, FirebaseContext } from "../../firebase";
 import { Context } from "../../store/Store";
-import { updateToasts } from "../../store/actions";
 
 /* Constants */
 import { CHARACTERS, FIRESTORE } from "../../constants/constants";
@@ -59,33 +58,29 @@ export interface AddForm {
 }
 
 export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
-  const [state, dispatch] = useContext(Context);
+  const [state] = useContext(Context);
   const [guides, setGuides] = useState<Guide[]>([]);
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook, toasts } = state;
+  const { cookbook } = state;
   const toast = new ToastService();
+
+  const getGuides = async () => {
+    const guides = await firebase?.getAll(
+      cookbook.id,
+      FIRESTORE.collections.guides
+    );
+    return guides.map((guide) => guide.data());
+  };
 
   useEffect(() => {
     async function init() {
       try {
-        setGuides(
-          await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
-        );
+        setGuides(await getGuides());
       } catch (err) {
-        dispatch(
-          updateToasts(
-            toasts.concat({
-              title: "Error getting guides",
-              color: "danger",
-              iconType: "alert",
-              toastLifeTimeMs: 5000,
-              text: <p>{err.message}</p>,
-            })
-          )
-        );
+        toast.errorToast("Error getting guides", err.message);
       }
     }
     init();
@@ -128,9 +123,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     try {
       setCreating(true);
       await firebase?.add(cookbook.id, FIRESTORE.collections.guides, guide);
-      setGuides(
-        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
-      );
+      setGuides(await getGuides());
       setGuide(emptyGuide);
       setShowAdd(false);
       toast.successToast(
