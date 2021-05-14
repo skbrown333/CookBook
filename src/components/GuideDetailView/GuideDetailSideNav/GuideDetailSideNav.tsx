@@ -7,16 +7,21 @@ import { Post } from "../../../models/Post";
 /* Styles */
 import "./_guide-detail-side-nav.scss";
 
+/* Constants */
+import { CHARACTERS } from "../../../constants/constants";
+
 export interface GuideDetailSideNavProps {
   editing: boolean;
   title: string;
   sections: Array<Post>;
+  character: string | null;
 }
 
 export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
   editing,
   title,
   sections,
+  character,
 }) => {
   const buildSideNaveItems = () => {
     if (!sections) return;
@@ -46,11 +51,11 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
     >
       <div className="side-nav__header">
         <EuiAvatar
-          size="m"
+          size="xl"
           className="side-nav__header__avatar"
           name={title}
           color={null}
-          imageUrl={"https://ssb.wiki.gallery/images/d/d6/FalcoHeadSSBM.png"}
+          iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
         ></EuiAvatar>
         {title}
       </div>
