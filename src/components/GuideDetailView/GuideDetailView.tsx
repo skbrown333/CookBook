@@ -33,6 +33,8 @@ import { GuideDetailControls } from "./GuideDetailControls/GuideDetailControls";
 import FirebaseContext from "../../firebase/context";
 import { Context } from "../../store/Store";
 import { FIRESTORE } from "../../constants/constants";
+
+/* Services */
 import { ToastService } from "../../services/ToastService";
 
 export interface GuideDetailViewProps {}
