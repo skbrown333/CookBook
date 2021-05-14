@@ -5,6 +5,7 @@ export interface Guide {
   title: string;
   sections: Array<Post>;
   tags: Array<Tag>;
-  character?: string | null;
+  character: string | null;
   description?: string;
+  doc_ref?: any;
 }
