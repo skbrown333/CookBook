@@ -47,11 +47,7 @@ export const App: FunctionComponent = () => {
   useEffect(() => {
     async function init() {
       try {
-        const cookbooks = await firebaseInstance.getByValue(
-          FIRESTORE.collections.cookbooks,
-          "name",
-          "falcon"
-        );
+        const cookbooks = await firebaseInstance.getCookbookInfo("falcon");
         dispatch(updateCookbook(cookbooks[0]));
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {

@@ -48,12 +48,24 @@ export class Firebase {
     return docs;
   };
 
-  getByValue = async (collection, key, value) => {
-    const collectionRef = app.firestore().collection(collection);
-    const snapshot = await collectionRef.where(key, "==", value).get();
+  getCookbookInfo = async (name) => {
+    const collectionRef = app.firestore().collection("cookbooks");
+    const snapshot = await collectionRef.where("name", "==", name).get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
       docs.push({ ...doc.data(), ...{ id: doc.id } });
+    });
+    return docs;
+  };
+
+  getByValue = async (cookbook, collection, key, value) => {
+    const collectionRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+    const snapshot = await collectionRef.where(key, "==", value).get();
+    const docs: any = [];
+    snapshot.forEach((doc: any) => {
+      docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
     });
     return docs;
   };
