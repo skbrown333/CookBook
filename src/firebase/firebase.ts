@@ -33,7 +33,7 @@ export class Firebase {
     const collectionRef = app
       .firestore()
       .collection(`cookbooks/${cookbook}/${collection}`);
-    await collectionRef.add(data);
+    return await collectionRef.add(data);
   };
 
   getAll = async (cookbook, collection) => {

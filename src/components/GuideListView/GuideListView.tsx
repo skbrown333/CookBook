@@ -34,10 +34,12 @@ import { CharacterSelect } from "../CharacterSelect/CharacterSelect";
 /* Context */
 import { Firebase, FirebaseContext } from "../../firebase";
 import { Context } from "../../store/Store";
-import { updateToasts } from "../../store/actions";
 
 /* Constants */
 import { CHARACTERS, FIRESTORE } from "../../constants/constants";
+
+/* Services */
+import { ToastService } from "../../services/ToastService";
 
 export interface GuideListViewProps {}
 
@@ -56,13 +58,14 @@ export interface AddForm {
 }
 
 export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
-  const [state, dispatch] = useContext(Context);
+  const [state] = useContext(Context);
   const [guides, setGuides] = useState<Guide[]>([]);
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook, toasts } = state;
+  const { cookbook } = state;
+  const toast = new ToastService();
 
   useEffect(() => {
     async function init() {
@@ -71,17 +74,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
           await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
         );
       } catch (err) {
-        dispatch(
-          updateToasts(
-            toasts.concat({
-              title: "Error getting guides",
-              color: "danger",
-              iconType: "alert",
-              toastLifeTimeMs: 5000,
-              text: <p>{err.message}</p>,
-            })
-          )
-        );
+        toast.errorToast("Error getting guides", err.message);
       }
     }
     init();
@@ -119,39 +112,35 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     </EuiForm>
   );
 
+  const createGuide = async (newGuide) => {
+    const { character, description, tags, title } = newGuide;
+    try {
+      await firebase?.add(cookbook.id, FIRESTORE.collections.guides, {
+        character,
+        description,
+        sections: [],
+        tags,
+        title,
+      });
+      toast.successToast(
+        guide.title,
+        "Guide succesfully created",
+        character ? CHARACTERS[character] : null
+      );
+    } catch (err) {
+      toast.errorToast("Failed to create guide", err.message);
+    }
+  };
   const handleSave = async (event) => {
     event?.preventDefault();
     try {
       setCreating(true);
-      await firebase?.add(cookbook.id, FIRESTORE.collections.guides, guide);
+      await createGuide(guide);
       setGuides(
         await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
       );
       setGuide(emptyGuide);
       setShowAdd(false);
-      dispatch(
-        updateToasts(
-          toasts.concat({
-            title: guide.title,
-            color: "success",
-            iconType: guide.character ? CHARACTERS[guide.character] : null,
-            toastLifeTimeMs: 5000,
-            text: <p>Guide succesfully created</p>,
-          })
-        )
-      );
-    } catch (err) {
-      dispatch(
-        updateToasts(
-          toasts.concat({
-            title: "Error creating guide",
-            color: "danger",
-            iconType: "alert",
-            toastLifeTimeMs: 5000,
-            text: <p>{err.message}</p>,
-          })
-        )
-      );
     } finally {
       setCreating(false);
     }

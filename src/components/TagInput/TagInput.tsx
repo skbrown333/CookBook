@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  FunctionComponent,
-} from "react";
+import React, { useState, useContext, FunctionComponent } from "react";
 
 /* Components */
 import { EuiComboBox } from "@elastic/eui";
@@ -17,8 +12,10 @@ import { Tag } from "../../models/Tag";
 /* Store */
 import FirebaseContext from "../../firebase/context";
 import { Context } from "../../store/Store";
-import { updateToasts } from "../../store/actions";
 import { FIRESTORE } from "../../constants/constants";
+
+/* Services */
+import { ToastService } from "../../services/ToastService";
 
 export interface TagInputProps {
   initialTags: Array<Tag>;
@@ -30,45 +27,57 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   initialTags,
   handleUpdate,
 }) => {
-  const [state, dispatch] = useContext(Context);
+  const [state] = useContext(Context);
   const firebase = useContext(FirebaseContext);
-  const [selectedOptions, setSelected] = useState(initialTags);
+  const [selected, setSelected] = useState(initialTags);
   const [options, setOptions] = useState(Array<any>());
   const [loading, setLoading] = useState(false);
   const { cookbook } = state;
+  const toast = new ToastService();
 
   const fetchTags = async () => {
     try {
       let x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
       let tags = Array<Object>();
       x?.forEach((doc) => {
-        tags.push({ label: doc.data().value });
+        tags.push({
+          label: doc.value,
+        });
       });
       setOptions(tags);
-      setLoading(false);
     } catch (err) {
-      dispatch(
-        updateToasts(
-          state.toasts.concat({
-            title: "Error fetching tags",
-            color: "danger",
-            iconType: "alert",
-            toastLifeTimeMs: 5000,
-            text: <p>{err.message}</p>,
-          })
-        )
+      toast.errorToast("Error fetching tags", err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const createTag = async (newOption) => {
+    try {
+      const doc_ref = await firebase?.add(
+        cookbook.id,
+        FIRESTORE.collections.tags,
+        {
+          value: newOption.label,
+        }
       );
+      newOption.doc_ref = doc_ref;
+      setOptions([...options, newOption]);
+      toast.successToast(`Added tag: ${newOption.label}`);
+    } catch (err) {
+      toast.errorToast("Failed to add tag", err.message);
     }
   };
 
   const onFocus = () => {
-    setLoading(true);
-    fetchTags();
+    if (!options.length) {
+      setLoading(true);
+      fetchTags();
+    }
   };
 
-  const onChange = (selectedOptions) => {
-    setSelected(selectedOptions);
-    handleUpdate(selectedOptions);
+  const onChange = (selected) => {
+    setSelected(selected);
+    handleUpdate(selected);
   };
 
   const onCreateOption = (searchValue) => {
@@ -84,13 +93,10 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
     }
 
     if (options.some((tag) => tag != normalizedSearchValue)) {
-      setOptions([...options, newOption]);
-      firebase?.add(cookbook.id, FIRESTORE.collections.tags, {
-        value: normalizedSearchValue,
-      });
+      createTag(newOption);
     }
 
-    setSelected([...selectedOptions, newOption]);
+    setSelected([...selected, newOption]);
   };
 
   return (
@@ -99,12 +105,11 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
       placeholder="add tags"
       options={options}
       onFocus={onFocus}
-      selectedOptions={selectedOptions}
+      selectedOptions={selected}
       onChange={onChange}
       onCreateOption={onCreateOption}
       isClearable={true}
       isLoading={loading}
-      isDisabled={true}
     />
   );
 };
