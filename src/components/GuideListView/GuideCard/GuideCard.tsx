@@ -21,7 +21,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
   const history = useHistory();
   const { title, character, tags, description } = guide;
   const redirectToGuide = () => {
-    history.push(`/recipes/${guide.title}`);
+    history.push(`/recipes/${guide.id}`);
   };
 
   return (

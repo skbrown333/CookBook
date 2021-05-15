@@ -58,6 +58,14 @@ export class Firebase {
     return docs;
   };
 
+  getDocById = async (cookbook, collection, id) => {
+    const collectionRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+    const snapshot = await collectionRef.doc(id).get();
+    return { ...snapshot.data(), id, doc_ref: snapshot.ref };
+  };
+
   getByValue = async (cookbook, collection, key, value) => {
     const collectionRef = app
       .firestore()

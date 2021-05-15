@@ -5,8 +5,7 @@ import React, {
   ReactElement,
   useContext,
 } from "react";
-import { useLocation } from "react-router-dom";
-import uniqid from "uniqid";
+import { useParams } from "react-router-dom";
 
 /* Components */
 import {
@@ -49,16 +48,16 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const firebase = useContext(FirebaseContext);
     const [state] = useContext(Context);
     const { cookbook } = state;
-    const [, , title] = useLocation().pathname.split("/");
+    const guide_id = useParams().recipe;
     const toast = new ToastService();
 
     const getGuide = async () => {
-      const [guide] = await firebase?.getByValue(
+      const guide = await firebase?.getDocById(
         cookbook.id,
         FIRESTORE.collections.guides,
-        "title",
-        title
+        guide_id
       );
+      // @ts-ignore
       setGuide(guide);
     };
     useEffect(() => {
@@ -78,7 +77,6 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const handleAddSection = () => {
       if (!guide) return;
       const { sections } = guide;
-      newSection._id = uniqid(`${guide.character}-`);
       sections.unshift({ ...newSection });
       collapsed.unshift(false);
       setCollapsed([...collapsed]);
