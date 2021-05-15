@@ -3,7 +3,9 @@ import React, {
   useState,
   useEffect,
   ReactElement,
+  useContext,
 } from "react";
+import { useParams } from "react-router-dom";
 
 /* Components */
 import {
@@ -21,10 +23,18 @@ import "./_guide-detail-view.scss";
 import { Guide } from "../../models/Guide";
 
 /* Constants */
-import { mockGuide, newSection } from "../../constants/constants";
+import { newSection } from "../../constants/constants";
 import { GuideDetailSideNav } from "./GuideDetailSideNav/GuideDetailSideNav";
 import { GuideDetailSection } from "./GuideDetailSection/GuideDetailSection";
 import { GuideDetailControls } from "./GuideDetailControls/GuideDetailControls";
+
+/* Firebase */
+import FirebaseContext from "../../firebase/context";
+import { Context } from "../../store/Store";
+import { FIRESTORE } from "../../constants/constants";
+
+/* Services */
+import { ToastService } from "../../services/ToastService";
 
 export interface GuideDetailViewProps {}
 
@@ -32,11 +42,27 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
   (): ReactElement => {
     const [editing, setEditing] = useState<boolean>(false);
     const [collapsed, setCollapsed] = useState<Array<boolean>>(
-      Array(mockGuide.sections.length).fill(false)
+      Array<boolean>()
     );
-    const [guide, setGuide] = useState<Guide | null>(
-      JSON.parse(JSON.stringify(mockGuide))
-    );
+    const [guide, setGuide] = useState<Guide | null>(null);
+    const firebase = useContext(FirebaseContext);
+    const [state] = useContext(Context);
+    const { cookbook } = state;
+    const guide_id = useParams().recipe;
+    const toast = new ToastService();
+
+    const getGuide = async () => {
+      const guide = await firebase?.getDocById(
+        cookbook.id,
+        FIRESTORE.collections.guides,
+        guide_id
+      );
+      // @ts-ignore
+      setGuide(guide);
+    };
+    useEffect(() => {
+      getGuide();
+    }, []);
 
     const updateSection = (key, value, index) => {
       if (!guide) return;
@@ -57,9 +83,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       setGuide({ ...guide });
     };
 
-    const handleCancel = () => {
-      setGuide(JSON.parse(JSON.stringify(mockGuide)));
-      setCollapsed(Array(mockGuide.sections.length).fill(false));
+    const handleCancel = async () => {
+      await getGuide();
+      setCollapsed(Array(guide?.sections.length).fill(false));
       setEditing(false);
     };
 
@@ -79,9 +105,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
 
     const handleSave = () => {
       if (!guide) return;
-      setCollapsed(Array(guide.sections.length).fill(false));
-      setEditing(false);
-      setGuide({ ...guide });
+      try {
+        guide.doc_ref.update({ sections: guide.sections });
+        toast.successToast("Save success!", "Guide saved");
+        setEditing(false);
+        setCollapsed(Array(guide.sections.length).fill(false));
+        getGuide();
+      } catch (error) {
+        toast.errorToast("Something went wrong", "Guide was not saved");
+      }
     };
 
     const handleCollapse = (index) => {
@@ -170,8 +202,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
             <div className="guide-detail__content">
               <GuideDetailSideNav
                 editing={editing}
-                title={mockGuide.title}
+                title={guide.title}
                 sections={guide.sections}
+                character={guide.character}
               />
               <div id="sections" className="guide-content__sections">
                 {editing ? (

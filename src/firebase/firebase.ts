@@ -43,14 +43,14 @@ export class Firebase {
     const snapshot = await collectionRef.get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
-      docs.push({ ...doc.data(), id: doc.id });
+      docs.push({ ...doc.data(), ...{ id: doc.id } });
     });
     return docs;
   };
 
-  getByValue = async (collection, key, value) => {
-    const collectionRef = app.firestore().collection(collection);
-    const snapshot = await collectionRef.where(key, "==", value).get();
+  getCookbookInfo = async (name) => {
+    const collectionRef = app.firestore().collection("cookbooks");
+    const snapshot = await collectionRef.where("name", "==", name).get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
       docs.push({ ...doc.data(), ...{ id: doc.id } });
@@ -63,6 +63,26 @@ export class Firebase {
       .firestore()
       .collection(`cookbooks/${cookbook}/${collection}`);
     return await collectionRef.doc(id).delete();
+  };
+
+  getDocById = async (cookbook, collection, id) => {
+    const collectionRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+    const snapshot = await collectionRef.doc(id).get();
+    return { ...snapshot.data(), id, doc_ref: snapshot.ref };
+  };
+
+  getByValue = async (cookbook, collection, key, value) => {
+    const collectionRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+    const snapshot = await collectionRef.where(key, "==", value).get();
+    const docs: any = [];
+    snapshot.forEach((doc: any) => {
+      docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
+    });
+    return docs;
   };
 
   /**

@@ -15,6 +15,7 @@ import { EuiLoadingSpinner, EuiGlobalToastList } from "@elastic/eui";
 
 /* Services */
 import { TwitchService } from "./services/TwitchService";
+import { ToastService } from "./services/ToastService";
 
 /* Constants */
 import { DISCORD, FIRESTORE } from "./constants/constants";
@@ -39,31 +40,18 @@ export const App: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
   const { toasts } = state;
   const twitch = new TwitchService();
+  const toast = new ToastService();
   const [isLoading, setIsLoading] = useState(true);
   const { cookbook } = state;
 
   useEffect(() => {
     async function init() {
       try {
-        const cookbooks = await firebaseInstance.getByValue(
-          FIRESTORE.collections.cookbooks,
-          "name",
-          "falcon"
-        );
+        const cookbooks = await firebaseInstance.getCookbookInfo("falcon");
         dispatch(updateCookbook(cookbooks[0]));
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
-        dispatch(
-          updateToasts(
-            state.toasts.concat({
-              title: "Error",
-              color: "danger",
-              iconType: "alert",
-              toastLifeTimeMs: 5000,
-              text: <p>{err.message}</p>,
-            })
-          )
-        );
+        toast.errorToast("Error", err.msg);
       } finally {
         setIsLoading(false);
       }
@@ -127,6 +115,7 @@ export const Login: FunctionComponent = () => {
   let params = new URLSearchParams(search);
   let code = params.get("code");
   let baseUrl = window.location.origin;
+  const toast = new ToastService();
 
   async function login() {
     if (!code) return;
@@ -138,17 +127,7 @@ export const Login: FunctionComponent = () => {
       await firebaseInstance.signInWithCustomToken(res.result);
       window.location.href = baseUrl;
     } catch (err) {
-      dispatch(
-        updateToasts(
-          state.toasts.concat({
-            title: "Error creating guide",
-            color: "danger",
-            iconType: "alert",
-            toastLifeTimeMs: 5000,
-            text: <p>{err.message}</p>,
-          })
-        )
-      );
+      toast.errorToast("Error creating guide", err.msg);
       window.location.href = baseUrl;
     }
   }
