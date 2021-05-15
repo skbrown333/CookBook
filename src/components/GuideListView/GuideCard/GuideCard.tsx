@@ -17,12 +17,14 @@ export interface GuideCardProps {
   guide: Guide;
   editing: boolean;
   handleDelete: (event, guide) => void;
+  handleEdit: (event, guide) => void;
 }
 
 export const GuideCard: FunctionComponent<GuideCardProps> = ({
   guide,
   editing,
   handleDelete,
+  handleEdit,
 }) => {
   const history = useHistory();
   const { title, character, tags, description } = guide;
@@ -49,13 +51,22 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
           {title}
         </div>
         {editing ? (
-          <EuiButtonIcon
-            aria-label="delete"
-            className="guide-card__header__delete"
-            iconType="trash"
-            color="danger"
-            onClick={(event) => handleDelete(event, guide)}
-          />
+          <div className="guide-card__header__controls">
+            <EuiButtonIcon
+              aria-label="edit"
+              className="guide-card__header__edit"
+              iconType="documentEdit"
+              color="primary"
+              onClick={(event) => handleEdit(event, guide)}
+            />
+            <EuiButtonIcon
+              aria-label="delete"
+              className="guide-card__header__delete"
+              iconType="trash"
+              color="danger"
+              onClick={(event) => handleDelete(event, guide)}
+            />
+          </div>
         ) : (
           ""
         )}

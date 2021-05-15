@@ -39,7 +39,8 @@
     width: 100%;
     height: 57px;
 
-    &__title {
+    &__title,
+    &__controls {
       display: inherit;
       align-items: inherit;
     }

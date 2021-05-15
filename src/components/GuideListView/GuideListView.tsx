@@ -113,6 +113,11 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     }
   };
 
+  const handleEdit = async (event, guide) => {
+    event.stopPropagation();
+    console.log(guide);
+  };
+
   const destroyModal = (
     <EuiConfirmModal
       title={`Delete guide ${guideToDelete ? guideToDelete.title : ""}?`}
@@ -206,6 +211,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
           key={index}
           editing={editing}
           handleDelete={(event, guide) => deletePrompt(event, guide)}
+          handleEdit={(event, guide) => handleEdit(event, guide)}
         />
       );
     });
