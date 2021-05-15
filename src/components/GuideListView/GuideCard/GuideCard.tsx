@@ -8,16 +8,22 @@ import { CHARACTERS } from "../../../constants/constants";
 import { Guide } from "../../../models/Guide";
 
 /* Components */
-import { EuiPanel, EuiAvatar, EuiBadge } from "@elastic/eui";
+import { EuiPanel, EuiAvatar, EuiBadge, EuiButtonIcon } from "@elastic/eui";
 
 /* Styles */
 import "./_guide-card.scss";
 
 export interface GuideCardProps {
   guide: Guide;
+  editing: boolean;
+  handleDelete: (event, guide) => void;
 }
 
-export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
+export const GuideCard: FunctionComponent<GuideCardProps> = ({
+  guide,
+  editing,
+  handleDelete,
+}) => {
   const history = useHistory();
   const { title, character, tags, description } = guide;
   const redirectToGuide = () => {
@@ -32,14 +38,27 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({ guide }) => {
       onClick={redirectToGuide}
     >
       <div className="guide-card__header">
-        <EuiAvatar
-          className="guide-card__header__avatar"
-          name={title}
-          color={null}
-          iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
-          iconSize="xl"
-        ></EuiAvatar>
-        {title}
+        <div className="guide-card__header__title">
+          <EuiAvatar
+            className="guide-card__header__avatar"
+            name={title}
+            color={null}
+            iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
+            iconSize="xl"
+          ></EuiAvatar>
+          {title}
+        </div>
+        {editing ? (
+          <EuiButtonIcon
+            aria-label="delete"
+            className="guide-card__header__delete"
+            iconType="trash"
+            color="danger"
+            onClick={(event) => handleDelete(event, guide)}
+          />
+        ) : (
+          ""
+        )}
       </div>
       <div className="guide-card__content">
         <div className="guide-card__content__description">{description}</div>

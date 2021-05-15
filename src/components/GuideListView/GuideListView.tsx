@@ -21,6 +21,7 @@ import {
   EuiModalBody,
   EuiModalFooter,
   EuiModalHeader,
+  EuiConfirmModal,
   EuiModalHeaderTitle,
   EuiTextArea,
 } from "@elastic/eui";
@@ -60,25 +61,72 @@ export interface AddForm {
 export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [state] = useContext(Context);
   const [guides, setGuides] = useState<Guide[]>([]);
+  const [guideToDelete, setGuideToDelete] = useState<any>(null);
   const [showAdd, setShowAdd] = useState<boolean>(false);
+  const [showDelete, setShowDelete] = useState<boolean>(false);
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
+  const [editing, setEditing] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const toast = new ToastService();
 
+  const getGuides = async () => {
+    return await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides);
+  };
+
   useEffect(() => {
     async function init() {
       try {
-        setGuides(
-          await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
-        );
+        setGuides(await getGuides());
       } catch (err) {
         toast.errorToast("Error getting guides", err.message);
       }
     }
     init();
   }, []);
+
+  const deletePrompt = async (e, guide) => {
+    e.stopPropagation();
+    setGuideToDelete(guide);
+    setShowDelete(true);
+  };
+
+  const deleteGuide = async () => {
+    if (!guideToDelete) return;
+    try {
+      await firebase?.deleteDocById(
+        cookbook.id,
+        FIRESTORE.collections.guides,
+        guideToDelete.id
+      );
+      setGuides(await getGuides());
+      toast.successToast(
+        "Guide deleted",
+        `guide ${guideToDelete.title} has been deleted`
+      );
+    } catch (error) {
+      toast.errorToast("Guide failed to be deleted", error.msg);
+    } finally {
+      setShowDelete(false);
+      setGuideToDelete(null);
+    }
+  };
+
+  const destroyModal = (
+    <EuiConfirmModal
+      title={`Delete guide ${guideToDelete ? guideToDelete.title : ""}?`}
+      onCancel={() => setShowDelete(false)}
+      onConfirm={deleteGuide}
+      cancelButtonText="No, don't do it"
+      confirmButtonText="Yes, do it"
+      buttonColor="danger"
+      defaultFocusedButton="confirm"
+    >
+      <p>You&rsquo;re about to delete this guide permanently</p>
+      <p>Are you sure you want to do this?</p>
+    </EuiConfirmModal>
+  );
 
   const addGuideform = (
     <EuiForm id="addGuideForm" component="form">
@@ -152,13 +200,43 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
 
   const buildGuides = () => {
     return guides.map((guide, index) => {
-      return <GuideCard guide={guide} key={index} />;
+      return (
+        <GuideCard
+          guide={guide}
+          key={index}
+          editing={editing}
+          handleDelete={(event, guide) => deletePrompt(event, guide)}
+        />
+      );
     });
   };
 
   return (
     <div className="guide-list">
       <div className="guide-list__controls">
+        {editing ? (
+          <EuiButton
+            aria-label="edit"
+            className="guide-controls__button"
+            fill
+            iconType="heart"
+            color="danger"
+            onClick={() => {
+              setEditing(false);
+            }}
+          />
+        ) : (
+          <EuiButton
+            aria-label="edit"
+            className="guide-controls__button"
+            fill
+            iconType="heart"
+            color="primary"
+            onClick={() => {
+              setEditing(true);
+            }}
+          />
+        )}
         <EuiButton
           aria-label="add"
           className="guide-controls__button"
@@ -195,6 +273,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
             </EuiModalFooter>
           </EuiModal>
         )}
+        {showDelete ? destroyModal : <></>}
       </div>
       <div className="guide-list__content">{buildGuides()}</div>
     </div>
