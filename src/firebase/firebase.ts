@@ -43,7 +43,7 @@ export class Firebase {
     const snapshot = await collectionRef.get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
-      docs.push(doc.data());
+      docs.push({ ...doc.data(), id: doc.id });
     });
     return docs;
   };
@@ -56,6 +56,13 @@ export class Firebase {
       docs.push({ ...doc.data(), ...{ id: doc.id } });
     });
     return docs;
+  };
+
+  deleteDocById = async (cookbook, collection, id) => {
+    const collectionRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+    return await collectionRef.doc(id).delete();
   };
 
   /**
