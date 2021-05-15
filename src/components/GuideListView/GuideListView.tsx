@@ -61,12 +61,12 @@ export interface AddForm {
 export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [state] = useContext(Context);
   const [guides, setGuides] = useState<Guide[]>([]);
-  const [guideToDelete, setGuideToDelete] = useState<any>(null);
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [showDelete, setShowDelete] = useState<boolean>(false);
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
+  const [showEdit, setShowEdit] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const toast = new ToastService();
@@ -88,53 +88,53 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
 
   const deletePrompt = async (e, guide) => {
     e.stopPropagation();
-    setGuideToDelete(guide);
+    setGuide(guide);
     setShowDelete(true);
   };
 
   const deleteGuide = async () => {
-    if (!guideToDelete) return;
+    if (!guide) return;
     try {
       await firebase?.deleteDocById(
         cookbook.id,
         FIRESTORE.collections.guides,
-        guideToDelete.id
+        guide.id
       );
       setGuides(await getGuides());
       toast.successToast(
         "Guide deleted",
-        `guide ${guideToDelete.title} has been deleted`
+        `guide ${guide.title} has been deleted`
       );
     } catch (error) {
       toast.errorToast("Guide failed to be deleted", error.msg);
     } finally {
       setShowDelete(false);
-      setGuideToDelete(null);
+      setGuide(emptyGuide);
     }
   };
 
   const handleEdit = async (event, guide) => {
     event.stopPropagation();
-    console.log(guide);
+    setGuide(guide);
+    setShowEdit(true);
   };
 
   const destroyModal = (
     <EuiConfirmModal
-      title={`Delete guide ${guideToDelete ? guideToDelete.title : ""}?`}
+      title={`Delete guide "${guide ? guide.title : ""}"?`}
       onCancel={() => setShowDelete(false)}
       onConfirm={deleteGuide}
-      cancelButtonText="No, don't do it"
-      confirmButtonText="Yes, do it"
+      cancelButtonText="Cancel"
+      confirmButtonText="Delete"
       buttonColor="danger"
       defaultFocusedButton="confirm"
     >
       <p>You&rsquo;re about to delete this guide permanently</p>
-      <p>Are you sure you want to do this?</p>
     </EuiConfirmModal>
   );
 
-  const addGuideform = (
-    <EuiForm id="addGuideForm" component="form">
+  const guideForm = (
+    <EuiForm id="guideForm" component="form">
       <EuiFormRow label="Title">
         <EuiFieldText
           value={guide.title}
@@ -154,11 +154,12 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       <EuiFormRow label="Select Character (optional)">
         <CharacterSelect
           onChange={(value) => setGuide({ ...guide, ...{ character: value } })}
+          value={guide.character}
         />
       </EuiFormRow>
       <EuiFormRow label="Tags (optional)">
         <TagInput
-          initialTags={[]}
+          initialTags={guide.tags}
           handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
         />
       </EuiFormRow>
@@ -184,7 +185,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       toast.errorToast("Failed to create guide", err.message);
     }
   };
-  const handleSave = async (event) => {
+
+  const handleNewSave = async (event) => {
     event?.preventDefault();
     try {
       setCreating(true);
@@ -198,8 +200,28 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       setCreating(false);
     }
   };
+
+  const handleEditSave = async (event) => {
+    try {
+      setCreating(true);
+      await guide.doc_ref.set(guide);
+      toast.successToast(
+        "Guide edit successful",
+        `Edited guide: ${guide.title}`
+      );
+      setGuides(
+        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
+      );
+    } finally {
+      setGuide(emptyGuide);
+      setShowEdit(false);
+      setCreating(false);
+    }
+  };
+
   const handleCancel = () => {
     setShowAdd(false);
+    setShowEdit(false);
     setGuide(emptyGuide);
   };
 
@@ -217,6 +239,32 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     });
   };
 
+  const Modal = (title, save) => {
+    return (
+      <EuiModal onClose={handleCancel} initialFocus="[name=popswitch]">
+        <EuiModalHeader>
+          <EuiModalHeaderTitle>
+            <h1>{title}</h1>
+          </EuiModalHeaderTitle>
+        </EuiModalHeader>
+        <EuiModalBody>{guideForm}</EuiModalBody>
+        <EuiModalFooter>
+          <EuiButtonEmpty onClick={handleCancel}>Cancel</EuiButtonEmpty>
+          <EuiButton
+            type="submit"
+            form="guideForm"
+            onClick={save}
+            fill
+            disabled={!guide.title || guide.title.length === 0}
+            isLoading={creating}
+          >
+            Save
+          </EuiButton>
+        </EuiModalFooter>
+      </EuiModal>
+    );
+  };
+
   return (
     <div className="guide-list">
       <div className="guide-list__controls">
@@ -225,23 +273,27 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
             aria-label="edit"
             className="guide-controls__button"
             fill
-            iconType="heart"
+            iconType="documentEdit"
             color="danger"
             onClick={() => {
               setEditing(false);
             }}
-          />
+          >
+            Stop Editing
+          </EuiButton>
         ) : (
           <EuiButton
             aria-label="edit"
             className="guide-controls__button"
             fill
-            iconType="heart"
+            iconType="documentEdit"
             color="primary"
             onClick={() => {
               setEditing(true);
             }}
-          />
+          >
+            Edit
+          </EuiButton>
         )}
         <EuiButton
           aria-label="add"
@@ -255,31 +307,9 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
         >
           Create
         </EuiButton>
-        {showAdd === true && firebase && (
-          <EuiModal onClose={handleCancel} initialFocus="[name=popswitch]">
-            <EuiModalHeader>
-              <EuiModalHeaderTitle>
-                <h1>Add Guide</h1>
-              </EuiModalHeaderTitle>
-            </EuiModalHeader>
-            <EuiModalBody>{addGuideform}</EuiModalBody>
-            <EuiModalFooter>
-              <EuiButtonEmpty onClick={handleCancel}>Cancel</EuiButtonEmpty>
-
-              <EuiButton
-                type="submit"
-                form="addGuideForm"
-                onClick={handleSave}
-                fill
-                disabled={!guide.title || guide.title.length === 0}
-                isLoading={creating}
-              >
-                Save
-              </EuiButton>
-            </EuiModalFooter>
-          </EuiModal>
-        )}
-        {showDelete ? destroyModal : <></>}
+        {showAdd === true && firebase && Modal("Add Guide", handleNewSave)}
+        {showDelete && destroyModal}
+        {showEdit && Modal("Edit Guide", handleEditSave)}
       </div>
       <div className="guide-list__content">{buildGuides()}</div>
     </div>
