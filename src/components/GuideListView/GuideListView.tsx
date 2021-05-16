@@ -65,7 +65,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [showDelete, setShowDelete] = useState<boolean>(false);
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
-  const [editing, setEditing] = useState<boolean>(false);
+  const [editing, setEditing] = useState<boolean>(true);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
@@ -205,10 +205,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     try {
       setCreating(true);
       await guide.doc_ref.set(guide);
-      toast.successToast(
-        "Guide edit successful",
-        `Edited guide: ${guide.title}`
-      );
+      toast.successToast("Guide Updated", `Edited guide: ${guide.title}`);
       setGuides(
         await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
       );
@@ -268,33 +265,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   return (
     <div className="guide-list">
       <div className="guide-list__controls">
-        {editing ? (
-          <EuiButton
-            aria-label="edit"
-            className="guide-controls__button"
-            fill
-            iconType="documentEdit"
-            color="danger"
-            onClick={() => {
-              setEditing(false);
-            }}
-          >
-            Stop Editing
-          </EuiButton>
-        ) : (
-          <EuiButton
-            aria-label="edit"
-            className="guide-controls__button"
-            fill
-            iconType="documentEdit"
-            color="primary"
-            onClick={() => {
-              setEditing(true);
-            }}
-          >
-            Edit
-          </EuiButton>
-        )}
         <EuiButton
           aria-label="add"
           className="guide-controls__button"
