@@ -1,7 +1,16 @@
 import React, { FunctionComponent } from "react";
 
 /* Components */
-import { EuiAvatar, EuiPanel, EuiSideNav } from "@elastic/eui";
+import {
+  EuiAvatar,
+  EuiPanel,
+  EuiSideNav,
+  EuiDragDropContext,
+  EuiDroppable,
+  EuiDraggable,
+  euiDragDropReorder,
+  EuiText,
+} from "@elastic/eui";
 import { Post } from "../../../models/Post";
 
 /* Styles */
@@ -23,22 +32,32 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
   sections,
   character,
 }) => {
-  const buildSideNaveItems = () => {
-    if (!sections) return;
+  const buildSideNavItems = () => {
+    if (!sections) return [];
     return sections.map((section, index) => {
       const { title } = section;
-      return {
-        name: title,
-        id: index,
-        onClick: () => {
-          let div = document.getElementById(`section-${index}`);
-          if (div && document) {
-            let topPos = div.offsetTop - 200;
-            let sectionsDiv = document.getElementById("sections");
-            if (sectionsDiv) sectionsDiv.scrollTop = topPos;
-          }
-        },
-      };
+      return (
+        <EuiDraggable
+          spacing="m"
+          key={index}
+          index={index}
+          draggableId={index.toString()}
+        >
+          <EuiText
+            id="index"
+            onClick={() => {
+              let div = document.getElementById(`section-${index}`);
+              if (div && document) {
+                let topPos = div.offsetTop - 200;
+                let sectionsDiv = document.getElementById("sections");
+                if (sectionsDiv) sectionsDiv.scrollTop = topPos;
+              }
+            }}
+          >
+            {title}
+          </EuiText>
+        </EuiDraggable>
+      );
     });
   };
 
@@ -60,18 +79,17 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
         {title}
       </div>
       <div className="side-nav__content">
-        <EuiSideNav
-          className="side-nav-content__items"
-          aria-label="Basic example"
-          style={{ width: 192 }}
-          items={[
-            {
-              name: "Sections",
-              id: 0,
-              items: buildSideNaveItems(),
-            },
-          ]}
-        />
+        <EuiPanel className="side-nav-content__items" hasShadow={false}>
+          <EuiDragDropContext onDragEnd={() => console.log("shit")}>
+            <EuiDroppable
+              droppableId="DROPPABLE_AREA"
+              spacing="m"
+              className="guide-content__droppable"
+            >
+              {buildSideNavItems()}
+            </EuiDroppable>
+          </EuiDragDropContext>
+        </EuiPanel>
       </div>
     </EuiPanel>
   );
