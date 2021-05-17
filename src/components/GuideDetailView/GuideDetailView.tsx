@@ -60,6 +60,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       // @ts-ignore
       setGuide(guide);
     };
+
     useEffect(() => {
       getGuide();
     }, []);
