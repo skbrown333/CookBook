@@ -1,12 +1,6 @@
 import React, { FunctionComponent, useContext } from "react";
 
-import {
-  EuiPanel,
-  EuiImage,
-  EuiText,
-  EuiListGroup,
-  EuiListGroupItem,
-} from "@elastic/eui";
+import { EuiPanel, EuiAvatar, EuiListGroup, EuiHealth } from "@elastic/eui";
 
 /* Styles */
 import "./_twitch-sidebar.scss";
@@ -18,41 +12,81 @@ export interface TwitchSidebarProps {
   className: string;
 }
 export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
-  const { streams } = useContext(Context)[0];
+  const { twitch } = useContext(Context)[0];
 
+  const handleClick = (url) => {
+    window.open(url, "_blank");
+  };
   const buildStreams = () => {
-    if (!streams) return;
-    return streams.map((stream) => {
-      if (!stream) return;
-      const { title, user_name, profile_image_url } = stream;
+    if (!twitch) return;
+    const { streams, users } = twitch;
+    let online = [];
+    let offline = [];
+    online = streams.data.map((stream) => {
+      const { user_name, game_name, viewer_count } = stream;
+      let img;
+      users.data.forEach((user: any) => {
+        if (user.id === stream.user_id) {
+          img = user.profile_image_url;
+        }
+      });
       return (
-        <EuiListGroupItem
-          key={user_name}
-          title={title}
-          className="twitch-stream"
-          id={user_name + "-stream"}
-          label={user_name}
-          href={"https://www.twitch.tv/" + user_name}
-          target="_blank"
-          icon={
-            <EuiImage
-              alt={user_name + " channel image"}
-              size={30}
-              src={profile_image_url}
-            />
-          }
-        />
+        <div
+          className="stream"
+          onClick={() => handleClick("https://www.twitch.tv/" + user_name)}
+        >
+          <EuiAvatar imageUrl={img} size="l" name="avatar" />
+          <div className="stream-info">
+            <div className="stream-info__title">
+              {user_name}
+              <EuiHealth color="danger" className="viewer-count">
+                {viewer_count}
+              </EuiHealth>
+            </div>
+            <div className="stream-info__game">{game_name}</div>
+          </div>
+        </div>
       );
     });
+
+    offline = users.data.map((user) => {
+      const { profile_image_url, display_name, description, login } = user;
+      for (let i = 0; i < streams.data.length; i++) {
+        const stream = streams.data[i];
+        if (stream.user_id === user.id) {
+          return;
+        }
+      }
+      return (
+        <div
+          className="stream"
+          onClick={() => handleClick("https://www.twitch.tv/" + login)}
+        >
+          <EuiAvatar
+            imageUrl={profile_image_url}
+            size="l"
+            name="avatar"
+            className="offline"
+          />
+          <div className="stream-info">
+            <div className="stream-info__title">{display_name}</div>
+          </div>
+        </div>
+      );
+    });
+    return [...online, ...offline];
   };
 
   return (
     <div className={props.className}>
-      <EuiPanel paddingSize="m" hasShadow={false} hasBorder>
-        <EuiText>
-          <h4>Live Twitch Streams</h4>
-        </EuiText>
-        <div className="twitch-streams">
+      <EuiPanel
+        paddingSize="m"
+        hasShadow={false}
+        hasBorder
+        className="twitch-sidebar"
+      >
+        <div className="twitch-sidebar__header">Twitch</div>
+        <div className="twitch-sidebar__streams">
           <EuiListGroup gutterSize="none">{buildStreams()}</EuiListGroup>
         </div>
       </EuiPanel>

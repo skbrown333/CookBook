@@ -87,6 +87,19 @@ export class Firebase {
   };
 
   /**
+   * Gets a user and token from a discord login code
+   *
+   * @param code {String} - autho code needed to get user
+   */
+
+  getTwitchStreams = async (streams) => {
+    const res = await axios.post(FUNCTIONS.getTwitchStreams, {
+      data: streams,
+    });
+    return res.data.result;
+  };
+
+  /**
    * Creates a new user with the provided email and password
    *
    * @param email {String} - email address

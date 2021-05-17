@@ -1,5 +1,5 @@
 export const UPDATE_USER_ACTION = "UpdateUserAction";
-export const UPDATE_STREAMS = "UpdateStreams";
+export const UPDATE_TWITCH = "UpdateTwitch";
 export const UPDATE_TOASTS = "UpdateToasts";
 export const UPDATE_COOKBOOK = "UpdateCookbook";
 
@@ -10,10 +10,10 @@ export function updateUser(user) {
   };
 }
 
-export function updateStreams(streams) {
+export function updateTwitch(twitch) {
   return {
-    type: UPDATE_STREAMS,
-    payload: streams,
+    type: UPDATE_TWITCH,
+    payload: twitch,
   };
 }
 
