@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 
   &__controls {
     width: 100%;
@@ -13,7 +14,6 @@
     justify-content: flex-end;
     align-items: center;
     height: 54px;
-    margin-bottom: 16px;
 
     .guide-controls__button {
       @media only screen and (max-width: 574px) {
@@ -32,6 +32,8 @@
     width: 100%;
     max-width: 1400px;
     justify-content: center;
+    overflow: auto;
+    padding-top: 16px;
 
     .euiFlexItem {
       margin-bottom: 0 !important;
