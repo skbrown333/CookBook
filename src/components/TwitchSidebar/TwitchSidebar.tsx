@@ -22,7 +22,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
     const { streams, users } = twitch;
     let online = [];
     let offline = [];
-    online = streams.data.map((stream) => {
+    online = streams.data.map((stream, index) => {
       const { user_name, game_name, viewer_count } = stream;
       let img;
       users.data.forEach((user: any) => {
@@ -34,6 +34,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
         <div
           className="stream"
           onClick={() => handleClick("https://www.twitch.tv/" + user_name)}
+          key={`online-${index}`}
         >
           <EuiAvatar imageUrl={img} size="l" name="avatar" />
           <div className="stream-info">
@@ -49,7 +50,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
       );
     });
 
-    offline = users.data.map((user) => {
+    offline = users.data.map((user, index) => {
       const { profile_image_url, display_name, description, login } = user;
       for (let i = 0; i < streams.data.length; i++) {
         const stream = streams.data[i];
@@ -61,6 +62,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
         <div
           className="stream"
           onClick={() => handleClick("https://www.twitch.tv/" + login)}
+          key={`offline-${index}`}
         >
           <EuiAvatar
             imageUrl={profile_image_url}
