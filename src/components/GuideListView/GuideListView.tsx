@@ -24,6 +24,8 @@ import {
   EuiConfirmModal,
   EuiModalHeaderTitle,
   EuiTextArea,
+  EuiSearchBar,
+  EuiButtonIcon,
 } from "@elastic/eui";
 
 import { TagInput } from "../TagInput/TagInput";
@@ -265,18 +267,20 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   return (
     <div className="guide-list">
       <div className="guide-list__controls">
-        <EuiButton
+        <EuiSearchBar onChange={() => {}} />
+        <EuiButtonIcon
           aria-label="add"
           className="guide-controls__button"
-          fill
+          display="fill"
           iconType="plus"
-          color="secondary"
+          color="success"
+          size="m"
           onClick={() => {
             setShowAdd(true);
           }}
         >
           Create
-        </EuiButton>
+        </EuiButtonIcon>
         {showAdd === true && firebase && Modal("Add Guide", handleNewSave)}
         {showDelete && destroyModal}
         {showEdit && Modal("Edit Guide", handleEditSave)}
