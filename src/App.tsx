@@ -25,7 +25,7 @@ import { Firebase, FirebaseContext } from "./firebase";
 import { Context } from "./store/Store";
 import {
   updateUser,
-  updateStreams,
+  updateTwitch,
   updateToasts,
   updateCookbook,
 } from "./store/actions";
@@ -49,9 +49,13 @@ export const App: FunctionComponent = () => {
       try {
         const cookbooks = await firebaseInstance.getCookbookInfo("falcon");
         dispatch(updateCookbook(cookbooks[0]));
-        dispatch(updateStreams(await twitch.getStreams()));
+        dispatch(
+          updateTwitch(
+            await firebaseInstance.getTwitchStreams(cookbooks[0].streams)
+          )
+        );
       } catch (err) {
-        toast.errorToast("Error", err.msg);
+        toast.errorToast("Error", err.message);
       } finally {
         setIsLoading(false);
       }
@@ -125,7 +129,7 @@ export const Login: FunctionComponent = () => {
       );
       await firebaseInstance.signInWithCustomToken(res.result);
     } catch (err) {
-      toast.errorToast("Error creating guide", err.msg);
+      toast.errorToast("Error creating guide", err.message);
     } finally {
       window.location.replace(baseUrl);
     }
@@ -157,7 +161,7 @@ export const Logout: FunctionComponent = () => {
         await firebaseInstance.signOut();
         dispatch(updateUser(null));
       } catch (err) {
-        toast.errorToast("Error logging out", err.msg);
+        toast.errorToast("Error logging out", err.message);
       } finally {
         window.location.replace(baseUrl);
       }
