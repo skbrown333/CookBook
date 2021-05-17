@@ -72,6 +72,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
           />
           <div className="stream-info">
             <div className="stream-info__title">{display_name}</div>
+            <div className="stream-info__game">Offline</div>
           </div>
         </div>
       );
