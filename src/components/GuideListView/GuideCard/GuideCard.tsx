@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import { useHistory } from "react-router-dom";
 
 /* Constants */
@@ -9,6 +9,9 @@ import { Guide } from "../../../models/Guide";
 
 /* Components */
 import { EuiPanel, EuiAvatar, EuiBadge, EuiButtonIcon } from "@elastic/eui";
+
+/* Store */
+import { Context } from "../../../store/Store";
 
 /* Styles */
 import "./_guide-card.scss";
@@ -27,7 +30,9 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
   handleEdit,
 }) => {
   const history = useHistory();
+  const [state] = useContext(Context);
   const { title, character, tags, description } = guide;
+  const { cookbook, user } = state;
   const redirectToGuide = () => {
     history.push(`/recipes/${guide.id}`);
   };
@@ -50,7 +55,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
           ></EuiAvatar>
           {title}
         </div>
-        {editing ? (
+        {user && cookbook.roles[user.uid] === "admin" && (
           <div className="guide-card__header__controls">
             <EuiButtonIcon
               aria-label="edit"
@@ -67,8 +72,6 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
               onClick={(event) => handleDelete(event, guide)}
             />
           </div>
-        ) : (
-          ""
         )}
       </div>
       <div className="guide-card__content">

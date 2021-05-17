@@ -70,7 +70,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [editing, setEditing] = useState<boolean>(true);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook } = state;
+  const { cookbook, user } = state;
   const toast = new ToastService();
 
   const getGuides = async () => {
@@ -268,19 +268,22 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     <div className="guide-list">
       <div className="guide-list__controls">
         <EuiSearchBar onChange={() => {}} />
-        <EuiButtonIcon
-          aria-label="add"
-          className="guide-controls__button"
-          display="fill"
-          iconType="plus"
-          color="success"
-          size="m"
-          onClick={() => {
-            setShowAdd(true);
-          }}
-        >
-          Create
-        </EuiButtonIcon>
+        {user && cookbook.roles[user.uid] === "admin" && (
+          <EuiButtonIcon
+            aria-label="add"
+            className="guide-controls__button"
+            display="fill"
+            iconType="plus"
+            color="success"
+            size="m"
+            onClick={() => {
+              setShowAdd(true);
+            }}
+          >
+            Create
+          </EuiButtonIcon>
+        )}
+
         {showAdd === true && firebase && Modal("Add Guide", handleNewSave)}
         {showDelete && destroyModal}
         {showEdit && Modal("Edit Guide", handleEditSave)}

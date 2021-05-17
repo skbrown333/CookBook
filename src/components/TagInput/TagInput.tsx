@@ -1,4 +1,9 @@
-import React, { useState, useContext, FunctionComponent } from "react";
+import React, {
+  useState,
+  useContext,
+  FunctionComponent,
+  useEffect,
+} from "react";
 
 /* Components */
 import { EuiComboBox } from "@elastic/eui";
@@ -35,6 +40,10 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   const { cookbook } = state;
   const toast = new ToastService();
 
+  useEffect(() => {
+    handleUpdate(selected);
+  }, [selected]);
+
   const fetchTags = async () => {
     try {
       let x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
@@ -51,6 +60,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
       setLoading(false);
     }
   };
+
   const createTag = async (newOption) => {
     try {
       const doc_ref = await firebase?.add(
@@ -62,6 +72,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
       );
       newOption.doc_ref = doc_ref;
       setOptions([...options, newOption]);
+      setSelected([...selected, newOption]);
       toast.successToast(`Added tag: ${newOption.label}`);
     } catch (err) {
       toast.errorToast("Failed to add tag", err.message);
@@ -77,7 +88,6 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const onChange = (selected) => {
     setSelected(selected);
-    handleUpdate(selected);
   };
 
   const onCreateOption = (searchValue) => {
@@ -85,18 +95,13 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
     const newOption = {
       _id: "mock_tag_id",
       label: normalizedSearchValue,
-      value: normalizedSearchValue,
     };
 
-    if (!normalizedSearchValue) {
-      return;
-    }
+    if (!normalizedSearchValue) return;
 
     if (options.some((tag) => tag != normalizedSearchValue)) {
       createTag(newOption);
     }
-
-    setSelected([...selected, newOption]);
   };
 
   return (

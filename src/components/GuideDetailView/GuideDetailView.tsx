@@ -47,7 +47,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const [guide, setGuide] = useState<Guide | null>(null);
     const firebase = useContext(FirebaseContext);
     const [state] = useContext(Context);
-    const { cookbook } = state;
+    const { cookbook, user } = state;
     const guide_id = useParams().recipe;
     const toast = new ToastService();
 
@@ -60,6 +60,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       // @ts-ignore
       setGuide(guide);
     };
+
     useEffect(() => {
       getGuide();
     }, []);
@@ -103,14 +104,14 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       setGuide({ ...guide });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
       if (!guide) return;
       try {
-        guide.doc_ref.update({ sections: guide.sections });
-        toast.successToast("Save success!", "Guide saved");
-        setEditing(false);
+        await guide.doc_ref.update({ sections: guide.sections });
+        toast.successToast("Guide saved!", "Guide saved");
         setCollapsed(Array(guide.sections.length).fill(false));
-        getGuide();
+        await getGuide();
+        setEditing(false);
       } catch (error) {
         toast.errorToast("Something went wrong", "Guide was not saved");
       }
@@ -186,18 +187,20 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       <div id="guide-detail" className="guide-detail">
         {guide && guide.sections && (
           <>
-            <div
-              className="guide-detail__controls"
-              style={editing ? { paddingRight: 8 } : {}}
-            >
-              <GuideDetailControls
-                editing={editing}
-                handleCancel={handleCancel}
-                handleSave={handleSave}
-                handleAddSection={handleAddSection}
-                handleSetEditing={handleSetEditing}
-              />
-            </div>
+            {user && cookbook.roles[user.uid] === "admin" && (
+              <div
+                className="guide-detail__controls"
+                style={editing ? { paddingRight: 8 } : {}}
+              >
+                <GuideDetailControls
+                  editing={editing}
+                  handleCancel={handleCancel}
+                  handleSave={handleSave}
+                  handleAddSection={handleAddSection}
+                  handleSetEditing={handleSetEditing}
+                />
+              </div>
+            )}
 
             <div className="guide-detail__content">
               <GuideDetailSideNav
