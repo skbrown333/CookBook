@@ -50,6 +50,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const { cookbook, user } = state;
     const guide_id = useParams().recipe;
     const toast = new ToastService();
+    const showControls = user && cookbook.roles[user.uid] === "admin";
 
     const getGuide = async () => {
       const guide = await firebase?.getDocById(
@@ -187,7 +188,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       <div id="guide-detail" className="guide-detail">
         {guide && guide.sections && (
           <>
-            {user && cookbook.roles[user.uid] === "admin" && (
+            {showControls && (
               <div
                 className="guide-detail__controls"
                 style={editing ? { paddingRight: 8 } : {}}
@@ -202,7 +203,10 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
               </div>
             )}
 
-            <div className="guide-detail__content">
+            <div
+              className="guide-detail__content"
+              style={showControls ? { paddingBottom: 64 } : {}}
+            >
               <GuideDetailSideNav
                 editing={editing}
                 title={guide.title}
