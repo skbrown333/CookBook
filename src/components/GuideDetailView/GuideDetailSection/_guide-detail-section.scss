@@ -12,6 +12,18 @@
     margin-left: auto;
   }
 
+  .euiMarkdownFormat table {
+    display: table;
+
+    th {
+      background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+    }
+
+    td {
+      background-color: darken($color: $euiColorEmptyShade, $amount: 2%);
+    }
+  }
+
   &__title {
     display: flex;
     align-items: center;

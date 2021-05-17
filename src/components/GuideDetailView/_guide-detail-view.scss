@@ -1,7 +1,7 @@
 @import "../../styles/responsive";
 
 #guide-detail {
-  padding: 12px 4px;
+  padding: 8px 8px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -9,7 +9,7 @@
   overflow: hidden;
 
   @include respond-to(gt-sm) {
-    padding: 24px 24px 0 24px;
+    padding: 8px 24px 0 24px;
   }
 
   .guide-detail__controls {
