@@ -52,16 +52,13 @@ export const App: FunctionComponent = () => {
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
         toast.errorToast("Error", err.msg);
-        console.log(err);
       } finally {
         setIsLoading(false);
       }
       try {
         const user = await firebaseInstance.getCurrentUser();
         dispatch(updateUser(user));
-      } catch (err) {
-        console.log("Main: ", err);
-      }
+      } catch (err) {}
     }
     init();
   }, []);

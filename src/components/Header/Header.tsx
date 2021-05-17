@@ -39,9 +39,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
       try {
         const user = await context.getCurrentUser();
         setUser(user);
-      } catch (err) {
-        console.log("Header: ", err);
-      }
+      } catch (err) {}
     }
   }, []);
 
