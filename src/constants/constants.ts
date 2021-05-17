@@ -71,6 +71,7 @@ export const newSection: Post = {
 
 export const mockGuide: Guide = {
   title: "falco",
+  character: null,
   sections: [
     {
       _id: "mock_post_id",
