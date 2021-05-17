@@ -7,7 +7,6 @@ export interface AppContext {
 }
 
 export const InitialState: AppContext = {
-  user: null,
   streams: null,
   toasts: [],
 };

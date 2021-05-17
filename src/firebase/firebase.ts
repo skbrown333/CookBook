@@ -142,24 +142,17 @@ export class Firebase {
    * Gets the current user
    */
   getCurrentUser = async () => {
-    return new Promise((resolve, reject) => {
-      this.auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          try {
-            const doc = await this.firestore
-              .collection("user_profiles")
-              .doc(user.uid)
-              .get();
+    const user = this.auth.currentUser;
 
-            resolve(doc.data());
-          } catch (err) {
-            reject(Error("Error Fetching User"));
-          }
-        } else {
-          reject(Error("Error fetching user"));
-        }
-      });
-    });
+    if (user) {
+      const doc = await this.firestore
+        .collection("user_profiles")
+        .doc(user.uid)
+        .get();
+      return { ...doc.data(), ...{ uid: user.uid } };
+    }
+
+    return null;
   };
 
   /**

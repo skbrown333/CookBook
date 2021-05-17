@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  useEffect,
-  useState,
-  useContext,
-} from "react";
+import React, { FunctionComponent, useContext } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -18,9 +13,7 @@ import {
 import { EuiAvatar } from "@elastic/eui";
 
 /* Context */
-import { Firebase, FirebaseContext } from "../../firebase";
 import { Context } from "../../store/Store";
-import { updateToasts } from "../../store/actions";
 
 /* Constants */
 import { DISCORD } from "../../constants/constants";
@@ -28,21 +21,8 @@ import { DISCORD } from "../../constants/constants";
 export interface HeaderBarProps {}
 
 export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
-  const context = useContext<Firebase | null>(FirebaseContext);
-  const [state, dispatch] = useContext(Context);
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    init();
-    async function init() {
-      if (!context) return;
-      try {
-        const user = await context.getCurrentUser();
-        setUser(user);
-      } catch (err) {}
-    }
-  }, []);
-
+  const [state] = useContext(Context);
+  const { cookbook, user } = state;
   return (
     <EuiHeader
       theme="default"
@@ -70,7 +50,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                 </EuiHeaderLink>
               </Link>
             </EuiHeaderLinks>,
-            ...(user
+            ...(user && cookbook.roles[user.uid] === "admin"
               ? [
                   <EuiHeaderSectionItemButton aria-label="Account menu">
                     <EuiAvatar
