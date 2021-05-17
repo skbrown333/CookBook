@@ -9,12 +9,14 @@ import "./_character-select.scss";
 
 export interface CharacterSelectProps {
   onChange: (value: string) => void;
+  value?: any;
 }
 
 export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
   onChange,
+  value = {},
 }) => {
-  const [selected, setSelected] = useState(undefined);
+  const [selected, setSelected] = useState(value || undefined);
   const options = [
     {
       value: "bowser",
