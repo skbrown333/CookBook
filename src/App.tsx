@@ -58,7 +58,9 @@ export const App: FunctionComponent = () => {
       try {
         const user = await firebaseInstance.getCurrentUser();
         dispatch(updateUser(user));
-      } catch (err) {}
+      } catch (err) {
+        console.log("Main: ", err);
+      }
     }
     init();
   }, []);
