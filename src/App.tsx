@@ -52,6 +52,7 @@ export const App: FunctionComponent = () => {
         dispatch(updateStreams(await twitch.getStreams()));
       } catch (err) {
         toast.errorToast("Error", err.msg);
+        console.log(err);
       } finally {
         setIsLoading(false);
       }
