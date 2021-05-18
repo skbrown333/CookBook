@@ -87,6 +87,19 @@ export class Firebase {
   };
 
   /**
+   * Gets a user and token from a discord login code
+   *
+   * @param code {String} - autho code needed to get user
+   */
+
+  getTwitchStreams = async (streams) => {
+    const res = await axios.post(FUNCTIONS.getTwitchStreams, {
+      data: streams,
+    });
+    return res.data.result;
+  };
+
+  /**
    * Creates a new user with the provided email and password
    *
    * @param email {String} - email address
@@ -142,24 +155,17 @@ export class Firebase {
    * Gets the current user
    */
   getCurrentUser = async () => {
-    return new Promise((resolve, reject) => {
-      this.auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          try {
-            const doc = await this.firestore
-              .collection("user_profiles")
-              .doc(user.uid)
-              .get();
+    const user = this.auth.currentUser;
 
-            resolve(doc.data());
-          } catch (err) {
-            reject(Error("Error Fetching User"));
-          }
-        } else {
-          reject(Error("Error fetching user"));
-        }
-      });
-    });
+    if (user) {
+      const doc = await this.firestore
+        .collection("user_profiles")
+        .doc(user.uid)
+        .get();
+      return { ...doc.data(), ...{ uid: user.uid } };
+    }
+
+    return null;
   };
 
   /**
