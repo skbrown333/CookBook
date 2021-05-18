@@ -113,17 +113,15 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
       </div>
       {editing ? (
         <div className="side-nav__draggable side-nav__content">
-          <EuiPanel className="side-nav-draggable__items" hasShadow={false}>
-            <EuiDragDropContext onDragEnd={handleDragEnd}>
-              <EuiDroppable
-                droppableId="DROPPABLE_AREA"
-                spacing="m"
-                className="guide-content__droppable"
-              >
-                {buildDraggable()}
-              </EuiDroppable>
-            </EuiDragDropContext>
-          </EuiPanel>
+          <EuiDragDropContext onDragEnd={handleDragEnd}>
+            <EuiDroppable
+              droppableId="DROPPABLE_AREA"
+              spacing="m"
+              className="guide-content__droppable"
+            >
+              {buildDraggable()}
+            </EuiDroppable>
+          </EuiDragDropContext>
         </div>
       ) : (
         <div className="side-nav__content">

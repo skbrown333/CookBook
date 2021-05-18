@@ -66,6 +66,10 @@
         display: none;
         width: 248px;
 
+        &.editing {
+          margin-top: 8px;
+        }
+
         @include respond-to(gt-sm) {
           display: block;
         }

@@ -229,7 +229,13 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                   buildSections()
                 )}
               </div>
-              <TwitchSidebar className="guide-content__right" />
+              <TwitchSidebar
+                className={
+                  editing
+                    ? "guide-content__right editing"
+                    : "guide-content__right"
+                }
+              />
             </div>
           </>
         )}
