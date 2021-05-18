@@ -1,7 +1,16 @@
 import React, { FunctionComponent } from "react";
 
 /* Components */
-import { EuiAvatar, EuiPanel, EuiSideNav } from "@elastic/eui";
+import {
+  EuiAvatar,
+  EuiPanel,
+  EuiIcon,
+  EuiDragDropContext,
+  EuiDroppable,
+  EuiDraggable,
+  EuiSideNav,
+  EuiText,
+} from "@elastic/eui";
 import { Post } from "../../../models/Post";
 
 /* Styles */
@@ -15,6 +24,7 @@ export interface GuideDetailSideNavProps {
   title: string;
   sections: Array<Post>;
   character: string | null;
+  handleDragEnd: (result) => void;
 }
 
 export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
@@ -22,7 +32,49 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
   title,
   sections,
   character,
+  handleDragEnd,
 }) => {
+  const buildDraggable = () => {
+    if (!sections) return [];
+    return sections.map((section, index) => {
+      const { title } = section;
+      return (
+        <EuiDraggable
+          spacing="m"
+          key={index}
+          index={index}
+          draggableId={index.toString()}
+          customDragHandle={true}
+        >
+          {(provided) => (
+            <div className="guide-content__side-nav__item">
+              <div
+                {...provided.dragHandleProps}
+                className="guide-content__side-nav__handle"
+                aria-label="Drag Handle"
+              >
+                <EuiIcon type="grab" />
+              </div>
+              <EuiText
+                id="index"
+                onClick={() => {
+                  let div = document.getElementById(`section-${index}`);
+                  if (div && document) {
+                    let topPos = div.offsetTop - 200;
+                    let sectionsDiv = document.getElementById("sections");
+                    if (sectionsDiv) sectionsDiv.scrollTop = topPos;
+                  }
+                }}
+              >
+                {title}
+              </EuiText>
+            </div>
+          )}
+        </EuiDraggable>
+      );
+    });
+  };
+
   const buildSideNaveItems = () => {
     if (!sections) return;
     return sections.map((section, index) => {
@@ -59,20 +111,34 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
         ></EuiAvatar>
         {title}
       </div>
-      <div className="side-nav__content">
-        <EuiSideNav
-          className="side-nav-content__items"
-          aria-label="Basic example"
-          style={{ width: 192 }}
-          items={[
-            {
-              name: "Sections",
-              id: 0,
-              items: buildSideNaveItems(),
-            },
-          ]}
-        />
-      </div>
+      {editing ? (
+        <div className="side-nav__draggable side-nav__content">
+          <EuiDragDropContext onDragEnd={handleDragEnd}>
+            <EuiDroppable
+              droppableId="DROPPABLE_AREA"
+              spacing="m"
+              className="guide-content__droppable"
+            >
+              {buildDraggable()}
+            </EuiDroppable>
+          </EuiDragDropContext>
+        </div>
+      ) : (
+        <div className="side-nav__content">
+          <EuiSideNav
+            className="side-nav-content__items"
+            aria-label="Basic example"
+            style={{ width: 192 }}
+            items={[
+              {
+                name: "Sections",
+                id: 0,
+                items: buildSideNaveItems(),
+              },
+            ]}
+          />
+        </div>
+      )}
     </EuiPanel>
   );
 };
