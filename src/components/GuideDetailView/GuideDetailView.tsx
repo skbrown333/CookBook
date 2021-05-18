@@ -205,6 +205,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                 title={guide.title}
                 sections={guide.sections}
                 character={guide.character}
+                handleDragEnd={handleDragEnd}
               />
               <div id="sections" className="guide-content__sections">
                 {editing ? (
