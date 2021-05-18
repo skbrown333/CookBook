@@ -25,7 +25,7 @@ import { Firebase, FirebaseContext } from "./firebase";
 import { Context } from "./store/Store";
 import {
   updateUser,
-  updateStreams,
+  updateTwitch,
   updateToasts,
   updateCookbook,
 } from "./store/actions";
@@ -49,9 +49,13 @@ export const App: FunctionComponent = () => {
       try {
         const cookbooks = await firebaseInstance.getCookbookInfo("falcon");
         dispatch(updateCookbook(cookbooks[0]));
-        dispatch(updateStreams(await twitch.getStreams()));
+        dispatch(
+          updateTwitch(
+            await firebaseInstance.getTwitchStreams(cookbooks[0].streams)
+          )
+        );
       } catch (err) {
-        toast.errorToast("Error", err.msg);
+        toast.errorToast("Error", err.message);
       } finally {
         setIsLoading(false);
       }
@@ -110,11 +114,10 @@ export const App: FunctionComponent = () => {
 };
 
 export const Login: FunctionComponent = () => {
-  const [state, dispatch] = useContext(Context);
-  let search = window.location.search;
-  let params = new URLSearchParams(search);
-  let code = params.get("code");
-  let baseUrl = window.location.origin;
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  const code = params.get("code");
+  const baseUrl = window.location.origin;
   const toast = new ToastService();
 
   async function login() {
@@ -125,10 +128,10 @@ export const Login: FunctionComponent = () => {
         `${baseUrl}/login`
       );
       await firebaseInstance.signInWithCustomToken(res.result);
-      window.location.href = baseUrl;
     } catch (err) {
-      toast.errorToast("Error creating guide", err.msg);
-      window.location.href = baseUrl;
+      toast.errorToast("Error creating guide", err.message);
+    } finally {
+      window.location.replace(baseUrl);
     }
   }
 
@@ -149,25 +152,18 @@ export const Login: FunctionComponent = () => {
 
 export const Logout: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
+  const baseUrl = window.location.origin;
+  const toast = new ToastService();
 
   useEffect(() => {
     async function init() {
       try {
         await firebaseInstance.signOut();
         dispatch(updateUser(null));
-        window.location.href = window.location.origin;
       } catch (err) {
-        dispatch(
-          updateToasts(
-            state.toasts.concat({
-              title: "Error logging out",
-              color: "danger",
-              iconType: "alert",
-              toastLifeTimeMs: 5000,
-              text: <p>{err.message}</p>,
-            })
-          )
-        );
+        toast.errorToast("Error logging out", err.message);
+      } finally {
+        window.location.replace(baseUrl);
       }
     }
     init();

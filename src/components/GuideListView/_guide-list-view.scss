@@ -1,22 +1,46 @@
+@import "../../styles/responsive";
+
 .guide-list {
   padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 
   &__controls {
     width: 100%;
+    max-width: 1200px;
     display: flex;
     justify-content: flex-end;
-    padding-right: 12px;
-    padding-bottom: 12px;
-    padding-top: 4px;
+    align-items: center;
+    height: 54px;
+
+    .guide-controls__button {
+      @media only screen and (max-width: 574px) {
+        margin-top: 8px;
+        margin-bottom: 16px;
+      }
+    }
+    &.euiPanel--paddingMedium {
+      padding: 0 12px;
+    }
   }
   &__content {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 400px);
+    grid-template-columns: repeat(auto-fill, 100%);
     grid-gap: 10px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 1400px;
     justify-content: center;
+    overflow: auto;
+    padding-top: 16px;
+
+    .euiFlexItem {
+      margin-bottom: 0 !important;
+    }
+
+    @include respond-to(gt-xs) {
+      grid-template-columns: repeat(auto-fill, 400px);
+    }
   }
 }

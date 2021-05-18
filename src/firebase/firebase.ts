@@ -43,7 +43,7 @@ export class Firebase {
     const snapshot = await collectionRef.get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
-      docs.push({ ...doc.data(), ...{ id: doc.id } });
+      docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
     });
     return docs;
   };
@@ -56,6 +56,14 @@ export class Firebase {
       docs.push({ ...doc.data(), ...{ id: doc.id } });
     });
     return docs;
+  };
+
+  deleteDocById = async (cookbook, collection, id) => {
+    const docRef = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`)
+      .doc(id);
+    return await docRef.delete();
   };
 
   getDocById = async (cookbook, collection, id) => {
@@ -76,6 +84,19 @@ export class Firebase {
       docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
     });
     return docs;
+  };
+
+  /**
+   * Gets a user and token from a discord login code
+   *
+   * @param code {String} - autho code needed to get user
+   */
+
+  getTwitchStreams = async (streams) => {
+    const res = await axios.post(FUNCTIONS.getTwitchStreams, {
+      data: streams,
+    });
+    return res.data.result;
   };
 
   /**
@@ -134,24 +155,17 @@ export class Firebase {
    * Gets the current user
    */
   getCurrentUser = async () => {
-    return new Promise((resolve, reject) => {
-      this.auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          try {
-            const doc = await this.firestore
-              .collection("user_profiles")
-              .doc(user.uid)
-              .get();
+    const user = this.auth.currentUser;
 
-            resolve(doc.data());
-          } catch (err) {
-            reject(Error("Error Fetching User"));
-          }
-        } else {
-          reject(Error("Error fetching user"));
-        }
-      });
-    });
+    if (user) {
+      const doc = await this.firestore
+        .collection("user_profiles")
+        .doc(user.uid)
+        .get();
+      return { ...doc.data(), ...{ uid: user.uid } };
+    }
+
+    return null;
   };
 
   /**

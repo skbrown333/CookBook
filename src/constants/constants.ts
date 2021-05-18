@@ -21,6 +21,7 @@ export const ENV = env;
  */
 export const FUNCTIONS = {
   loginWithDiscord: `https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/loginWithDiscord`,
+  getTwitchStreams: `https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/getTwitchStreams`,
 };
 
 /**
