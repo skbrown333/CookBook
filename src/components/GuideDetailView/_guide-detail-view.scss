@@ -1,4 +1,4 @@
-@import "../../styles/responsive";
+@import '../../styles/responsive';
 
 #guide-detail {
   padding: 8px 8px;
@@ -65,6 +65,10 @@
         margin-left: 12px;
         display: none;
         width: 248px;
+
+        &.editing {
+          margin-top: 8px;
+        }
 
         @include respond-to(gt-sm) {
           display: block;

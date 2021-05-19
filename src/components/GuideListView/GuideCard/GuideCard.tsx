@@ -1,31 +1,29 @@
-import React, { FunctionComponent, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, { FunctionComponent, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 
 /* Constants */
-import { CHARACTERS } from "../../../constants/constants";
+import { CHARACTERS } from '../../../constants/constants';
 
 /* Models */
-import { Guide } from "../../../models/Guide";
+import { Guide } from '../../../models/Guide';
 
 /* Components */
-import { EuiPanel, EuiAvatar, EuiBadge, EuiButtonIcon } from "@elastic/eui";
+import { EuiPanel, EuiAvatar, EuiBadge, EuiButtonIcon } from '@elastic/eui';
 
 /* Store */
-import { Context } from "../../../store/Store";
+import { Context } from '../../../store/Store';
 
 /* Styles */
-import "./_guide-card.scss";
+import './_guide-card.scss';
 
 export interface GuideCardProps {
   guide: Guide;
-  editing: boolean;
   handleDelete: (event, guide) => void;
   handleEdit: (event, guide) => void;
 }
 
 export const GuideCard: FunctionComponent<GuideCardProps> = ({
   guide,
-  editing,
   handleDelete,
   handleEdit,
 }) => {
@@ -55,7 +53,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
           ></EuiAvatar>
           {title}
         </div>
-        {user && cookbook.roles[user.uid] === "admin" && (
+        {user && cookbook.roles[user.uid] === 'admin' && (
           <div className="guide-card__header__controls">
             <EuiButtonIcon
               aria-label="edit"

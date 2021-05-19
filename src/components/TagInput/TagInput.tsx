@@ -3,24 +3,24 @@ import React, {
   useContext,
   FunctionComponent,
   useEffect,
-} from "react";
+} from 'react';
 
 /* Components */
-import { EuiComboBox } from "@elastic/eui";
+import { EuiComboBox } from '@elastic/eui';
 
 /* Styles */
-import "./_tag-input.scss";
+import './_tag-input.scss';
 
 /* Models */
-import { Tag } from "../../models/Tag";
+import { Tag } from '../../models/Tag';
 
 /* Store */
-import FirebaseContext from "../../firebase/context";
-import { Context } from "../../store/Store";
-import { FIRESTORE } from "../../constants/constants";
+import FirebaseContext from '../../firebase/context';
+import { Context } from '../../store/Store';
+import { FIRESTORE } from '../../constants/constants';
 
 /* Services */
-import { ToastService } from "../../services/ToastService";
+import { ToastService } from '../../services/ToastService';
 
 export interface TagInputProps {
   initialTags: Array<Tag>;
@@ -46,8 +46,8 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const fetchTags = async () => {
     try {
-      let x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
-      let tags = Array<Object>();
+      const x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
+      const tags = Array<any>();
       x?.forEach((doc) => {
         tags.push({
           label: doc.value,
@@ -55,7 +55,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
       });
       setOptions(tags);
     } catch (err) {
-      toast.errorToast("Error fetching tags", err.message);
+      toast.errorToast('Error fetching tags', err.message);
     } finally {
       setLoading(false);
     }
@@ -68,14 +68,14 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
         FIRESTORE.collections.tags,
         {
           value: newOption.label,
-        }
+        },
       );
       newOption.doc_ref = doc_ref;
       setOptions([...options, newOption]);
       setSelected([...selected, newOption]);
       toast.successToast(`Added tag: ${newOption.label}`);
     } catch (err) {
-      toast.errorToast("Failed to add tag", err.message);
+      toast.errorToast('Failed to add tag', err.message);
     }
   };
 
@@ -93,7 +93,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   const onCreateOption = (searchValue) => {
     const normalizedSearchValue = searchValue.trim().toLowerCase();
     const newOption = {
-      _id: "mock_tag_id",
+      _id: 'mock_tag_id',
       label: normalizedSearchValue,
     };
 

@@ -1,7 +1,7 @@
-export const UPDATE_USER_ACTION = "UpdateUserAction";
-export const UPDATE_TWITCH = "UpdateTwitch";
-export const UPDATE_TOASTS = "UpdateToasts";
-export const UPDATE_COOKBOOK = "UpdateCookbook";
+export const UPDATE_USER_ACTION = 'UpdateUserAction';
+export const UPDATE_TWITCH = 'UpdateTwitch';
+export const UPDATE_TOASTS = 'UpdateToasts';
+export const UPDATE_COOKBOOK = 'UpdateCookbook';
 
 export function updateUser(user) {
   return {

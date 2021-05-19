@@ -1,8 +1,8 @@
-import React, { useContext, FunctionComponent } from "react";
-import { Route, Redirect } from "react-router-dom";
+import React, { useContext, FunctionComponent } from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
 /* Store */
-import { Context } from "../../store/Store";
+import { Context } from '../../store/Store';
 
 /**
  * Route wrapper to protect authenticated routes
@@ -22,7 +22,7 @@ export const ProtectedRoute: FunctionComponent<any> = ({
     const error = (
       <Redirect
         to={{
-          pathname: "/login",
+          pathname: '/login',
           state: {
             from: props.location,
           },

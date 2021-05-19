@@ -1,18 +1,18 @@
-import { Guide } from "../models/Guide";
-import { Post } from "../models/Post";
-import { Tag } from "../models/Tag";
-import { CHARACTERS as characterIcons } from "./CharacterIcons";
+import { Guide } from '../models/Guide';
+import { Post } from '../models/Post';
+import { Tag } from '../models/Tag';
+import { CHARACTERS as characterIcons } from './CharacterIcons';
 
 /**
  * ENV
  */
 const NODE_ENV = process.env.NODE_ENV;
 
-let isLocal = NODE_ENV === "development";
-let env: any = {};
-env.base_url = isLocal ? "http://localhost:3000" : "https://cookbook.gg";
+const isLocal = NODE_ENV === 'development';
+const env: any = {};
+env.base_url = isLocal ? 'http://localhost:3000' : 'https://cookbook.gg';
 env.isLocal = isLocal;
-env.twitch_parent = isLocal ? "localhost" : "cookbook.gg";
+env.twitch_parent = isLocal ? 'localhost' : 'cookbook.gg';
 
 export const ENV = env;
 
@@ -29,7 +29,7 @@ export const FUNCTIONS = {
  */
 export const DISCORD = {
   authUrl: encodeURI(
-    `https://discord.com/api/oauth2/authorize?client_id=${process.env.REACT_APP_DISCORD_ID}&redirect_uri=${window.location.origin}/login&response_type=code&scope=identify email`
+    `https://discord.com/api/oauth2/authorize?client_id=${process.env.REACT_APP_DISCORD_ID}&redirect_uri=${window.location.origin}/login&response_type=code&scope=identify email`,
   ),
   getAvatarUrl: function (id, avatar) {
     return `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`;
@@ -48,10 +48,10 @@ export const CHARACTERS = characterIcons;
 
 export const FIRESTORE = {
   collections: {
-    guides: "guides",
-    tags: "tags",
-    posts: "posts",
-    cookbooks: "cookbooks",
+    guides: 'guides',
+    tags: 'tags',
+    posts: 'posts',
+    cookbooks: 'cookbooks',
   },
 };
 
@@ -64,26 +64,26 @@ const sampleBody = `
  `;
 
 export const newSection: Post = {
-  _id: "mock_post_id",
-  title: "**replace with title",
+  _id: 'mock_post_id',
+  title: '**replace with title',
   body: sampleBody,
   tags: Array<Tag>(),
 };
 
 export const mockGuide: Guide = {
-  title: "falco",
+  title: 'falco',
   character: null,
   sections: [
     {
-      _id: "mock_post_id",
-      title: "basics",
+      _id: 'mock_post_id',
+      title: 'basics',
       body: `The first key to understanding how to fight falco is that both of his primary walling options (bair and utilt) have virtually the exact same range. Meaning, if you're spacing for one you're simultaneously spacing for the other. This makes it far simpler to smother him/punish him
 \n![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
       tags: Array<Tag>(),
     },
     {
-      _id: "mock_post_id",
-      title: "percents",
+      _id: 'mock_post_id',
+      title: 'percents',
       body: `## \`No DI\`\n
 * \`40%\` Uthrow regrab
 * \`72%\` Uthrow fsmash
@@ -97,8 +97,8 @@ export const mockGuide: Guide = {
       tags: Array<Tag>(),
     },
     {
-      _id: "mock_post_id",
-      title: "defense-and-recovery",
+      _id: 'mock_post_id',
+      title: 'defense-and-recovery',
       body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) `,
       tags: Array<Tag>(),
     },
