@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { HeaderBar } from './components/Header/Header';
 import { GuideDetailView } from './components/GuideDetailView/GuideDetailView';
 import { GuideListView } from './components/GuideListView/GuideListView';
+import { ListView } from './components/ListView/PostListView';
 import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 
 /* Services */
@@ -86,7 +87,9 @@ export const App: FunctionComponent = () => {
                 <Route path="/recipes">
                   <GuideListView />
                 </Route>
-                <Route path="/"></Route>
+                <Route path="/">
+                  <ListView />
+                </Route>
               </Switch>
             </>
           )}
