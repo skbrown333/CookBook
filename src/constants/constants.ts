@@ -8,8 +8,8 @@ import { CHARACTERS as characterIcons } from './CharacterIcons';
  */
 const NODE_ENV = process.env.NODE_ENV;
 
-let isLocal = NODE_ENV === 'development';
-let env: any = {};
+const isLocal = NODE_ENV === 'development';
+const env: any = {};
 env.base_url = isLocal ? 'http://localhost:3000' : 'https://cookbook.gg';
 env.isLocal = isLocal;
 env.twitch_parent = isLocal ? 'localhost' : 'cookbook.gg';

@@ -20,6 +20,14 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     'no-console': 'error',
-    'no-empty-interface': 'off',
+    'react/prop-types': 'off',
+    'react/jsx-key': 'off',
+    'no-sparse-arrays': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
 };

@@ -46,8 +46,8 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const fetchTags = async () => {
     try {
-      let x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
-      let tags = Array<Object>();
+      const x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
+      const tags = Array<any>();
       x?.forEach((doc) => {
         tags.push({
           label: doc.value,

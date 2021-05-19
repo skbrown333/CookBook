@@ -58,10 +58,10 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
               <EuiText
                 id="index"
                 onClick={() => {
-                  let div = document.getElementById(`section-${index}`);
+                  const div = document.getElementById(`section-${index}`);
                   if (div && document) {
-                    let topPos = div.offsetTop - 200;
-                    let sectionsDiv = document.getElementById('sections');
+                    const topPos = div.offsetTop - 200;
+                    const sectionsDiv = document.getElementById('sections');
                     if (sectionsDiv) sectionsDiv.scrollTop = topPos;
                   }
                 }}
@@ -83,10 +83,10 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
         name: title,
         id: index,
         onClick: () => {
-          let div = document.getElementById(`section-${index}`);
+          const div = document.getElementById(`section-${index}`);
           if (div && document) {
-            let topPos = div.offsetTop - 200;
-            let sectionsDiv = document.getElementById('sections');
+            const topPos = div.offsetTop - 200;
+            const sectionsDiv = document.getElementById('sections');
             if (sectionsDiv) sectionsDiv.scrollTop = topPos;
           }
         },

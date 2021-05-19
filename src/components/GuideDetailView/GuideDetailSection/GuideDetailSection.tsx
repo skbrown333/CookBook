@@ -116,8 +116,8 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
               </EuiMarkdownFormat>
               <EuiSpacer size="s" />
               <div className="tag-holder guide-section__tags">
-                {tags.map((tag) => (
-                  <EuiBadge className="tag" color="hollow">
+                {tags.map((tag, index) => (
+                  <EuiBadge key={index} className="tag" color="hollow">
                     #{tag.label}
                   </EuiBadge>
                 ))}

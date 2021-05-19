@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { EuiAspectRatio } from '@elastic/eui';
 
 import { ENV } from '../constants/constants';

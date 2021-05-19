@@ -1,3 +1,5 @@
+import React from 'react';
+
 // const GifPlugin = {
 //   name: "GifPlugin",
 //   button: {
@@ -27,8 +29,8 @@ function GifMarkdownParser() {
     const gfyTransform = (url) => {
       const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
       if (url.includes(thumb) && url.includes(size)) return url;
-      let splitUrl = url.split('/');
-      let [, , gfy, path] = splitUrl;
+      const splitUrl = url.split('/');
+      const [, , gfy, path] = splitUrl;
       splitUrl[3] = path + size;
       splitUrl[2] = thumb + gfy;
       return splitUrl.join('/');

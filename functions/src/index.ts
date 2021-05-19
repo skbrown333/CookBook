@@ -21,7 +21,7 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
 
   try {
     // Get discord auth token
-    let response = await axios.post(
+    const response = await axios.post(
       `${baseUrl}/oauth2/token`,
       encodeURI(params),
       {
@@ -30,7 +30,7 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
     );
 
     // Get user with auth token
-    let newResponse = await axios.get(`${baseUrl}/users/@me`, {
+    const newResponse = await axios.get(`${baseUrl}/users/@me`, {
       headers: {
         authorization: `${response.data.token_type} ${response.data.access_token}`,
       },
@@ -50,7 +50,7 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
   };
 
   try {
-    let userRecord = await admin.auth().getUserByEmail(user.email);
+    const userRecord = await admin.auth().getUserByEmail(user.email);
     await admin
       .firestore()
       .collection('user_profiles')
@@ -58,7 +58,7 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
       .set(userProfile);
     return await admin.auth().createCustomToken(userRecord.uid);
   } catch (err) {
-    let userRecord = await admin.auth().createUser({ email: user.email });
+    const userRecord = await admin.auth().createUser({ email: user.email });
     await admin
       .firestore()
       .collection('user_profiles')
