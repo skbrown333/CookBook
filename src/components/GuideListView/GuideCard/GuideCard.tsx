@@ -18,14 +18,12 @@ import './_guide-card.scss';
 
 export interface GuideCardProps {
   guide: Guide;
-  editing: boolean;
   handleDelete: (event, guide) => void;
   handleEdit: (event, guide) => void;
 }
 
 export const GuideCard: FunctionComponent<GuideCardProps> = ({
   guide,
-  editing,
   handleDelete,
   handleEdit,
 }) => {

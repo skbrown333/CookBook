@@ -51,7 +51,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
     });
 
     offline = users.data.map((user, index) => {
-      const { profile_image_url, display_name, description, login } = user;
+      const { profile_image_url, display_name, login } = user;
       for (let i = 0; i < streams.data.length; i++) {
         const stream = streams.data[i];
         if (stream.user_id === user.id) {
