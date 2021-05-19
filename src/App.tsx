@@ -1,9 +1,4 @@
-import React, {
-  useEffect,
-  useContext,
-  useState,
-  FunctionComponent,
-} from 'react';
+import React, { useEffect, useContext, FunctionComponent } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 /* Components */
@@ -14,7 +9,6 @@ import { GuideListView } from './components/GuideListView/GuideListView';
 import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 
 /* Services */
-import { TwitchService } from './services/TwitchService';
 import { ToastService } from './services/ToastService';
 
 /* Constants */
