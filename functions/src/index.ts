@@ -1,8 +1,8 @@
-import * as functions from "firebase-functions";
+import * as functions from 'firebase-functions';
 
 // The Firebase Admin SDK to access Firestore.
-import * as admin from "firebase-admin";
-import axios from "axios";
+import * as admin from 'firebase-admin';
+import axios from 'axios';
 
 admin.initializeApp({
   serviceAccountId: functions.config().fb.service_account,
@@ -13,9 +13,9 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
   const clientId = functions.config().discord.id;
   const clientSecret = functions.config().discord.secret;
   const params = `client_id=${clientId}&client_secret=${clientSecret}&grant_type=authorization_code&code=${code}&redirect_uri=${redirectUrl}&scope=identify email`;
-  const baseUrl = "https://discord.com/api";
+  const baseUrl = 'https://discord.com/api';
   const headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
+    'Content-Type': 'application/x-www-form-urlencoded',
   };
   let user;
 
@@ -26,7 +26,7 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
       encodeURI(params),
       {
         headers: headers,
-      }
+      },
     );
 
     // Get user with auth token
@@ -53,7 +53,7 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
     let userRecord = await admin.auth().getUserByEmail(user.email);
     await admin
       .firestore()
-      .collection("user_profiles")
+      .collection('user_profiles')
       .doc(userRecord.uid)
       .set(userProfile);
     return await admin.auth().createCustomToken(userRecord.uid);
@@ -61,7 +61,7 @@ export const loginWithDiscord = functions.https.onCall(async (data: any) => {
     let userRecord = await admin.auth().createUser({ email: user.email });
     await admin
       .firestore()
-      .collection("user_profiles")
+      .collection('user_profiles')
       .doc(userRecord.uid)
       .set(userProfile);
     return await admin.auth().createCustomToken(userRecord.uid);
@@ -76,19 +76,19 @@ export const getTwitchStreams = functions.https.onCall(async (data: any) => {
   try {
     const res = await axios.post(authUrl);
     const { access_token } = res.data;
-    let usersQuery = "";
-    let streamsQuery = "";
+    let usersQuery = '';
+    let streamsQuery = '';
 
     // Build user query
     for (let i = 0; i < data.length; i++) {
       usersQuery += `login=${data[i]}`;
       if (i < data.length - 1) {
-        usersQuery += "&";
+        usersQuery += '&';
       }
 
       streamsQuery += `user_login=${data[i]}`;
       if (i < data.length - 1) {
-        streamsQuery += "&";
+        streamsQuery += '&';
       }
     }
 
@@ -98,9 +98,9 @@ export const getTwitchStreams = functions.https.onCall(async (data: any) => {
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
-          "Client-Id": client_id,
+          'Client-Id': client_id,
         },
-      }
+      },
     );
 
     //  Get streams
@@ -109,9 +109,9 @@ export const getTwitchStreams = functions.https.onCall(async (data: any) => {
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
-          "Client-Id": client_id,
+          'Client-Id': client_id,
         },
-      }
+      },
     );
 
     const users = userRes.data;

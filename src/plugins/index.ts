@@ -1,13 +1,13 @@
 /* Plugins */
-import { gifPlug } from "./GifPlugin";
-import { vidPlug } from "./iFramePlugin";
+import { gifPlug } from './GifPlugin';
+import { vidPlug } from './iFramePlugin';
 
 /* Defaults */
 import {
   getDefaultEuiMarkdownParsingPlugins,
   getDefaultEuiMarkdownProcessingPlugins,
   getDefaultEuiMarkdownUiPlugins,
-} from "@elastic/eui";
+} from '@elastic/eui';
 
 const plugs = [gifPlug, vidPlug];
 

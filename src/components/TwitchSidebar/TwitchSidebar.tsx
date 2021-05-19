@@ -1,12 +1,12 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent, useContext } from 'react';
 
-import { EuiPanel, EuiAvatar, EuiListGroup, EuiHealth } from "@elastic/eui";
+import { EuiPanel, EuiAvatar, EuiListGroup, EuiHealth } from '@elastic/eui';
 
 /* Styles */
-import "./_twitch-sidebar.scss";
+import './_twitch-sidebar.scss';
 
 /* Store */
-import { Context } from "../../store/Store";
+import { Context } from '../../store/Store';
 
 export interface TwitchSidebarProps {
   className: string;
@@ -15,7 +15,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   const { twitch } = useContext(Context)[0];
 
   const handleClick = (url) => {
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   };
   const buildStreams = () => {
     if (!twitch) return;
@@ -33,7 +33,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
       return (
         <div
           className="stream"
-          onClick={() => handleClick("https://www.twitch.tv/" + user_name)}
+          onClick={() => handleClick('https://www.twitch.tv/' + user_name)}
           key={`online-${index}`}
         >
           <EuiAvatar imageUrl={img} size="l" name="avatar" />
@@ -61,7 +61,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
       return (
         <div
           className="stream"
-          onClick={() => handleClick("https://www.twitch.tv/" + login)}
+          onClick={() => handleClick('https://www.twitch.tv/' + login)}
           key={`offline-${index}`}
         >
           <EuiAvatar

@@ -1,6 +1,6 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent, useContext } from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 /* Components */
 import {
@@ -9,14 +9,14 @@ import {
   EuiHeaderLinks,
   EuiHeaderLogo,
   EuiHeaderSectionItemButton,
-} from "@elastic/eui";
-import { EuiAvatar } from "@elastic/eui";
+} from '@elastic/eui';
+import { EuiAvatar } from '@elastic/eui';
 
 /* Context */
-import { Context } from "../../store/Store";
+import { Context } from '../../store/Store';
 
 /* Constants */
-import { DISCORD } from "../../constants/constants";
+import { DISCORD } from '../../constants/constants';
 
 export interface HeaderBarProps {}
 
@@ -36,7 +36,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
               </EuiHeaderLogo>
             </Link>,
           ],
-          borders: "right",
+          borders: 'right',
         },
         {
           items: [
@@ -50,7 +50,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                 </EuiHeaderLink>
               </Link>
             </EuiHeaderLinks>,
-            ...(user && cookbook.roles[user.uid] === "admin"
+            ...(user && cookbook.roles[user.uid] === 'admin'
               ? [
                   <EuiHeaderSectionItemButton aria-label="Account menu">
                     <EuiAvatar
@@ -73,7 +73,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
               : [<></>]),
             ,
           ],
-          borders: "left",
+          borders: 'left',
         },
       ]}
     />

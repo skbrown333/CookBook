@@ -1,11 +1,11 @@
-import app from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/functions";
-import axios from "axios";
+import app from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/functions';
+import axios from 'axios';
 
 /* Constants */
-import { FUNCTIONS } from "../constants/constants";
+import { FUNCTIONS } from '../constants/constants';
 
 export class Firebase {
   auth;
@@ -49,8 +49,8 @@ export class Firebase {
   };
 
   getCookbookInfo = async (name) => {
-    const collectionRef = app.firestore().collection("cookbooks");
-    const snapshot = await collectionRef.where("name", "==", name).get();
+    const collectionRef = app.firestore().collection('cookbooks');
+    const snapshot = await collectionRef.where('name', '==', name).get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
       docs.push({ ...doc.data(), ...{ id: doc.id } });
@@ -78,7 +78,7 @@ export class Firebase {
     const collectionRef = app
       .firestore()
       .collection(`cookbooks/${cookbook}/${collection}`);
-    const snapshot = await collectionRef.where(key, "==", value).get();
+    const snapshot = await collectionRef.where(key, '==', value).get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
       docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
@@ -159,7 +159,7 @@ export class Firebase {
 
     if (user) {
       const doc = await this.firestore
-        .collection("user_profiles")
+        .collection('user_profiles')
         .doc(user.uid)
         .get();
       return { ...doc.data(), ...{ uid: user.uid } };

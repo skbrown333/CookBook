@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { Context } from "../store/Store";
-import { updateToasts } from "../store/actions";
+import { useContext } from 'react';
+import { Context } from '../store/Store';
+import { updateToasts } from '../store/actions';
 
 export class ToastService {
   state;
@@ -16,10 +16,10 @@ export class ToastService {
 
   successToast(
     title,
-    text = "",
-    iconType = "bell",
-    color = "success",
-    toastLifeTimeMs = 5000
+    text = '',
+    iconType = 'bell',
+    color = 'success',
+    toastLifeTimeMs = 5000,
   ): void {
     this.sendToast({
       title,
@@ -32,10 +32,10 @@ export class ToastService {
 
   errorToast(
     title,
-    text = "",
-    iconType = "alert",
-    color = "danger",
-    toastLifeTimeMs = 5000
+    text = '',
+    iconType = 'alert',
+    color = 'danger',
+    toastLifeTimeMs = 5000,
   ): void {
     this.sendToast({
       title,

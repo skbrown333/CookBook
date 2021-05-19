@@ -3,14 +3,14 @@ import React, {
   useContext,
   useState,
   useEffect,
-} from "react";
+} from 'react';
 
 /* Models */
-import { Guide } from "../../models/Guide";
-import { Tag } from "../../models/Tag";
+import { Guide } from '../../models/Guide';
+import { Tag } from '../../models/Tag';
 
 /* Components */
-import { GuideCard } from "./GuideCard/GuideCard";
+import { GuideCard } from './GuideCard/GuideCard';
 import {
   EuiButton,
   EuiButtonEmpty,
@@ -26,29 +26,29 @@ import {
   EuiTextArea,
   EuiSearchBar,
   EuiButtonIcon,
-} from "@elastic/eui";
+} from '@elastic/eui';
 
-import { TagInput } from "../TagInput/TagInput";
+import { TagInput } from '../TagInput/TagInput';
 
 /* Styles */
-import "./_guide-list-view.scss";
-import { CharacterSelect } from "../CharacterSelect/CharacterSelect";
+import './_guide-list-view.scss';
+import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
 
 /* Context */
-import { Firebase, FirebaseContext } from "../../firebase";
-import { Context } from "../../store/Store";
+import { Firebase, FirebaseContext } from '../../firebase';
+import { Context } from '../../store/Store';
 
 /* Constants */
-import { CHARACTERS, FIRESTORE } from "../../constants/constants";
+import { CHARACTERS, FIRESTORE } from '../../constants/constants';
 
 /* Services */
-import { ToastService } from "../../services/ToastService";
+import { ToastService } from '../../services/ToastService';
 
 export interface GuideListViewProps {}
 
 const emptyGuide: Guide = {
-  title: "",
-  description: "",
+  title: '',
+  description: '',
   character: null,
   sections: [],
   tags: [],
@@ -82,7 +82,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       try {
         setGuides(await getGuides());
       } catch (err) {
-        toast.errorToast("Error getting guides", err.message);
+        toast.errorToast('Error getting guides', err.message);
       }
     }
     init();
@@ -100,15 +100,15 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       await firebase?.deleteDocById(
         cookbook.id,
         FIRESTORE.collections.guides,
-        guide.id
+        guide.id,
       );
       setGuides(await getGuides());
       toast.successToast(
-        "Guide deleted",
-        `guide ${guide.title} has been deleted`
+        'Guide deleted',
+        `guide ${guide.title} has been deleted`,
       );
     } catch (error) {
-      toast.errorToast("Guide failed to be deleted", error.msg);
+      toast.errorToast('Guide failed to be deleted', error.msg);
     } finally {
       setShowDelete(false);
       setGuide(emptyGuide);
@@ -123,7 +123,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
 
   const destroyModal = (
     <EuiConfirmModal
-      title={`Delete guide "${guide ? guide.title : ""}"?`}
+      title={`Delete guide "${guide ? guide.title : ''}"?`}
       onCancel={() => setShowDelete(false)}
       onConfirm={deleteGuide}
       cancelButtonText="Cancel"
@@ -147,7 +147,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       <EuiFormRow label="Description (optional)">
         <EuiTextArea
           resize="none"
-          value={guide.description || ""}
+          value={guide.description || ''}
           onChange={(e) =>
             setGuide({ ...guide, ...{ description: e.target.value } })
           }
@@ -180,11 +180,11 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       });
       toast.successToast(
         guide.title,
-        "Guide succesfully created",
-        character ? CHARACTERS[character] : null
+        'Guide succesfully created',
+        character ? CHARACTERS[character] : null,
       );
     } catch (err) {
-      toast.errorToast("Failed to create guide", err.message);
+      toast.errorToast('Failed to create guide', err.message);
     }
   };
 
@@ -194,7 +194,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       setCreating(true);
       await createGuide(guide);
       setGuides(
-        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
+        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides),
       );
       setGuide(emptyGuide);
       setShowAdd(false);
@@ -207,9 +207,9 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     try {
       setCreating(true);
       await guide.doc_ref.set(guide);
-      toast.successToast("Guide Updated", `Edited guide: ${guide.title}`);
+      toast.successToast('Guide Updated', `Edited guide: ${guide.title}`);
       setGuides(
-        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides)
+        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides),
       );
     } finally {
       setGuide(emptyGuide);
@@ -268,7 +268,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     <div className="guide-list">
       <div className="guide-list__controls">
         <EuiSearchBar onChange={() => {}} />
-        {user && cookbook.roles[user.uid] === "admin" && (
+        {user && cookbook.roles[user.uid] === 'admin' && (
           <EuiButtonIcon
             aria-label="add"
             className="guide-controls__button"
@@ -284,9 +284,9 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
           </EuiButtonIcon>
         )}
 
-        {showAdd === true && firebase && Modal("Add Guide", handleNewSave)}
+        {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
         {showDelete && destroyModal}
-        {showEdit && Modal("Edit Guide", handleEditSave)}
+        {showEdit && Modal('Edit Guide', handleEditSave)}
       </div>
       <div className="guide-list__content">{buildGuides()}</div>
     </div>

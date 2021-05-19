@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 
 /* Components */
 import {
@@ -10,14 +10,14 @@ import {
   EuiDraggable,
   EuiSideNav,
   EuiText,
-} from "@elastic/eui";
-import { Post } from "../../../models/Post";
+} from '@elastic/eui';
+import { Post } from '../../../models/Post';
 
 /* Styles */
-import "./_guide-detail-side-nav.scss";
+import './_guide-detail-side-nav.scss';
 
 /* Constants */
-import { CHARACTERS } from "../../../constants/constants";
+import { CHARACTERS } from '../../../constants/constants';
 
 export interface GuideDetailSideNavProps {
   editing: boolean;
@@ -61,7 +61,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
                   let div = document.getElementById(`section-${index}`);
                   if (div && document) {
                     let topPos = div.offsetTop - 200;
-                    let sectionsDiv = document.getElementById("sections");
+                    let sectionsDiv = document.getElementById('sections');
                     if (sectionsDiv) sectionsDiv.scrollTop = topPos;
                   }
                 }}
@@ -86,7 +86,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
           let div = document.getElementById(`section-${index}`);
           if (div && document) {
             let topPos = div.offsetTop - 200;
-            let sectionsDiv = document.getElementById("sections");
+            let sectionsDiv = document.getElementById('sections');
             if (sectionsDiv) sectionsDiv.scrollTop = topPos;
           }
         },
@@ -131,7 +131,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
             style={{ width: 192 }}
             items={[
               {
-                name: "Sections",
+                name: 'Sections',
                 id: 0,
                 items: buildSideNaveItems(),
               },

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 
 /* Components */
 import {
@@ -9,17 +9,17 @@ import {
   EuiPanel,
   EuiSpacer,
   EuiBadge,
-} from "@elastic/eui";
-import { TagInput } from "../../TagInput/TagInput";
+} from '@elastic/eui';
+import { TagInput } from '../../TagInput/TagInput';
 
 /* Styles */
-import "./_guide-detail-section.scss";
+import './_guide-detail-section.scss';
 
 /*Models*/
-import { Tag } from "../../../models/Tag";
+import { Tag } from '../../../models/Tag';
 
 /* Plugins */
-import { parsingList, processingList, uiList } from "../../../plugins";
+import { parsingList, processingList, uiList } from '../../../plugins';
 
 export interface GuideDetailSectionProps {
   title: string;
@@ -58,7 +58,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
             <EuiFieldText
               placeholder="title"
               value={title}
-              onChange={(e) => updateSection("title", e.target.value, index)}
+              onChange={(e) => updateSection('title', e.target.value, index)}
             />
             <EuiButtonIcon
               aria-label="delete-icon"
@@ -78,7 +78,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
         )}
         <EuiButtonIcon
           aria-label="collapse-icon"
-          iconType={isCollapsed ? "arrowDown" : "arrowUp"}
+          iconType={isCollapsed ? 'arrowDown' : 'arrowUp'}
           iconSize="l"
           size="m"
           className="guide-section__title--collapse"
@@ -88,13 +88,13 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
         ></EuiButtonIcon>
       </div>
       {!isCollapsed && (
-        <div className={`guide-section__body${editing ? " editing" : ""}`}>
+        <div className={`guide-section__body${editing ? ' editing' : ''}`}>
           {editing ? (
             <>
               <EuiMarkdownEditor
                 aria-label="Body markdown editor"
                 value={body}
-                onChange={(value) => updateSection("body", value, index)}
+                onChange={(value) => updateSection('body', value, index)}
                 height={400}
                 parsingPluginList={parsingList}
                 processingPluginList={processingList}
@@ -103,7 +103,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
               <TagInput
                 className="guide-section__tags"
                 initialTags={tags}
-                handleUpdate={(tags) => updateSection("tags", tags, index)}
+                handleUpdate={(tags) => updateSection('tags', tags, index)}
               ></TagInput>
             </>
           ) : (
