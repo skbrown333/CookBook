@@ -1,75 +1,64 @@
-import React, {
-  useEffect,
-  useContext,
-  useState,
-  FunctionComponent,
-} from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useEffect, useContext, FunctionComponent } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 /* Components */
-import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
-import { HeaderBar } from "./components/Header/Header";
-import { GuideDetailView } from "./components/GuideDetailView/GuideDetailView";
-import { GuideListView } from "./components/GuideListView/GuideListView";
-import { EuiLoadingSpinner, EuiGlobalToastList } from "@elastic/eui";
+import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
+import { HeaderBar } from './components/Header/Header';
+import { GuideDetailView } from './components/GuideDetailView/GuideDetailView';
+import { GuideListView } from './components/GuideListView/GuideListView';
+import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 
 /* Services */
-import { TwitchService } from "./services/TwitchService";
-import { ToastService } from "./services/ToastService";
+import { ToastService } from './services/ToastService';
 
 /* Constants */
-import { DISCORD, FIRESTORE } from "./constants/constants";
+import { DISCORD } from './constants/constants';
 
 /* Store */
-import { Firebase, FirebaseContext } from "./firebase";
-import { Context } from "./store/Store";
+import { Firebase, FirebaseContext } from './firebase';
+import { Context } from './store/Store';
 import {
   updateUser,
   updateTwitch,
   updateToasts,
   updateCookbook,
-} from "./store/actions";
+} from './store/actions';
 
 /* Styles */
-import "@elastic/eui/dist/eui_theme_amsterdam_dark.css";
-import "./App.scss";
+import '@elastic/eui/dist/eui_theme_amsterdam_dark.css';
+import './App.scss';
 
 const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
   const { toasts } = state;
-  const twitch = new TwitchService();
   const toast = new ToastService();
-  const [isLoading, setIsLoading] = useState(true);
   const { cookbook } = state;
 
   useEffect(() => {
     async function init() {
       try {
-        const cookbooks = await firebaseInstance.getCookbookInfo("falcon");
+        const cookbooks = await firebaseInstance.getCookbookInfo('falcon');
         dispatch(updateCookbook(cookbooks[0]));
         dispatch(
           updateTwitch(
-            await firebaseInstance.getTwitchStreams(cookbooks[0].streams)
-          )
+            await firebaseInstance.getTwitchStreams(cookbooks[0].streams),
+          ),
         );
       } catch (err) {
-        toast.errorToast("Error", err.message);
-      } finally {
-        setIsLoading(false);
+        toast.errorToast('Error', err.message);
       }
-      try {
-        const user = await firebaseInstance.getCurrentUser();
-        dispatch(updateUser(user));
-      } catch (err) {}
+
+      const user = await firebaseInstance.getCurrentUser();
+      dispatch(updateUser(user));
     }
     init();
   }, []);
 
   const removeToast = (removedToast) => {
     dispatch(
-      updateToasts(toasts.filter((toast) => toast.id !== removedToast.id))
+      updateToasts(toasts.filter((toast) => toast.id !== removedToast.id)),
     );
   };
 
@@ -116,7 +105,7 @@ export const App: FunctionComponent = () => {
 export const Login: FunctionComponent = () => {
   const search = window.location.search;
   const params = new URLSearchParams(search);
-  const code = params.get("code");
+  const code = params.get('code');
   const baseUrl = window.location.origin;
   const toast = new ToastService();
 
@@ -125,11 +114,11 @@ export const Login: FunctionComponent = () => {
     try {
       const res = await firebaseInstance.loginWithDiscord(
         code,
-        `${baseUrl}/login`
+        `${baseUrl}/login`,
       );
       await firebaseInstance.signInWithCustomToken(res.result);
     } catch (err) {
-      toast.errorToast("Error creating guide", err.message);
+      toast.errorToast('Error creating guide', err.message);
     } finally {
       window.location.replace(baseUrl);
     }
@@ -151,7 +140,7 @@ export const Login: FunctionComponent = () => {
 };
 
 export const Logout: FunctionComponent = () => {
-  const [state, dispatch] = useContext(Context);
+  const [dispatch] = useContext(Context)[1];
   const baseUrl = window.location.origin;
   const toast = new ToastService();
 
@@ -161,7 +150,7 @@ export const Logout: FunctionComponent = () => {
         await firebaseInstance.signOut();
         dispatch(updateUser(null));
       } catch (err) {
-        toast.errorToast("Error logging out", err.message);
+        toast.errorToast('Error logging out', err.message);
       } finally {
         window.location.replace(baseUrl);
       }

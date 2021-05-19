@@ -1,5 +1,5 @@
-import { Post } from "./Post";
-import { Tag } from "./Tag";
+import { Post } from './Post';
+import { Tag } from './Tag';
 
 export interface Guide {
   id?: string;

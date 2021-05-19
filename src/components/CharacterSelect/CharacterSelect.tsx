@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState } from 'react';
 
 /* Components */
-import { EuiSuperSelect } from "@elastic/eui";
-import { CHARACTERS } from "../../constants/CharacterIcons";
+import { EuiSuperSelect } from '@elastic/eui';
+import { CHARACTERS } from '../../constants/CharacterIcons';
 
 /* Styles */
-import "./_character-select.scss";
+import './_character-select.scss';
 
 export interface CharacterSelectProps {
   onChange: (value: string) => void;
@@ -19,7 +19,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
   const [selected, setSelected] = useState(value || undefined);
   const options = [
     {
-      value: "bowser",
+      value: 'bowser',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.bowser} /> Bowser
@@ -27,7 +27,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "donkey_kong",
+      value: 'donkey_kong',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.donkey_kong} /> Donkey Kong
@@ -35,7 +35,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "dr_mario",
+      value: 'dr_mario',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.dr_mario} /> Dr. Mario
@@ -43,7 +43,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "falco",
+      value: 'falco',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.falco} /> Falco
@@ -51,7 +51,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "falcon",
+      value: 'falcon',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.falcon} /> Captain Falcon
@@ -59,7 +59,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "fox",
+      value: 'fox',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.fox} /> Fox
@@ -67,7 +67,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "game_and_watch",
+      value: 'game_and_watch',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.game_and_watch} /> Mr. Game & Watch
@@ -75,7 +75,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "ganon",
+      value: 'ganon',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.ganon} /> Ganondorf
@@ -83,7 +83,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "ice_climbers",
+      value: 'ice_climbers',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.ice_climbers} /> Ice Climbers
@@ -91,7 +91,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "jiggly_puff",
+      value: 'jiggly_puff',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.jiggly_puff} /> Jigglypuff
@@ -99,7 +99,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "kirby",
+      value: 'kirby',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.kirby} /> Kirby
@@ -107,7 +107,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "link",
+      value: 'link',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.link} /> Link
@@ -115,7 +115,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "luigi",
+      value: 'luigi',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.luigi} /> Luigi
@@ -123,7 +123,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "mario",
+      value: 'mario',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.mario} /> Mario
@@ -131,7 +131,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "marth",
+      value: 'marth',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.marth} /> Marth
@@ -139,7 +139,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "mew_two",
+      value: 'mew_two',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.mew_two} /> Mewtwo
@@ -147,7 +147,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "ness",
+      value: 'ness',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.ness} /> Ness
@@ -155,7 +155,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "peach",
+      value: 'peach',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.peach} /> Peach
@@ -163,7 +163,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "pichu",
+      value: 'pichu',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.pichu} /> Pichu
@@ -171,7 +171,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "pikachu",
+      value: 'pikachu',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.pikachu} /> Pikachu
@@ -179,7 +179,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "roy",
+      value: 'roy',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.roy} /> Roy
@@ -187,7 +187,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "samus",
+      value: 'samus',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.samus} /> Samus
@@ -195,7 +195,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "sheik",
+      value: 'sheik',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.sheik} /> Sheik
@@ -203,7 +203,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "yoshi",
+      value: 'yoshi',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.yoshi} /> Yoshi
@@ -211,7 +211,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "young_link",
+      value: 'young_link',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.young_link} /> Young Link
@@ -219,7 +219,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
-      value: "zelda",
+      value: 'zelda',
       inputDisplay: (
         <span className="character-select__character">
           <img src={CHARACTERS.zelda} /> Zelda

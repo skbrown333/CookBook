@@ -1,5 +1,5 @@
 export interface Cookbook {
-  roles: Object;
+  roles: any;
   streamers: Array<string>;
-  name: "string";
+  name: 'string';
 }

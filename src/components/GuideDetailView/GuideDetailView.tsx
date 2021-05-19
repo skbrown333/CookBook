@@ -4,8 +4,8 @@ import React, {
   useEffect,
   ReactElement,
   useContext,
-} from "react";
-import { useParams } from "react-router-dom";
+} from 'react';
+import { useParams } from 'react-router-dom';
 
 /* Components */
 import {
@@ -13,28 +13,28 @@ import {
   EuiDroppable,
   EuiDraggable,
   euiDragDropReorder,
-} from "@elastic/eui";
-import { TwitchSidebar } from "../TwitchSidebar/TwitchSidebar";
+} from '@elastic/eui';
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 
 /* Styles */
-import "./_guide-detail-view.scss";
+import './_guide-detail-view.scss';
 
 /* Types */
-import { Guide } from "../../models/Guide";
+import { Guide } from '../../models/Guide';
 
 /* Constants */
-import { newSection } from "../../constants/constants";
-import { GuideDetailSideNav } from "./GuideDetailSideNav/GuideDetailSideNav";
-import { GuideDetailSection } from "./GuideDetailSection/GuideDetailSection";
-import { GuideDetailControls } from "./GuideDetailControls/GuideDetailControls";
+import { newSection } from '../../constants/constants';
+import { GuideDetailSideNav } from './GuideDetailSideNav/GuideDetailSideNav';
+import { GuideDetailSection } from './GuideDetailSection/GuideDetailSection';
+import { GuideDetailControls } from './GuideDetailControls/GuideDetailControls';
 
 /* Firebase */
-import FirebaseContext from "../../firebase/context";
-import { Context } from "../../store/Store";
-import { FIRESTORE } from "../../constants/constants";
+import FirebaseContext from '../../firebase/context';
+import { Context } from '../../store/Store';
+import { FIRESTORE } from '../../constants/constants';
 
 /* Services */
-import { ToastService } from "../../services/ToastService";
+import { ToastService } from '../../services/ToastService';
 
 export interface GuideDetailViewProps {}
 
@@ -42,7 +42,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
   (): ReactElement => {
     const [editing, setEditing] = useState<boolean>(false);
     const [collapsed, setCollapsed] = useState<Array<boolean>>(
-      Array<boolean>()
+      Array<boolean>(),
     );
     const [guide, setGuide] = useState<Guide | null>(null);
     const firebase = useContext(FirebaseContext);
@@ -50,15 +50,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const { cookbook, user } = state;
     const guide_id = useParams().recipe;
     const toast = new ToastService();
-    const showControls = user && cookbook.roles[user.uid] === "admin";
+    const showControls = user && cookbook.roles[user.uid] === 'admin';
 
     const getGuide = async () => {
-      const guide = await firebase?.getDocById(
+      const guide: any = await firebase?.getDocById(
         cookbook.id,
         FIRESTORE.collections.guides,
-        guide_id
+        guide_id,
       );
-      // @ts-ignore
+
       setGuide(guide);
     };
 
@@ -93,11 +93,11 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
 
     const handleDelete = (index) => {
       if (!guide) return;
-      let { sections } = guide;
+      const { sections } = guide;
       setCollapsed(
         collapsed
           .slice(0, index)
-          .concat(collapsed.slice(index + 1, collapsed.length))
+          .concat(collapsed.slice(index + 1, collapsed.length)),
       );
       guide.sections = sections
         .slice(0, index)
@@ -109,12 +109,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       if (!guide) return;
       try {
         await guide.doc_ref.update({ sections: guide.sections });
-        toast.successToast("Guide saved!", "Guide saved");
+        toast.successToast('Guide saved!', 'Guide saved');
         setCollapsed(Array(guide.sections.length).fill(false));
         await getGuide();
         setEditing(false);
       } catch (error) {
-        toast.errorToast("Something went wrong", "Guide was not saved");
+        toast.errorToast('Something went wrong', 'Guide was not saved');
       }
     };
 
@@ -126,12 +126,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const handleDragEnd = (result) => {
       const { source, destination } = result;
       if (!guide) return;
-      let { sections } = guide;
+      const { sections } = guide;
       if (source && destination) {
         const items = euiDragDropReorder(
           sections,
           source.index,
-          destination.index
+          destination.index,
         );
         setCollapsed([
           ...euiDragDropReorder(collapsed, source.index, destination.index),
@@ -212,6 +212,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                 title={guide.title}
                 sections={guide.sections}
                 character={guide.character}
+                handleDragEnd={handleDragEnd}
               />
               <div id="sections" className="guide-content__sections">
                 {editing ? (
@@ -228,7 +229,13 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                   buildSections()
                 )}
               </div>
-              <TwitchSidebar className="guide-content__right" />
+              <TwitchSidebar
+                className={
+                  editing
+                    ? 'guide-content__right editing'
+                    : 'guide-content__right'
+                }
+              />
             </div>
           </>
         )}

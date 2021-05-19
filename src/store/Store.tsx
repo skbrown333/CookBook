@@ -1,6 +1,6 @@
-import React, { createContext, useReducer } from "react";
-import { Reducer } from "./reducers";
-import { InitialState, AppContext } from "./initial-state";
+import React, { createContext, useReducer } from 'react';
+import { Reducer } from './reducers';
+import { InitialState } from './initial-state';
 
 export const Store = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, InitialState);

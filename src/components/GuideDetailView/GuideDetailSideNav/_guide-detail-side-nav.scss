@@ -1,11 +1,11 @@
-@import "../../../styles/responsive";
-@import "@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss";
+@import '../../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
 .guide-content__side-nav {
   max-height: 75%;
-  max-width: 248px;
+  width: 248px;
   margin-right: 24px;
-  margin-left: -250px;
+  display: none;
 
   &.euiPanel {
     flex-grow: 0;
@@ -24,24 +24,35 @@
     text-transform: capitalize;
   }
 
-  .side-nav__header {
+  .side-nav {
+    &__header {
+      display: flex;
+      align-items: center;
+      background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+      font-size: 24px;
+      font-weight: 600;
+      text-transform: capitalize;
+      width: 100%;
+      height: 57px;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      width: 100%;
+      &__items {
+        margin: 12px 0;
+      }
+    }
+  }
+  &__item {
     display: flex;
     align-items: center;
-    background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
-    font-size: 24px;
-    font-weight: 600;
-    text-transform: capitalize;
-    width: 100%;
-    height: 57px;
   }
 
-  .side-nav__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 16px;
-    &__items {
-      margin: 12px 0;
-    }
+  &__handle {
+    margin-right: 10px;
   }
 }

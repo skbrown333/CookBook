@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 
 /* Components */
-import { EuiButtonIcon } from "@elastic/eui";
+import { EuiButtonIcon } from '@elastic/eui';
 
 /* Styles */
-import "./_guide-detail-controls.scss";
+import './_guide-detail-controls.scss';
 
 export interface GuideDetailControlsProps {
   editing: boolean;
