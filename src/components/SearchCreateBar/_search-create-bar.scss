@@ -1,0 +1,18 @@
+.search-controls {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 54px;
+
+  &__button {
+    @media only screen and (max-width: 574px) {
+      margin-top: 8px;
+      margin-bottom: 16px;
+    }
+  }
+  &.euiPanel--paddingMedium {
+    padding: 0 12px;
+  }
+}
