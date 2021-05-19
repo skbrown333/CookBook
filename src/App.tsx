@@ -143,7 +143,7 @@ export const Login: FunctionComponent = () => {
 };
 
 export const Logout: FunctionComponent = () => {
-  const [dispatch] = useContext(Context)[1];
+  const [, dispatch] = useContext(Context);
   const baseUrl = window.location.origin;
   const toast = new ToastService();
 
