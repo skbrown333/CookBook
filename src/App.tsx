@@ -39,7 +39,10 @@ export const App: FunctionComponent = () => {
   useEffect(() => {
     async function init() {
       try {
-        const cookbooks = await firebaseInstance.getCookbookInfo('falcon');
+        const domains = window.location.host.split('.');
+        const subdomain =
+          domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
+        const cookbooks = await firebaseInstance.getCookbookInfo(subdomain);
         dispatch(updateCookbook(cookbooks[0]));
         dispatch(
           updateTwitch(

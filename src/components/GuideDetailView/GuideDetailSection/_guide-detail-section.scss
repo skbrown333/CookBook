@@ -12,15 +12,24 @@
     margin-left: auto;
   }
 
-  .euiMarkdownFormat table {
-    display: table;
+  .euiMarkdownFormat {
+    display: flex;
+    justify-content: center;
 
-    th {
-      background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+    div {
+      max-width: 800px;
     }
 
-    td {
-      background-color: darken($color: $euiColorEmptyShade, $amount: 2%);
+    table {
+      display: table;
+
+      th {
+        background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+      }
+
+      td {
+        background-color: darken($color: $euiColorEmptyShade, $amount: 2%);
+      }
     }
   }
 
