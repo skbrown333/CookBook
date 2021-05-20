@@ -147,7 +147,6 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
           </EuiModalHeaderTitle>
         </EuiModalHeader>
         <EuiModalBody>
-          {' '}
           <EuiFieldText
             placeholder="title"
             value={title}
