@@ -4,16 +4,16 @@ import React, { FunctionComponent, useContext } from 'react';
 import {
   EuiMarkdownFormat,
   EuiPanel,
-  EuiSpacer,
   EuiBadge,
   EuiButtonIcon,
+  EuiAvatar,
 } from '@elastic/eui';
 
 /* Styles */
 import './_post-view.scss';
 
-/* Models */
-import { Tag } from '../../../models/Tag';
+/* Constants */
+import { CHARACTERS } from '../../../constants/constants';
 
 /* Plugins */
 import { parsingList, processingList } from '../../../plugins';
@@ -22,24 +22,19 @@ import { parsingList, processingList } from '../../../plugins';
 import { Context } from '../../../store/Store';
 
 export interface PostProps {
-  title: string;
-  body: string;
-  tags: Array<Tag>;
-  id: string;
+  post: any;
   handleEdit: () => void;
   handleDelete: () => void;
 }
 
 export const PostView: FunctionComponent<PostProps> = ({
-  title,
-  body,
-  tags,
-  id,
+  post,
   handleEdit,
   handleDelete,
 }) => {
   const [state] = useContext(Context);
   const { cookbook, user } = state;
+  const { title, body, id, character, tags } = post;
 
   return (
     <EuiPanel
@@ -51,7 +46,32 @@ export const PostView: FunctionComponent<PostProps> = ({
     >
       <div className="post__content">
         <div className="post__title">
+          <EuiAvatar
+            className="guide-card__header__avatar"
+            name={title}
+            color={null}
+            iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
+            iconSize="xl"
+          ></EuiAvatar>
           <div className="post__title--text">{title}</div>
+          {user && cookbook.roles[user.uid] === 'admin' && (
+            <div className="post__controls">
+              <EuiButtonIcon
+                aria-label="edit"
+                className="post__header__edit"
+                iconType="documentEdit"
+                color="primary"
+                onClick={handleEdit}
+              />
+              <EuiButtonIcon
+                aria-label="delete"
+                className="post__header__delete"
+                iconType="trash"
+                color="danger"
+                onClick={handleDelete}
+              />
+            </div>
+          )}
         </div>
 
         <div className={`post__body`}>
@@ -61,34 +81,15 @@ export const PostView: FunctionComponent<PostProps> = ({
           >
             {body}
           </EuiMarkdownFormat>
-          <EuiSpacer size="s" />
-          <div className="tag-holder post__tags">
-            {tags.map((tag, index) => (
-              <EuiBadge key={index} className="tag" color="hollow">
-                #{tag.label}
-              </EuiBadge>
-            ))}
-          </div>
+        </div>
+        <div className="post__footer">
+          {tags.map((tag, index) => (
+            <EuiBadge key={index} className="tag" color="hollow">
+              #{tag.label}
+            </EuiBadge>
+          ))}
         </div>
       </div>
-      {user && cookbook.roles[user.uid] === 'admin' && (
-        <div className="post__controls">
-          <EuiButtonIcon
-            aria-label="edit"
-            className="post__header__edit"
-            iconType="documentEdit"
-            color="primary"
-            onClick={handleEdit}
-          />
-          <EuiButtonIcon
-            aria-label="delete"
-            className="post__header__delete"
-            iconType="trash"
-            color="danger"
-            onClick={handleDelete}
-          />
-        </div>
-      )}
     </EuiPanel>
   );
 };

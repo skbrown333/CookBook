@@ -107,7 +107,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
         `guide ${guide.title} has been deleted`,
       );
     } catch (error) {
-      toast.errorToast('Guide failed to be deleted', error.msg);
+      toast.errorToast('Guide failed to be deleted', error.message);
     } finally {
       setShowDelete(false);
       setGuide(emptyGuide);
