@@ -4,7 +4,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  height: 54px;
+  min-height: 54px;
 
   &__button {
     @media only screen and (max-width: 574px) {
