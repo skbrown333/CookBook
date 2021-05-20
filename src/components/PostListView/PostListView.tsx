@@ -23,7 +23,7 @@ import {
   EuiConfirmModal,
 } from '@elastic/eui';
 
-/* STyles */
+/* Styles */
 import './_post-list-view.scss';
 
 /* Models */
@@ -140,7 +140,11 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const Modal = (head, save) => {
     const { title, body, tags } = post;
     return (
-      <EuiModal onClose={cancelModal} initialFocus="[name=popswitch]">
+      <EuiModal
+        className="post__modal"
+        onClose={cancelModal}
+        initialFocus="[name=popswitch]"
+      >
         <EuiModalHeader>
           <EuiModalHeaderTitle>
             <h1>{head}</h1>
@@ -156,7 +160,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
             aria-label="Body markdown editor"
             value={body}
             onChange={(value) => updateSection('body', value)}
-            height={400}
+            height={300}
             parsingPluginList={parsingList}
             processingPluginList={processingList}
             uiPlugins={uiList}
