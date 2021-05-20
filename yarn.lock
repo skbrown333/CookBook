@@ -10543,12 +10543,24 @@ react-focus-on@^3.5.0:
     use-callback-ref "^1.2.5"
     use-sidecar "^1.0.5"
 
+react-infinite-scroll-hook@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-hook/-/react-infinite-scroll-hook-4.0.1.tgz#0fea9de7a84764975aad1209baeff286681d83b9"
+  integrity sha512-UzRt1TPLnWV8TZ6Yw2k5vuVZX/d/gOm2NB1hrp48iTcVwV/4dSsUFDsnwrdTqioSl2n6wz2kfo8BowOczsaJRw==
+  dependencies:
+    react-intersection-observer-hook "^2.0.3"
+
 react-input-autosize@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-2.2.2.tgz#fcaa7020568ec206bc04be36f4eb68e647c4d8c2"
   integrity sha512-jQJgYCA3S0j+cuOwzuCd1OjmBmnZLdqQdiLKRYrsMMzbjUrVDS5RvJUDwJqA7sKuksDuzFtm6hZGKFu7Mjk5aw==
   dependencies:
     prop-types "^15.5.8"
+
+react-intersection-observer-hook@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer-hook/-/react-intersection-observer-hook-2.0.3.tgz#de6a1fb00ffac1acee651e908e7e17e0eff1e8b6"
+  integrity sha512-6LcrY/oUtZqn7HbwLTgSk43/KdZD5LZJsWUOwQB11aMPi3OkjyDcm2dwAQ1ydlbrSDlL4fHUNXisNt4B470UJg==
 
 react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"

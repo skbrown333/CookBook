@@ -1,4 +1,3 @@
-import { Guide } from '../models/Guide';
 import { Post } from '../models/Post';
 import { Tag } from '../models/Tag';
 import { CHARACTERS as characterIcons } from './CharacterIcons';
@@ -68,41 +67,6 @@ export const newSection: Post = {
   title: '**replace with title',
   body: sampleBody,
   tags: Array<Tag>(),
+  cre_date: new Date(),
   doc_ref: '',
-};
-
-export const mockGuide: Guide = {
-  title: 'falco',
-  character: null,
-  sections: [
-    {
-      id: 'mock_postid',
-      title: 'basics',
-      body: `The first key to understanding how to fight falco is that both of his primary walling options (bair and utilt) have virtually the exact same range. Meaning, if you're spacing for one you're simultaneously spacing for the other. This makes it far simpler to smother him/punish him
-\n![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
-      tags: Array<Tag>(),
-    },
-    {
-      id: 'mock_postid',
-      title: 'percents',
-      body: `## \`No DI\`\n
-* \`40%\` Uthrow regrab
-* \`72%\` Uthrow fsmash
-* \`85%\` Uthrow knee
-      
-## \`DI down and away\` 
-*(rough %s as it depends on notch position)*
-* \`~65%\` Uthrow regrab
-* \`~65%\` Uthrow dash SH uair
-* \`~105%\` Uthrow dash SH knee`,
-      tags: Array<Tag>(),
-    },
-    {
-      id: 'mock_postid',
-      title: 'defense-and-recovery',
-      body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) `,
-      tags: Array<Tag>(),
-    },
-  ],
-  tags: Array<Tag>(),
 };

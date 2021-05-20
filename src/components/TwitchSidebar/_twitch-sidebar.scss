@@ -2,6 +2,8 @@
 @import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
 .twitch-sidebar {
+  width: 254px;
+
   .twitch-sidebar__header {
     display: flex;
     align-items: center;
