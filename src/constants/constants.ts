@@ -69,4 +69,5 @@ export const newSection: Post = {
   tags: Array<Tag>(),
   cre_date: new Date(),
   doc_ref: '',
+  doc: undefined,
 };

@@ -36,13 +36,17 @@ export class Firebase {
     return await collectionRef.add(data);
   };
 
-  getAll = async (cookbook, collection, key?, order?) => {
+  getAll = async (cookbook, collection, key?, order?, limit?, startAfter?) => {
     let collectionRef;
     if (key && order) {
       collectionRef = app
         .firestore()
         .collection(`cookbooks/${cookbook}/${collection}`)
-        .orderBy(key, order);
+        .orderBy(key, order)
+        .limit(limit);
+      if (startAfter) {
+        collectionRef = collectionRef.startAfter(startAfter);
+      }
     } else {
       collectionRef = app
         .firestore()
@@ -51,7 +55,10 @@ export class Firebase {
     const snapshot = await collectionRef.get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
-      docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
+      docs.push({
+        ...doc.data(),
+        ...{ id: doc.id, doc_ref: doc.ref, doc },
+      });
     });
     return docs;
   };

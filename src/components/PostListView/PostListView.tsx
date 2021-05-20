@@ -24,7 +24,9 @@ import {
   EuiConfirmModal,
   EuiForm,
   EuiFormRow,
+  EuiLoadingSpinner,
 } from '@elastic/eui';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 /* Styles */
 import './_post-list-view.scss';
@@ -55,6 +57,7 @@ const emptyPost: Post = {
   tags: Array<Tag>(),
   cre_date: new Date(),
   doc_ref: '',
+  doc: undefined,
 };
 
 export const PostListView: FunctionComponent<ListViewProps> = () => {
@@ -68,6 +71,8 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const toast = new ToastService();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
 
   useEffect(() => {
     getPosts();
@@ -79,14 +84,26 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   };
 
   const getPosts = async () => {
-    setPosts(
-      await firebase?.getAll(
+    setLoading(true);
+    try {
+      const limit = 15;
+      const newPosts = await firebase?.getAll(
         cookbook.id,
         FIRESTORE.collections.posts,
         'cre_date',
         'desc',
-      ),
-    );
+        limit,
+        posts.length > 0 ? posts[posts.length - 1].doc : undefined,
+      );
+      if (newPosts.length < limit) {
+        setHasNextPage(false);
+      }
+      setPosts([...posts, ...newPosts]);
+    } catch (err) {
+      toast.errorToast('Error Fetching Posts', err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const cancelModal = () => {
@@ -235,11 +252,28 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     });
   };
 
+  const [sentryRef] = useInfiniteScroll({
+    loading,
+    hasNextPage: hasNextPage,
+    onLoadMore: getPosts,
+    // When there is an error, we stop infinite loading.
+    // It can be reactivated by setting "error" state as undefined.
+    disabled: false,
+    // `rootMargin` is passed to `IntersectionObserver`.
+    // We can use it to trigger 'onLoadMore' when the sentry comes near to become
+    // visible, instead of becoming fully visible on the screen.
+    rootMargin: '0px 0px 400px 0px',
+  });
+
   return (
     <div id="post-list">
       <div className="post-list">
         <SearchCreateBar handlePlus={handlePlus} handleSearch={handleSearch} />
-        <div className="post-list__content">{buildPosts()}</div>
+        <div className="post-list__content">
+          {buildPosts()}
+          <div ref={sentryRef} />
+          {loading && <EuiLoadingSpinner size="xl" />}
+        </div>
       </div>
       <TwitchSidebar className="post-list__twitch" />
 
