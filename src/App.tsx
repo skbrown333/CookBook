@@ -6,7 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { HeaderBar } from './components/Header/Header';
 import { GuideDetailView } from './components/GuideDetailView/GuideDetailView';
 import { GuideListView } from './components/GuideListView/GuideListView';
-import { ListView } from './components/ListView/PostListView';
+import { PostListView } from './components/PostListView/PostListView';
 import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 
 /* Services */
@@ -88,7 +88,7 @@ export const App: FunctionComponent = () => {
                   <GuideListView />
                 </Route>
                 <Route path="/">
-                  <ListView />
+                  <PostListView />
                 </Route>
               </Switch>
             </>
