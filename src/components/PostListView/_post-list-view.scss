@@ -1,9 +1,42 @@
-.post-list {
+@import '../../styles/responsive';
+
+#post-list {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  .post {
-    flex-grow: 0;
+  justify-content: center;
+  overflow: hidden;
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 8px;
+    overflow: hidden;
+
+    @include respond-to(gt-md) {
+      margin-left: 258px;
+    }
+
+    &__content {
+      margin-top: 12px;
+      width: 100%;
+      overflow: auto;
+    }
+
+    &__twitch {
+      display: none;
+
+      @include respond-to(gt-md) {
+        display: block;
+        margin-top: 60px;
+        margin-left: 4px;
+      }
+    }
+
+    .post {
+      flex-grow: 0;
+    }
   }
 }
 

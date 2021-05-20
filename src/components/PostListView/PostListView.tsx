@@ -9,6 +9,8 @@ import React, {
 import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TagInput } from '../TagInput/TagInput';
 import { PostView } from './PostView/PostView';
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
 import {
   EuiModal,
   EuiModalHeader,
@@ -19,8 +21,9 @@ import {
   EuiButtonEmpty,
   EuiMarkdownEditor,
   EuiFieldText,
-  EuiPanel,
   EuiConfirmModal,
+  EuiForm,
+  EuiFormRow,
 } from '@elastic/eui';
 
 /* Styles */
@@ -50,6 +53,7 @@ const emptyPost: Post = {
   title: '',
   body: '',
   tags: Array<Tag>(),
+  cre_date: new Date(),
   doc_ref: '',
 };
 
@@ -75,7 +79,14 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   };
 
   const getPosts = async () => {
-    setPosts(await firebase?.getAll(cookbook.id, FIRESTORE.collections.posts));
+    setPosts(
+      await firebase?.getAll(
+        cookbook.id,
+        FIRESTORE.collections.posts,
+        'cre_date',
+        'desc',
+      ),
+    );
   };
 
   const cancelModal = () => {
@@ -84,7 +95,9 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     setShowDelete(false);
   };
 
-  const handleEditPost = async () => {
+  const handleEditPost = async (event) => {
+    event.preventDefault();
+
     try {
       post.doc_ref.set(post);
       cancelModal();
@@ -95,7 +108,9 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     }
   };
 
-  const handleNewPost = async () => {
+  const handleNewPost = async (event) => {
+    event.preventDefault();
+
     try {
       await firebase?.add(cookbook.id, FIRESTORE.collections.posts, post);
       cancelModal();
@@ -138,7 +153,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   );
 
   const Modal = (head, save) => {
-    const { title, body, tags } = post;
+    const { title, body, tags, character } = post;
     return (
       <EuiModal
         className="post__modal"
@@ -151,29 +166,50 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
           </EuiModalHeaderTitle>
         </EuiModalHeader>
         <EuiModalBody>
-          <EuiFieldText
-            placeholder="title"
-            value={title}
-            onChange={(e) => updateSection('title', e.target.value)}
-          />
-          <EuiMarkdownEditor
-            aria-label="Body markdown editor"
-            value={body}
-            onChange={(value) => updateSection('body', value)}
-            height={300}
-            parsingPluginList={parsingList}
-            processingPluginList={processingList}
-            uiPlugins={uiList}
-          />
-          <TagInput
-            className="guide-section__tags"
-            initialTags={tags}
-            handleUpdate={(tags) => updateSection('tags', tags)}
-          ></TagInput>
+          <EuiForm id="postForm" component="form">
+            <EuiFormRow>
+              <EuiFieldText
+                placeholder="title"
+                required
+                value={title}
+                onChange={(e) => updateSection('title', e.target.value)}
+              />
+            </EuiFormRow>
+            <EuiFormRow fullWidth>
+              <>
+                <EuiMarkdownEditor
+                  aria-label="Body markdown editor"
+                  value={body}
+                  onChange={(value) => updateSection('body', value)}
+                  height={248}
+                  parsingPluginList={parsingList}
+                  processingPluginList={processingList}
+                  uiPlugins={uiList}
+                />
+                <TagInput
+                  className="guide-section__tags"
+                  initialTags={tags}
+                  handleUpdate={(tags) => updateSection('tags', tags)}
+                ></TagInput>
+              </>
+            </EuiFormRow>
+            <EuiFormRow label="Select Character (optional)">
+              <CharacterSelect
+                value={character}
+                onChange={(value) => updateSection('character', value)}
+              />
+            </EuiFormRow>
+          </EuiForm>
         </EuiModalBody>
         <EuiModalFooter>
           <EuiButtonEmpty onClick={cancelModal}>Cancel</EuiButtonEmpty>
-          <EuiButton type="submit" form="guideForm" onClick={save} fill>
+          <EuiButton
+            type="submit"
+            form="postForm"
+            onClick={save}
+            fill
+            disabled={!title.length}
+          >
             Save
           </EuiButton>
         </EuiModalFooter>
@@ -183,13 +219,9 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const buildPosts = () => {
     return posts.map((post) => {
-      const { title, body, tags, id } = post;
       return (
         <PostView
-          title={title}
-          body={body}
-          tags={tags}
-          id={id}
+          post={post}
           handleEdit={() => {
             setPost(post);
             setShowEdit(true);
@@ -204,12 +236,16 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   };
 
   return (
-    <EuiPanel className="post-list">
-      <SearchCreateBar handlePlus={handlePlus} handleSearch={handleSearch} />
-      {buildPosts()}
+    <div id="post-list">
+      <div className="post-list">
+        <SearchCreateBar handlePlus={handlePlus} handleSearch={handleSearch} />
+        <div className="post-list__content">{buildPosts()}</div>
+      </div>
+      <TwitchSidebar className="post-list__twitch" />
+
       {showAdd && Modal('New Post', handleNewPost)}
       {showEdit && Modal('Edit Post', handleEditPost)}
       {showDelete && destroyModal}
-    </EuiPanel>
+    </div>
   );
 };
