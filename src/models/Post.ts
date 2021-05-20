@@ -7,5 +7,5 @@ export interface Post {
   character?: string;
   cre_date: Date;
   doc_ref?: any;
-  doc: any;
+  doc?: any;
 }

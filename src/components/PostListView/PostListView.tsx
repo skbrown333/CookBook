@@ -57,13 +57,13 @@ const emptyPost: Post = {
   tags: Array<Tag>(),
   cre_date: new Date(),
   doc_ref: '',
-  doc: undefined,
 };
 
 export const PostListView: FunctionComponent<ListViewProps> = () => {
   const handleSearch = (e) => e.queryText;
   const [posts, setPosts] = useState(Array<Post>());
   const [post, setPost] = useState(emptyPost);
+  const [index, setIndex] = useState(0);
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -114,14 +114,24 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const handleEditPost = async (event) => {
     event.preventDefault();
-
     try {
-      post.doc_ref.set(post);
+      const newPosts = [...posts];
+      delete post.doc;
+      await post.doc_ref.set(post);
+      newPosts[index] = {
+        ...newPosts[index],
+        ...{
+          title: post.title,
+          body: post.body,
+          character: post.character,
+          tags: post.tags,
+        },
+      };
+      setPosts([...newPosts]);
       cancelModal();
-      getPosts();
       toast.successToast('Edit successful');
     } catch (error) {
-      toast.errorToast('failed to edit post', error.msg);
+      toast.errorToast('failed to edit post', error.message);
     }
   };
 
@@ -129,12 +139,16 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     event.preventDefault();
 
     try {
-      await firebase?.add(cookbook.id, FIRESTORE.collections.posts, post);
+      const ref = await firebase?.add(
+        cookbook.id,
+        FIRESTORE.collections.posts,
+        post,
+      );
       cancelModal();
-      getPosts();
+      setPosts([...[{ ...post, ...{ doc_ref: ref } }], ...posts]);
       toast.successToast('Added new post');
     } catch (error) {
-      toast.errorToast('Failed adding post', error.msg);
+      toast.errorToast('Failed adding post', error.message);
     }
   };
 
@@ -147,8 +161,9 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const handleDelete = async () => {
     try {
       await post.doc_ref.delete();
+      posts.splice(index, 1);
+      setPosts([...posts]);
       cancelModal();
-      getPosts();
       toast.successToast('Deleted post');
     } catch (error) {
       toast.errorToast('Failed to Delete Post');
@@ -235,16 +250,18 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   };
 
   const buildPosts = () => {
-    return posts.map((post) => {
+    return posts.map((post, index) => {
       return (
         <PostView
           post={post}
           handleEdit={() => {
             setPost(post);
+            setIndex(index);
             setShowEdit(true);
           }}
           handleDelete={() => {
             setPost(post);
+            setIndex(index);
             setShowDelete(true);
           }}
         />
