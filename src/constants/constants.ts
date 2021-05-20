@@ -29,7 +29,7 @@ export const FUNCTIONS = {
  */
 export const DISCORD = {
   authUrl: encodeURI(
-    `https://discord.com/api/oauth2/authorize?client_id=${process.env.REACT_APP_DISCORD_ID}&redirect_uri=${window.location.origin}/login&response_type=code&scope=identify email`,
+    `https://discord.com/api/oauth2/authorize?clientid=${process.env.REACT_APP_DISCORD_ID}&redirect_uri=${window.location.origin}/login&response_type=code&scope=identify email`,
   ),
   getAvatarUrl: function (id, avatar) {
     return `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`;
@@ -64,10 +64,11 @@ const sampleBody = `
  `;
 
 export const newSection: Post = {
-  _id: 'mock_post_id',
+  id: '',
   title: '**replace with title',
   body: sampleBody,
   tags: Array<Tag>(),
+  doc_ref: '',
 };
 
 export const mockGuide: Guide = {
@@ -75,14 +76,14 @@ export const mockGuide: Guide = {
   character: null,
   sections: [
     {
-      _id: 'mock_post_id',
+      id: 'mock_postid',
       title: 'basics',
       body: `The first key to understanding how to fight falco is that both of his primary walling options (bair and utilt) have virtually the exact same range. Meaning, if you're spacing for one you're simultaneously spacing for the other. This makes it far simpler to smother him/punish him
 \n![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif)`,
       tags: Array<Tag>(),
     },
     {
-      _id: 'mock_post_id',
+      id: 'mock_postid',
       title: 'percents',
       body: `## \`No DI\`\n
 * \`40%\` Uthrow regrab
@@ -97,7 +98,7 @@ export const mockGuide: Guide = {
       tags: Array<Tag>(),
     },
     {
-      _id: 'mock_post_id',
+      id: 'mock_postid',
       title: 'defense-and-recovery',
       body: `![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) ![](https://media.giphy.com/media/ZpLzabCMomHUQPbcvg/giphy.gif) `,
       tags: Array<Tag>(),
