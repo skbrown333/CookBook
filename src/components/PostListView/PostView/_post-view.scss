@@ -1,0 +1,117 @@
+@import '../../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+
+.post {
+  width: 100%;
+  margin-bottom: 14px;
+  display: flex;
+
+  &__content {
+    flex-grow: 1;
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    .euiButtonIcon {
+      flex-grow: 1;
+      width: 30px;
+    }
+  }
+
+  .euiAspectRatio {
+    width: 100%;
+    max-width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .euiMarkdownFormat table {
+    display: table;
+
+    th {
+      background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+    }
+
+    td {
+      background-color: darken($color: $euiColorEmptyShade, $amount: 2%);
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: capitalize;
+    border-bottom: 1px solid $euiColorLightShade;
+
+    &--text {
+      margin-right: auto;
+    }
+
+    .euiFormControlLayout {
+      max-width: 200px;
+      margin-right: auto;
+
+      @include respond-to(gt-sm) {
+        max-width: 400px;
+      }
+    }
+  }
+
+  &__body {
+    padding: 16px;
+
+    .euiComboBox .euiComboBox__inputWrap {
+      border-radius: 0;
+    }
+
+    &.editing {
+      padding: 0;
+
+      .euiMarkdownEditorToolbar {
+        border-radius: 0;
+      }
+
+      .euiMarkdownEditorPreview,
+      .euiMarkdownEditorFooter {
+        border-radius: 0;
+      }
+
+      .euiMarkdownEditorFooter {
+        border-radius: 0;
+      }
+    }
+
+    @include respond-to(gt-xs) {
+      padding: 16px;
+    }
+
+    .euiMarkdownFormat {
+      p {
+        display: flex;
+        flex-direction: column;
+
+        @include respond-to(gt-sm) {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+      }
+
+      .markdown__gif {
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 800px;
+      }
+
+      img {
+        margin: 4px 2px;
+      }
+    }
+  }
+}

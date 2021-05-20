@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { HeaderBar } from './components/Header/Header';
 import { GuideDetailView } from './components/GuideDetailView/GuideDetailView';
 import { GuideListView } from './components/GuideListView/GuideListView';
+import { PostListView } from './components/PostListView/PostListView';
 import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 
 /* Services */
@@ -89,7 +90,9 @@ export const App: FunctionComponent = () => {
                 <Route path="/recipes">
                   <GuideListView />
                 </Route>
-                <Route path="/"></Route>
+                <Route path="/">
+                  <PostListView />
+                </Route>
               </Switch>
             </>
           )}
@@ -143,7 +146,7 @@ export const Login: FunctionComponent = () => {
 };
 
 export const Logout: FunctionComponent = () => {
-  const [dispatch] = useContext(Context)[1];
+  const [, dispatch] = useContext(Context);
   const baseUrl = window.location.origin;
   const toast = new ToastService();
 

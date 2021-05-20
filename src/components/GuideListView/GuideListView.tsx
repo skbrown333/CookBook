@@ -11,6 +11,8 @@ import { Tag } from '../../models/Tag';
 
 /* Components */
 import { GuideCard } from './GuideCard/GuideCard';
+import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
+
 import {
   EuiButton,
   EuiButtonEmpty,
@@ -24,8 +26,6 @@ import {
   EuiConfirmModal,
   EuiModalHeaderTitle,
   EuiTextArea,
-  EuiSearchBar,
-  EuiButtonIcon,
 } from '@elastic/eui';
 
 import { TagInput } from '../TagInput/TagInput';
@@ -69,7 +69,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [creating, setCreating] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook, user } = state;
+  const { cookbook } = state;
   const toast = new ToastService();
 
   const getGuides = async () => {
@@ -264,28 +264,13 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
 
   return (
     <div className="guide-list">
-      <div className="guide-list__controls">
-        <EuiSearchBar onChange={() => {}} />
-        {user && cookbook.roles[user.uid] === 'admin' && (
-          <EuiButtonIcon
-            aria-label="add"
-            className="guide-controls__button"
-            display="fill"
-            iconType="plus"
-            color="success"
-            size="m"
-            onClick={() => {
-              setShowAdd(true);
-            }}
-          >
-            Create
-          </EuiButtonIcon>
-        )}
-
-        {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
-        {showDelete && destroyModal}
-        {showEdit && Modal('Edit Guide', handleEditSave)}
-      </div>
+      <SearchCreateBar
+        handleSearch={(e) => e.queryText}
+        handlePlus={() => setShowAdd(true)}
+      />
+      {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
+      {showDelete && destroyModal}
+      {showEdit && Modal('Edit Guide', handleEditSave)}
       <div className="guide-list__content">{buildGuides()}</div>
     </div>
   );

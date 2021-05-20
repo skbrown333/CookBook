@@ -1,0 +1,33 @@
+.post-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .post {
+    flex-grow: 0;
+  }
+}
+
+.post__modal {
+  width: 80vw;
+  .euiFormControlLayout {
+    margin-bottom: 12px;
+  }
+
+  .euiComboBox .euiComboBox__inputWrap {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+  .euiMarkdownEditorToolbar {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .euiMarkdownEditorPreview,
+  .euiMarkdownEditorFooter {
+    border-radius: 0;
+  }
+
+  .euiMarkdownEditorFooter {
+    border-radius: 0;
+  }
+}
