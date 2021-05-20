@@ -48,9 +48,11 @@ export class Firebase {
     return docs;
   };
 
-  getCookbookInfo = async (name) => {
+  getCookbookInfo = async (subdomain) => {
     const collectionRef = app.firestore().collection('cookbooks');
-    const snapshot = await collectionRef.where('name', '==', name).get();
+    const snapshot = await collectionRef
+      .where('subdomain', '==', subdomain)
+      .get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
       docs.push({ ...doc.data(), ...{ id: doc.id } });
