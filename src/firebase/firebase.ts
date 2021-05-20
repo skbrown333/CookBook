@@ -57,7 +57,8 @@ export class Firebase {
     snapshot.forEach((doc: any) => {
       docs.push({
         ...doc.data(),
-        ...{ id: doc.id, doc_ref: doc.ref, doc },
+        ...{ id: doc.id, doc_ref: doc.ref },
+        ...(startAfter ? { doc } : {}),
       });
     });
     return docs;
