@@ -1,0 +1,8 @@
+.post-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .post {
+    flex-grow: 0;
+  }
+}
