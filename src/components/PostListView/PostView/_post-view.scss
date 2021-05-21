@@ -51,11 +51,13 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    text-transform: capitalize;
-    height: 57px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+
+    &__avatar {
+      margin-right: 8px;
+    }
 
     &--text {
       margin-right: auto;
