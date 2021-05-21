@@ -51,7 +51,7 @@ export const PostView: FunctionComponent<PostProps> = ({
             name={title}
             color={null}
             iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
-            iconSize="xl"
+            iconSize="l"
           ></EuiAvatar>
           <div className="post__title--text">{title}</div>
           {user && cookbook.roles[user.uid] === 'admin' && (
