@@ -74,7 +74,10 @@ export const PostView: FunctionComponent<PostProps> = ({
           )}
         </div>
 
-        <div className={`post__body`}>
+        <div
+          className={`post__body`}
+          style={tags.length > 0 ? { marginBottom: 8 } : { marginBottom: 16 }}
+        >
           <EuiMarkdownFormat
             parsingPluginList={parsingList}
             processingPluginList={processingList}
@@ -82,13 +85,15 @@ export const PostView: FunctionComponent<PostProps> = ({
             {body}
           </EuiMarkdownFormat>
         </div>
-        <div className="post__footer">
-          {tags.map((tag, index) => (
-            <EuiBadge key={index} className="tag" color="hollow">
-              #{tag.label}
-            </EuiBadge>
-          ))}
-        </div>
+        {tags.length > 0 && (
+          <div className="post__footer">
+            {tags.map((tag, index) => (
+              <EuiBadge key={index} className="tag" color="hollow">
+                #{tag.label}
+              </EuiBadge>
+            ))}
+          </div>
+        )}
       </div>
     </EuiPanel>
   );

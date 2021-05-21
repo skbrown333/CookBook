@@ -51,12 +51,11 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 600;
     text-transform: capitalize;
-    border-bottom: 1px solid $euiColorLightShade;
     height: 57px;
+    margin-bottom: 12px;
 
     &--text {
       margin-right: auto;
@@ -73,8 +72,6 @@
   }
 
   &__body {
-    padding: 16px;
-
     .euiComboBox .euiComboBox__inputWrap {
       border-radius: 0;
     }
@@ -96,35 +93,36 @@
       }
     }
 
-    @include respond-to(gt-xs) {
-      padding: 16px;
-    }
-
     .euiMarkdownFormat {
-      p {
-        display: flex;
-        flex-direction: column;
-
-        @include respond-to(gt-sm) {
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      ul,
+      ol,
+      blockquote,
+      table,
+      .euiCheckbox {
+        margin: 16px;
+        width: calc(100% - 32px);
       }
 
-      .markdown__gif {
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;
-        max-width: 800px;
-      }
-
+      .markdown__gif,
+      .euiAspectRatio,
       img {
-        margin: 4px 2px;
+        margin-left: -16px;
+        margin-right: -16px;
+        max-width: calc(100% + 32px);
+        width: calc(100% + 32px);
       }
     }
   }
 
   &__footer {
-    padding: 8px;
+    margin-left: 8px;
+    height: 36px;
+    display: flex;
+    align-items: center;
   }
 }
