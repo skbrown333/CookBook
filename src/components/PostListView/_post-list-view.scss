@@ -35,6 +35,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding-bottom: 48px;
 
       @include respond-to(gt-xs) {
         margin-top: 8px;
