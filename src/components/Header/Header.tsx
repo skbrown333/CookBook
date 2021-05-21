@@ -17,12 +17,14 @@ import { Context } from '../../store/Store';
 
 /* Constants */
 import { DISCORD } from '../../constants/constants';
+import { CHARACTERS } from '../../constants/CharacterIcons';
 
 export interface HeaderBarProps {}
 
 export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
   const [state] = useContext(Context);
   const { cookbook, user } = state;
+  const { name } = cookbook;
   return (
     <EuiHeader
       theme="default"
@@ -31,7 +33,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
         {
           items: [
             <Link to="/">
-              <EuiHeaderLogo iconType="https://ssb.wiki.gallery/images/5/5f/CaptainFalconHeadSSBM.png">
+              <EuiHeaderLogo iconType={CHARACTERS[name]}>
                 cookbook.gg
               </EuiHeaderLogo>
             </Link>,
