@@ -13,21 +13,49 @@
     width: 100%;
     height: 100%;
     max-width: 800px;
-    padding: 8px;
     overflow: hidden;
+
+    @include respond-to(gt-xs) {
+      padding: 8px;
+    }
+    @include respond-to(xs) {
+      .search-controls {
+        padding: 8px;
+      }
+    }
 
     @include respond-to(gt-md) {
       margin-left: 258px;
     }
 
     &__content {
-      margin-top: 12px;
       width: 100%;
       height: 100%;
       overflow: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      @include respond-to(gt-xs) {
+        margin-top: 8px;
+      }
+
+      .euiPanel {
+        &.euiPanel--hasBorder {
+          @include respond-to(xs) {
+            border-left: none;
+            border-right: none;
+          }
+        }
+
+        &.euiPanel--borderRadiusMedium {
+          border-radius: 0;
+
+          @include respond-to(gt-xs) {
+            border-radius: 4px;
+          }
+        }
+      }
     }
 
     &__twitch {
@@ -35,7 +63,7 @@
 
       @include respond-to(gt-md) {
         display: block;
-        margin-top: 74px;
+        margin-top: 70px;
         margin-left: 4px;
       }
     }
