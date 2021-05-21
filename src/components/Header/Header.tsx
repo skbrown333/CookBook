@@ -19,6 +19,9 @@ import { Context } from '../../store/Store';
 import { DISCORD } from '../../constants/constants';
 import { CHARACTERS } from '../../constants/CharacterIcons';
 
+/* Styles */
+import './_header.scss';
+
 export interface HeaderBarProps {}
 
 export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
@@ -27,6 +30,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
   const { name } = cookbook;
   return (
     <EuiHeader
+      id="header"
       theme="default"
       position="fixed"
       sections={[
