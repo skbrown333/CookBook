@@ -1,25 +1,15 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "CookBook",
+  "name": "cookbook.gg",
   "icons": [
     {
       "src": "falcon.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "falcon.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "falcon.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "24x24",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1d1e24",
+  "background_color": "#1d1e24"
 }
