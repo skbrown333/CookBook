@@ -47,7 +47,7 @@ export const PostView: FunctionComponent<PostProps> = ({
       <div className="post__content">
         <div className="post__title">
           <EuiAvatar
-            className="guide-card__header__avatar"
+            className="post__title__avatar"
             name={title}
             color={null}
             iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
