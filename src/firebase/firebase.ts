@@ -44,6 +44,7 @@ export class Firebase {
         .collection(`cookbooks/${cookbook}/${collection}`)
         .orderBy(key, order)
         .limit(limit);
+
       if (startAfter) {
         collectionRef = collectionRef.startAfter(startAfter);
       }
@@ -58,7 +59,7 @@ export class Firebase {
       docs.push({
         ...doc.data(),
         ...{ id: doc.id, doc_ref: doc.ref },
-        ...(startAfter ? { doc } : {}),
+        ...(limit ? { doc } : {}),
       });
     });
     return docs;
