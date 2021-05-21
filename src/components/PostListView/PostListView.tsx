@@ -116,15 +116,16 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     event.preventDefault();
     try {
       const newPosts = [...posts];
+      const { title, body, character, tags } = post;
       delete post.doc;
       await post.doc_ref.set(post);
       newPosts[index] = {
         ...newPosts[index],
         ...{
-          title: post.title,
-          body: post.body,
-          character: post.character,
-          tags: post.tags,
+          title,
+          ...(body ? { body } : {}),
+          ...(character ? { character } : {}),
+          ...(tags ? { tags } : {}),
         },
       };
       setPosts([...newPosts]);

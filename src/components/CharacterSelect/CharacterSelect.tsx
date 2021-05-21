@@ -19,6 +19,14 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
   const [selected, setSelected] = useState(value || undefined);
   const options = [
     {
+      value: 'wireframe',
+      inputDisplay: (
+        <span className="character-select__character">
+          <img src={CHARACTERS.wireframe} /> General
+        </span>
+      ),
+    },
+    {
       value: 'bowser',
       inputDisplay: (
         <span className="character-select__character">
