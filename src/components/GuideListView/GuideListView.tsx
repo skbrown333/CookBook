@@ -43,6 +43,7 @@ import { CHARACTERS, FIRESTORE } from '../../constants/constants';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 
 export interface GuideListViewProps {}
 
@@ -263,15 +264,19 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   };
 
   return (
-    <div className="guide-list">
-      <SearchCreateBar
-        handleSearch={(e) => e.queryText}
-        handlePlus={() => setShowAdd(true)}
-      />
-      {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
-      {showDelete && destroyModal}
-      {showEdit && Modal('Edit Guide', handleEditSave)}
-      <div className="guide-list__content">{buildGuides()}</div>
+    <div id="guide-list">
+      <div className="guide-list">
+        <SearchCreateBar
+          handleSearch={(e) => e.queryText}
+          handlePlus={() => setShowAdd(true)}
+        />
+        {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
+        {showDelete && destroyModal}
+        {showEdit && Modal('Edit Guide', handleEditSave)}
+        <div className="guide-list__content">{buildGuides()}</div>
+      </div>
+
+      <TwitchSidebar className="guide-list__twitch" />
     </div>
   );
 };

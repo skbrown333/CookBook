@@ -1,28 +1,49 @@
 @import '../../styles/responsive';
 
-.guide-list {
-  padding: 8px;
+#guide-list {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   overflow: hidden;
-
-  &__content {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 100%);
-    grid-gap: 10px;
+  flex: 1;
+  .guide-list {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
     width: 100%;
-    max-width: 1400px;
-    justify-content: center;
-    overflow: auto;
-    margin-top: 8px;
+    max-width: 800px;
 
-    .euiFlexItem {
-      margin-bottom: 0 !important;
+    @include respond-to(gt-md) {
+      margin-left: 258px;
     }
 
-    @include respond-to(gt-xs) {
-      grid-template-columns: repeat(auto-fill, 400px);
+    &__content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 100%);
+      grid-gap: 10px;
+      width: 100%;
+      justify-content: center;
+      overflow: auto;
+      padding-top: 8px;
+
+      .euiFlexItem {
+        margin-bottom: 0 !important;
+      }
+
+      // @include respond-to(gt-xs) {
+      //   grid-template-columns: repeat(auto-fill, 400px);
+      // }
+    }
+
+    &__twitch {
+      display: none;
+
+      @include respond-to(gt-md) {
+        display: block;
+        margin-top: 70px;
+        margin-left: 4px;
+      }
     }
   }
 }

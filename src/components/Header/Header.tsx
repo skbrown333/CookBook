@@ -41,11 +41,6 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                 cookbook.gg
               </EuiHeaderLogo>
             </Link>,
-          ],
-          borders: 'right',
-        },
-        {
-          items: [
             <EuiHeaderLinks
               aria-label="App navigation dark theme example"
               popoverBreakpoints="none"
@@ -56,6 +51,11 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                 </EuiHeaderLink>
               </Link>
             </EuiHeaderLinks>,
+          ],
+          borders: 'right',
+        },
+        {
+          items: [
             ...(user && cookbook.roles[user.uid] === 'admin'
               ? [
                   <EuiHeaderSectionItemButton aria-label="Account menu">
