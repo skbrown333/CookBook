@@ -7,9 +7,9 @@
   max-height: 150px;
   cursor: pointer;
 
-  @include respond-to(gt-xs) {
-    max-width: 400px;
-  }
+  // @include respond-to(gt-xs) {
+  //   max-width: 400px;
+  // }
 
   &.euiPanel {
     flex-grow: 0;
