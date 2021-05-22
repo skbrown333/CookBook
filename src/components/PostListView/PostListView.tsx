@@ -47,6 +47,7 @@ import { FIRESTORE } from '../../constants/constants';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
+import { updateTwitch } from '../../store/actions';
 
 export interface ListViewProps {}
 
@@ -60,6 +61,7 @@ const emptyPost: Post = {
 };
 
 export const PostListView: FunctionComponent<ListViewProps> = () => {
+  const [state, dispatch] = useContext(Context);
   const handleSearch = (e) => e.queryText;
   const [posts, setPosts] = useState(Array<Post>());
   const [post, setPost] = useState(emptyPost);
@@ -67,7 +69,6 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [state] = useContext(Context);
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const toast = new ToastService();
@@ -75,7 +76,20 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
 
   useEffect(() => {
+    async function init() {
+      if (firebase) {
+        try {
+          dispatch(
+            updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
+          );
+        } catch (err) {
+          toast.errorToast('Error Getting Streams', err.message);
+        }
+      }
+    }
     getPosts();
+
+    init();
   }, []);
 
   const handlePlus = () => {
