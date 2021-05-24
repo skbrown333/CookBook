@@ -25,6 +25,7 @@ import yoshi from '../images/yoshi.png';
 import young_link from '../images/younglink.png';
 import zelda from '../images/zelda.png';
 import wireframe from '../images/wireframe.png';
+import sandbag from '../images/sandbag.png';
 
 export const CHARACTERS = {
   bowser,
@@ -54,4 +55,5 @@ export const CHARACTERS = {
   young_link,
   zelda,
   wireframe,
+  sandbag,
 };

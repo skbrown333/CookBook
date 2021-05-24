@@ -18,12 +18,7 @@ import { DISCORD } from './constants/constants';
 /* Store */
 import { Firebase, FirebaseContext } from './firebase';
 import { Context } from './store/Store';
-import {
-  updateUser,
-  updateTwitch,
-  updateToasts,
-  updateCookbook,
-} from './store/actions';
+import { updateUser, updateToasts, updateCookbook } from './store/actions';
 
 /* Styles */
 import '@elastic/eui/dist/eui_theme_amsterdam_dark.css';
@@ -45,11 +40,6 @@ export const App: FunctionComponent = () => {
           domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
         const cookbooks = await firebaseInstance.getCookbookInfo(subdomain);
         dispatch(updateCookbook(cookbooks[0]));
-        dispatch(
-          updateTwitch(
-            await firebaseInstance.getTwitchStreams(cookbooks[0].streams),
-          ),
-        );
       } catch (err) {
         toast.errorToast('Error', err.message);
       }

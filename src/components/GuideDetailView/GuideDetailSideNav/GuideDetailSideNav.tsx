@@ -107,7 +107,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
           className="side-nav__header__avatar"
           name={title}
           color={null}
-          iconType={character ? CHARACTERS[character] : CHARACTERS.wireframe}
+          iconType={character ? CHARACTERS[character] : CHARACTERS.sandbag}
         ></EuiAvatar>
         {title}
       </div>
