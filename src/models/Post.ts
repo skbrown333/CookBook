@@ -2,6 +2,7 @@ import { Tag } from './Tag';
 export interface Post {
   id: string;
   title: string;
+  cre_account?: any;
   body: string;
   tags: Array<Tag>;
   character?: string;

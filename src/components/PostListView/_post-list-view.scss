@@ -99,3 +99,11 @@
     border-radius: 0;
   }
 }
+.euiModal .euiModal__flex {
+  @include respond-to(gt-xs) {
+    max-height: 85vh !important;
+  }
+}
+.euiOverlayMask {
+  padding-bottom: 0 !important;
+}

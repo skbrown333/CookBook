@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 /* Components */
 import {
@@ -34,7 +39,19 @@ export const PostView: FunctionComponent<PostProps> = ({
 }) => {
   const [state] = useContext(Context);
   const { cookbook, user } = state;
-  const { title, body, id, character, tags } = post;
+  const [author, setAuthor] = useState<any>(null);
+  const { title, body, id, character, tags, cre_account } = post;
+
+  const getAuthor = async () => {
+    if (!cre_account) return;
+    const doc = await cre_account.get();
+    const author = doc.data();
+    setAuthor(author);
+  };
+
+  useEffect(() => {
+    getAuthor();
+  }, [post]);
 
   return (
     <EuiPanel
@@ -52,8 +69,14 @@ export const PostView: FunctionComponent<PostProps> = ({
             color={null}
             iconType={character ? CHARACTERS[character] : CHARACTERS.sandbag}
             iconSize="xl"
+            size="l"
           ></EuiAvatar>
-          <div className="post__title--text">{title}</div>
+          <div className="post__title--text">
+            {title}
+            <div className="post__title--text author">
+              {author && `${author.username}#${author.discriminator}`}
+            </div>
+          </div>
           {user && cookbook.roles[user.uid] === 'admin' && (
             <div className="post__controls">
               <EuiButtonIcon

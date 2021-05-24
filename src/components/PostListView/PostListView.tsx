@@ -48,6 +48,7 @@ import { FIRESTORE } from '../../constants/constants';
 /* Services */
 import { ToastService } from '../../services/ToastService';
 import { updateTwitch } from '../../store/actions';
+import { UserInput } from '../UserInput/UserInput';
 
 export interface ListViewProps {}
 
@@ -62,7 +63,6 @@ const emptyPost: Post = {
 
 export const PostListView: FunctionComponent<ListViewProps> = () => {
   const [state, dispatch] = useContext(Context);
-  const handleSearch = (e) => e.queryText;
   const [posts, setPosts] = useState(Array<Post>());
   const [post, setPost] = useState(emptyPost);
   const [index, setIndex] = useState(0);
@@ -74,6 +74,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const toast = new ToastService();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+  const handleSearch = (e) => e.queryText;
 
   useEffect(() => {
     async function init() {
@@ -130,13 +131,14 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     event.preventDefault();
     try {
       const newPosts = [...posts];
-      const { title, body, character, tags } = post;
+      const { title, body, character, tags, cre_account } = post;
       delete post.doc;
       await post.doc_ref.set(post);
       newPosts[index] = {
         ...newPosts[index],
         ...{
           title,
+          cre_account,
           ...(body ? { body } : {}),
           ...(character ? { character } : {}),
           ...(tags ? { tags } : {}),
@@ -200,7 +202,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   );
 
   const Modal = (head, save) => {
-    const { title, body, tags, character } = post;
+    const { title, body, tags, character, cre_account } = post;
     return (
       <EuiModal
         className="post__modal"
@@ -220,6 +222,14 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
                 required
                 value={title}
                 onChange={(e) => updateSection('title', e.target.value)}
+              />
+            </EuiFormRow>
+            <EuiFormRow className="user-input">
+              <UserInput
+                initialSelected={cre_account}
+                handleUpdate={(user) =>
+                  updateSection('cre_account', user.value.doc_ref)
+                }
               />
             </EuiFormRow>
             <EuiFormRow fullWidth>

@@ -61,7 +61,7 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 8px;
 
@@ -71,6 +71,12 @@
 
     &--text {
       margin-right: auto;
+
+      &.author {
+        font-size: 12px;
+        color: rgb(160, 160, 160);
+        margin-top: 4px;
+      }
     }
 
     .euiFormControlLayout {
