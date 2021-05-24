@@ -27,6 +27,14 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
       ),
     },
     {
+      value: 'sandbag',
+      inputDisplay: (
+        <span className="character-select__character">
+          <img src={CHARACTERS.sandbag} /> General
+        </span>
+      ),
+    },
+    {
       value: 'bowser',
       inputDisplay: (
         <span className="character-select__character">
