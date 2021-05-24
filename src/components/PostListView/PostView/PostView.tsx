@@ -74,7 +74,7 @@ export const PostView: FunctionComponent<PostProps> = ({
           <div className="post__title--text">
             {title}
             <div className="post__title--text author">
-              {author && `${author.username}#${author.discriminator}`}
+              {author && `@${author.username}`}
             </div>
           </div>
           {user && cookbook.roles[user.uid] === 'admin' && (
