@@ -1,0 +1,17 @@
+.user-input {
+  .euiComboBox .euiComboBox__inputWrap {
+    border-radius: 6px;
+  }
+  &__user {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    img {
+      margin-right: 12px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+  }
+}

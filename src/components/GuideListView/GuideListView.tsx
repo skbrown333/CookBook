@@ -70,6 +70,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
+  const [filters, setFilters] = useState<any>([]);
+  const [searchText, setSearchText] = useState('');
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const toast = new ToastService();
@@ -98,6 +100,10 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     }
     init();
   }, []);
+
+  const handleFilterChange = (filters) => {
+    setFilters(filters);
+  };
 
   const deletePrompt = async (e, guide) => {
     e.stopPropagation();
@@ -235,17 +241,41 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     setGuide(emptyGuide);
   };
 
+  const handleSearch = (event) => {
+    const value = event.target.value.toUpperCase();
+    setSearchText(value);
+  };
+
   const buildGuides = () => {
-    return guides.map((guide, index) => {
-      return (
-        <GuideCard
-          guide={guide}
-          key={index}
-          handleDelete={(event, guide) => deletePrompt(event, guide)}
-          handleEdit={(event, guide) => handleEdit(event, guide)}
-        />
-      );
-    });
+    return guides
+      .filter((guide) => {
+        const { tags } = guide;
+        if (!filters || !filters.length) return true;
+        const parsedFilters = filters.map((filter) => {
+          return filter.label;
+        });
+        for (let i = 0; i < tags.length; i++) {
+          const tag = tags[i];
+          return parsedFilters.includes(tag.label);
+        }
+      })
+      .filter((guide) => {
+        return (
+          guide.title.toUpperCase().indexOf(searchText) > -1 ||
+          (guide.description &&
+            guide.description.toUpperCase().indexOf(searchText) > -1)
+        );
+      })
+      .map((guide, index) => {
+        return (
+          <GuideCard
+            guide={guide}
+            key={index}
+            handleDelete={(event, guide) => deletePrompt(event, guide)}
+            handleEdit={(event, guide) => handleEdit(event, guide)}
+          />
+        );
+      });
   };
 
   const Modal = (title, save) => {
@@ -278,7 +308,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     <div id="guide-list">
       <div className="guide-list">
         <SearchCreateBar
-          handleSearch={(e) => e.queryText}
+          handleSearch={handleSearch}
+          handleFilterChange={handleFilterChange}
           handlePlus={() => setShowAdd(true)}
         />
         {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
