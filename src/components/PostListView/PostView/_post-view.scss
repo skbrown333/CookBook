@@ -2,9 +2,13 @@
 @import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
 .post {
-  margin-bottom: 14px;
+  margin-bottom: 8px;
   width: 100%;
   display: flex;
+
+  @include respond-to(gt-xs) {
+    margin-bottom: 14px;
+  }
 
   &.euiPanel {
     flex-grow: 0;
