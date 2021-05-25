@@ -14,6 +14,7 @@
     height: 100%;
     max-width: 800px;
     overflow: hidden;
+    padding-top: 8px;
 
     @include respond-to(gt-xs) {
       padding: 8px;
@@ -36,6 +37,7 @@
       flex-direction: column;
       align-items: center;
       padding-bottom: 48px;
+      padding-top: 8px;
 
       @include respond-to(gt-xs) {
         padding-top: 8px;
@@ -98,4 +100,12 @@
   .euiMarkdownEditorFooter {
     border-radius: 0;
   }
+}
+.euiModal .euiModal__flex {
+  @include respond-to(gt-xs) {
+    max-height: 85vh !important;
+  }
+}
+.euiOverlayMask {
+  padding-bottom: 0 !important;
 }

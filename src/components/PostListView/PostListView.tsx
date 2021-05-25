@@ -48,6 +48,7 @@ import { FIRESTORE } from '../../constants/constants';
 /* Services */
 import { ToastService } from '../../services/ToastService';
 import { updateTwitch } from '../../store/actions';
+import { UserInput } from '../UserInput/UserInput';
 
 export interface ListViewProps {}
 
@@ -62,7 +63,6 @@ const emptyPost: Post = {
 
 export const PostListView: FunctionComponent<ListViewProps> = () => {
   const [state, dispatch] = useContext(Context);
-  const handleSearch = (e) => e.queryText;
   const [posts, setPosts] = useState(Array<Post>());
   const [post, setPost] = useState(emptyPost);
   const [index, setIndex] = useState(0);
@@ -74,6 +74,13 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const toast = new ToastService();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+  const [filters, setFilters] = useState<any>(undefined);
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (event) => {
+    const value = event?.target.value.toUpperCase();
+    setSearchText(value);
+  };
 
   useEffect(() => {
     async function init() {
@@ -87,10 +94,25 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
         }
       }
     }
-    getPosts();
 
     init();
   }, []);
+
+  useEffect(() => {
+    setHasNextPage(true);
+    setPosts([]);
+  }, [filters]);
+
+  useEffect(() => {
+    if (!hasNextPage) return;
+    if (posts.length === 0) {
+      getPosts();
+    }
+  }, [posts, hasNextPage]);
+
+  const handleFilterChange = (filters) => {
+    setFilters(filters);
+  };
 
   const handlePlus = () => {
     setPost(emptyPost);
@@ -108,6 +130,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
         'desc',
         limit,
         posts.length > 0 ? posts[posts.length - 1].doc : undefined,
+        filters && filters.length > 0 ? filters : undefined,
       );
       if (newPosts.length < limit) {
         setHasNextPage(false);
@@ -130,18 +153,20 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     event.preventDefault();
     try {
       const newPosts = [...posts];
-      const { title, body, character, tags } = post;
+      const { title, body, character, tags, cre_account } = post;
       delete post.doc;
       await post.doc_ref.set(post);
       newPosts[index] = {
         ...newPosts[index],
         ...{
           title,
+          cre_account,
           ...(body ? { body } : {}),
           ...(character ? { character } : {}),
           ...(tags ? { tags } : {}),
         },
       };
+
       setPosts([...newPosts]);
       cancelModal();
       toast.successToast('Edit successful');
@@ -200,7 +225,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   );
 
   const Modal = (head, save) => {
-    const { title, body, tags, character } = post;
+    const { title, body, tags, character, cre_account } = post;
     return (
       <EuiModal
         className="post__modal"
@@ -220,6 +245,14 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
                 required
                 value={title}
                 onChange={(e) => updateSection('title', e.target.value)}
+              />
+            </EuiFormRow>
+            <EuiFormRow className="user-input">
+              <UserInput
+                initialSelected={cre_account}
+                handleUpdate={(user) =>
+                  updateSection('cre_account', user.value.doc_ref)
+                }
               />
             </EuiFormRow>
             <EuiFormRow fullWidth>
@@ -265,23 +298,30 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   };
 
   const buildPosts = () => {
-    return posts.map((post, index) => {
-      return (
-        <PostView
-          post={post}
-          handleEdit={() => {
-            setPost(post);
-            setIndex(index);
-            setShowEdit(true);
-          }}
-          handleDelete={() => {
-            setPost(post);
-            setIndex(index);
-            setShowDelete(true);
-          }}
-        />
-      );
-    });
+    return posts
+      .filter((post) => {
+        return (
+          post.title.toUpperCase().indexOf(searchText) > -1 ||
+          post.body.toUpperCase().indexOf(searchText) > -1
+        );
+      })
+      .map((post, index) => {
+        return (
+          <PostView
+            post={post}
+            handleEdit={() => {
+              setPost(post);
+              setIndex(index);
+              setShowEdit(true);
+            }}
+            handleDelete={() => {
+              setPost(post);
+              setIndex(index);
+              setShowDelete(true);
+            }}
+          />
+        );
+      });
   };
 
   const [sentryRef] = useInfiniteScroll({
@@ -300,7 +340,11 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   return (
     <div id="post-list">
       <div className="post-list">
-        <SearchCreateBar handlePlus={handlePlus} handleSearch={handleSearch} />
+        <SearchCreateBar
+          handlePlus={handlePlus}
+          handleSearch={handleSearch}
+          handleFilterChange={handleFilterChange}
+        />
         <div className="post-list__content">
           {buildPosts()}
           <div ref={sentryRef} />

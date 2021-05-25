@@ -2,9 +2,13 @@
 @import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
 .post {
-  margin-bottom: 14px;
+  margin-bottom: 8px;
   width: 100%;
   display: flex;
+
+  @include respond-to(gt-xs) {
+    margin-bottom: 14px;
+  }
 
   &.euiPanel {
     flex-grow: 0;
@@ -61,7 +65,7 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 8px;
 
@@ -71,6 +75,12 @@
 
     &--text {
       margin-right: auto;
+
+      &.author {
+        font-size: 12px;
+        color: #8b89e2;
+        margin-top: 4px;
+      }
     }
 
     .euiFormControlLayout {

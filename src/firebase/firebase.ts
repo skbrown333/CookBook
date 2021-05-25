@@ -5,7 +5,7 @@ import 'firebase/functions';
 import axios from 'axios';
 
 /* Constants */
-import { FUNCTIONS } from '../constants/constants';
+import { FIRESTORE, FUNCTIONS } from '../constants/constants';
 
 export class Firebase {
   auth;
@@ -36,23 +36,35 @@ export class Firebase {
     return await collectionRef.add(data);
   };
 
-  getAll = async (cookbook, collection, key?, order?, limit?, startAfter?) => {
-    let collectionRef;
+  getAll = async (
+    cookbook,
+    collection,
+    key?,
+    order?,
+    limit?,
+    startAfter?,
+    filters?,
+  ) => {
+    let collectionRef: any = app
+      .firestore()
+      .collection(`cookbooks/${cookbook}/${collection}`);
+
     if (key && order) {
-      collectionRef = app
-        .firestore()
-        .collection(`cookbooks/${cookbook}/${collection}`)
-        .orderBy(key, order)
-        .limit(limit);
+      collectionRef = collectionRef.orderBy(key, order).limit(limit);
 
       if (startAfter) {
         collectionRef = collectionRef.startAfter(startAfter);
       }
-    } else {
-      collectionRef = app
-        .firestore()
-        .collection(`cookbooks/${cookbook}/${collection}`);
     }
+
+    if (filters) {
+      collectionRef = collectionRef.where(
+        FIRESTORE.collections.tags,
+        'array-contains-any',
+        filters,
+      );
+    }
+
     const snapshot = await collectionRef.get();
     const docs: any = [];
     snapshot.forEach((doc: any) => {
@@ -102,6 +114,25 @@ export class Firebase {
     snapshot.forEach((doc: any) => {
       docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
     });
+    return docs;
+  };
+
+  /**
+   * Gets a list of users given user ids
+   *
+   * @param userIds {Array} - array of user ids
+   * @returns
+   */
+  getUsers = async (userIds) => {
+    const snapshot = await this.firestore
+      .collection('user_profiles')
+      .where(app.firestore.FieldPath.documentId(), 'in', userIds)
+      .get();
+    const docs: any = [];
+    snapshot.forEach((doc: any) => {
+      docs.push({ ...doc.data(), ...{ doc_ref: doc.ref } });
+    });
+
     return docs;
   };
 
