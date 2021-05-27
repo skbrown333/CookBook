@@ -26,7 +26,7 @@ import { Guide } from '../../models/Guide';
 import { newSection } from '../../constants/constants';
 import { GuideDetailSideNav } from './GuideDetailSideNav/GuideDetailSideNav';
 import { GuideDetailSection } from './GuideDetailSection/GuideDetailSection';
-import { GuideDetailControls } from './GuideDetailControls/GuideDetailControls';
+import { GuideDetailHeader } from './GuideDetailHeader/GuideDetailHeader';
 
 /* Firebase */
 import FirebaseContext from '../../firebase/context';
@@ -188,20 +188,24 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       <div id="guide-detail" className="guide-detail">
         {guide && guide.sections && (
           <>
-            {showControls && (
+            {
               <div
-                className="guide-detail__controls"
+                className="guide-detail__header"
                 style={editing ? { paddingRight: 8 } : {}}
               >
-                <GuideDetailControls
+                <GuideDetailHeader
                   editing={editing}
                   handleCancel={handleCancel}
                   handleSave={handleSave}
                   handleAddSection={handleAddSection}
                   handleSetEditing={handleSetEditing}
+                  sections={guide.sections}
+                  title={guide.title}
+                  character={guide.character}
+                  showControls={showControls}
                 />
               </div>
-            )}
+            }
 
             <div
               className="guide-detail__content"

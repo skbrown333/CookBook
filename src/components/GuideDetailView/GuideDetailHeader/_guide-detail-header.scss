@@ -1,0 +1,39 @@
+@import '../../../styles/responsive';
+
+.guide-controls {
+  &__button {
+    margin-left: 8px;
+  }
+}
+
+.guide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @include respond-to(gt-sm) {
+    margin-right: 260px;
+    margin-bottom: 12px;
+    justify-content: flex-end;
+    .guide-header__title {
+      display: none;
+    }
+  }
+
+  &__controls__button {
+    margin: 0 4px 0 4px;
+  }
+
+  &__title {
+    display: inherit;
+    align-items: inherit;
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-left: 12px;
+  }
+}
+
+.nav-item {
+  padding: 10px;
+}
