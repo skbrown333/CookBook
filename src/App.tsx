@@ -38,9 +38,11 @@ export const App: FunctionComponent = () => {
         const domains = window.location.host.split('.');
         const subdomain =
           domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
-        console.log('domains: ', domains);
-        const cookbooks = await firebaseInstance.getCookbookInfo(subdomain);
-        console.log('cookbooks: ', cookbooks);
+        let cookbooks = await firebaseInstance.getCookbookInfo(subdomain);
+        // needed until domain gets switched over to vercel
+        if (cookbooks.length === 0) {
+          cookbooks = await firebaseInstance.getCookbookInfo('falcon');
+        }
         dispatch(updateCookbook(cookbooks[0]));
       } catch (err) {
         toast.errorToast('Error', err.message);
