@@ -60,7 +60,10 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
               ? [
                   <EuiHeaderSectionItemButton aria-label="Account menu">
                     <EuiAvatar
-                      imageUrl={DISCORD.getAvatarUrl(user.id, user.avatar)}
+                      imageUrl={DISCORD.getAvatarUrl(
+                        user.discord_id,
+                        user.avatar,
+                      )}
                       name={`${user.username}#${user.discriminator}`}
                       size="m"
                     />

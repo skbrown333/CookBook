@@ -24,8 +24,7 @@ import {
 
 /* Context */
 import { Context } from '../../store/Store';
-import { FirebaseContext } from '../../firebase';
-import { FIRESTORE } from '../../constants/constants';
+import TagService from '../../services/TagService/TagService';
 
 export interface SearchCreateBarProp {
   handlePlus: () => void;
@@ -46,16 +45,13 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<any>([]);
   const [searchText, setSearchText] = useState('');
-  const firebase = useContext(FirebaseContext);
+  const tagService = new TagService(cookbook._id);
 
   useEffect(() => {
     async function init() {
       setLoading(true);
       setItems([]);
-      const docs = await firebase?.getAll(
-        cookbook.id,
-        FIRESTORE.collections.tags,
-      );
+      const docs = await tagService.get();
 
       const tags = Array<any>();
       docs?.forEach((doc) => {

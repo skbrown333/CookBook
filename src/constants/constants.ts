@@ -9,7 +9,7 @@ const NODE_ENV = process.env.NODE_ENV;
 
 const isLocal = NODE_ENV === 'development';
 const env: any = {};
-env.base_url = isLocal ? 'http://localhost:3000' : 'https://cookbook.gg';
+env.base_url = 'http://localhost:3000';
 env.isLocal = isLocal;
 env.twitch_parent = isLocal ? 'localhost' : 'cookbook.gg';
 
@@ -42,6 +42,46 @@ export const DISCORD = {
 export const CHARACTERS = characterIcons;
 
 /**
+ * Cookbook
+ */
+
+export const COOKBOOK = {
+  route: '/cookbooks',
+};
+
+/**
+ * Guide
+ */
+
+export const GUIDE = {
+  route: '/guides',
+};
+
+/**
+ * Post
+ */
+
+export const POST = {
+  route: '/posts',
+};
+
+/**
+ * Tag
+ */
+
+export const TAG = {
+  route: '/tags',
+};
+
+/**
+ * User
+ */
+
+export const USER = {
+  route: '/users',
+};
+
+/**
  * Firestore
  */
 
@@ -63,7 +103,6 @@ const sampleBody = `
  `;
 
 export const newSection: Post = {
-  id: '',
   title: '**replace with title',
   body: sampleBody,
   tags: Array<Tag>(),

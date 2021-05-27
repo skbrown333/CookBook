@@ -23,6 +23,7 @@ import { updateUser, updateToasts, updateCookbook } from './store/actions';
 /* Styles */
 import '@elastic/eui/dist/eui_theme_amsterdam_dark.css';
 import './App.scss';
+import CookbookService from './services/CookbookService/CookbookService';
 
 const firebaseInstance = new Firebase();
 
@@ -31,6 +32,7 @@ export const App: FunctionComponent = () => {
   const { toasts } = state;
   const toast = new ToastService();
   const { cookbook } = state;
+  const cookbookService = new CookbookService();
 
   useEffect(() => {
     async function init() {
@@ -38,14 +40,16 @@ export const App: FunctionComponent = () => {
         const domains = window.location.host.split('.');
         const subdomain =
           domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
-        let cookbooks = await firebaseInstance.getCookbookInfo(subdomain);
+        let cookbooks = await cookbookService.get({ subdomain: subdomain });
         // needed until domain gets switched over to vercel
         if (cookbooks.length === 0) {
-          cookbooks = await firebaseInstance.getCookbookInfo('falcon');
+          cookbooks = await cookbookService.get({ subdomain: 'falcon' });
         }
+
         dispatch(updateCookbook(cookbooks[0]));
       } catch (err) {
-        toast.errorToast('Error', err.message);
+        console.log(err);
+        toast.errorToast('Error', err);
       }
 
       const user = await firebaseInstance.getCurrentUser();
@@ -117,8 +121,10 @@ export const Login: FunctionComponent = () => {
         `${baseUrl}/login`,
       );
       await firebaseInstance.signInWithCustomToken(res.result);
+      const user = await firebaseInstance.getCurrentUser();
+      console.log(user);
     } catch (err) {
-      toast.errorToast('Error creating guide', err.message);
+      toast.errorToast('Error loggin in', err.message);
     } finally {
       window.location.replace(baseUrl);
     }

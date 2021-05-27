@@ -1,6 +1,6 @@
 import { Tag } from './Tag';
 export interface Post {
-  id: string;
+  _id?: string;
   title: string;
   cre_account?: any;
   body: string;

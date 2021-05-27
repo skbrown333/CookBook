@@ -49,11 +49,11 @@ import { FIRESTORE } from '../../constants/constants';
 import { ToastService } from '../../services/ToastService';
 import { updateTwitch } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
+import PostService from '../../services/PostService/PostService';
 
 export interface ListViewProps {}
 
 const emptyPost: Post = {
-  id: '',
   title: '',
   body: '',
   tags: Array<Tag>(),
@@ -70,12 +70,13 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook } = state;
+  const { cookbook, user } = state;
   const toast = new ToastService();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const [filters, setFilters] = useState<any>(undefined);
   const [searchText, setSearchText] = useState('');
+  const postService = new PostService(cookbook._id);
 
   const handleSearch = (event) => {
     const value = event?.target.value.toUpperCase();
@@ -123,15 +124,11 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     setLoading(true);
     try {
       const limit = 15;
-      const newPosts = await firebase?.getAll(
-        cookbook.id,
-        FIRESTORE.collections.posts,
-        'cre_date',
-        'desc',
-        limit,
-        posts.length > 0 ? posts[posts.length - 1].doc : undefined,
-        filters && filters.length > 0 ? filters : undefined,
-      );
+      const newPosts = await postService.get({
+        // limit,
+        // skip: posts.length,
+        // filters,
+      });
       if (newPosts.length < limit) {
         setHasNextPage(false);
       }
@@ -177,13 +174,11 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const handleNewPost = async (event) => {
     event.preventDefault();
-
+    const token = await user.user.getIdToken();
     try {
-      const ref = await firebase?.add(
-        cookbook.id,
-        FIRESTORE.collections.posts,
-        post,
-      );
+      const ref = await postService.create(post, {
+        Authorization: `Bearer ${token}`,
+      });
       cancelModal();
       setPosts([...[{ ...post, ...{ doc_ref: ref } }], ...posts]);
       toast.successToast('Added new post');
@@ -200,7 +195,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const handleDelete = async () => {
     try {
-      await post.doc_ref.delete();
+      await postService.delete(post._id);
       posts.splice(index, 1);
       setPosts([...posts]);
       cancelModal();

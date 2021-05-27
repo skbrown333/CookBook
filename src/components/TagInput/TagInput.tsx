@@ -21,6 +21,7 @@ import { FIRESTORE } from '../../constants/constants';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
+import TagService from '../../services/TagService/TagService';
 
 export interface TagInputProps {
   initialTags: Array<Tag>;
@@ -39,6 +40,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   const [loading, setLoading] = useState(false);
   const { cookbook } = state;
   const toast = new ToastService();
+  const tagService = new TagService(cookbook._id);
 
   useEffect(() => {
     handleUpdate(selected);
@@ -46,13 +48,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const fetchTags = async () => {
     try {
-      const x = await firebase?.getAll(cookbook.id, FIRESTORE.collections.tags);
-      const tags = Array<any>();
-      x?.forEach((doc) => {
-        tags.push({
-          label: doc.value,
-        });
-      });
+      const tags = await tagService.get();
       setOptions(tags);
     } catch (err) {
       toast.errorToast('Error fetching tags', err.message);
@@ -63,19 +59,15 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const createTag = async (newOption) => {
     try {
-      const doc_ref = await firebase?.add(
-        cookbook.id,
-        FIRESTORE.collections.tags,
-        {
-          value: newOption.label,
-        },
-      );
-      newOption.doc_ref = doc_ref;
-      setOptions([...options, newOption]);
-      setSelected([...selected, newOption]);
-      toast.successToast(`Added tag: ${newOption.label}`);
+      const tag = await tagService.create(newOption);
+      setOptions([...options, tag]);
+      setSelected([...selected, tag]);
+      toast.successToast(`Added tag: ${tag.label}`);
     } catch (err) {
-      toast.errorToast('Failed to add tag', err.message);
+      toast.errorToast(
+        'Failed to add tag',
+        err && err.message ? err.message : '',
+      );
     }
   };
 
@@ -93,15 +85,12 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   const onCreateOption = (searchValue) => {
     const normalizedSearchValue = searchValue.trim().toLowerCase();
     const newOption = {
-      _id: 'mock_tag_id',
       label: normalizedSearchValue,
     };
 
     if (!normalizedSearchValue) return;
 
-    if (options.some((tag) => tag != normalizedSearchValue)) {
-      createTag(newOption);
-    }
+    createTag(newOption);
   };
 
   return (
