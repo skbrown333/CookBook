@@ -44,11 +44,9 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   showControls,
 }) => {
   const [flyoutVis, setFlyoutVis] = useState(false);
-  const handleFlyout = () => {
-    setFlyoutVis(true);
-  };
-  const closeFlyout = () => {
-    setFlyoutVis(false);
+
+  const toggleFlyout = () => {
+    setFlyoutVis(!flyoutVis);
   };
 
   const navItems = () => {
@@ -60,7 +58,7 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
             id={`nav-${index}`}
             size="m"
             onClick={() => {
-              closeFlyout();
+              toggleFlyout();
               const div = document.getElementById(`section-${index}`);
               if (div && document) {
                 const topPos = div.offsetTop - 200;
@@ -78,7 +76,7 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
 
   const flyout = () => {
     return (
-      <EuiFlyout ownFocus onClose={closeFlyout}>
+      <EuiFlyout ownFocus side="left" onClose={toggleFlyout}>
         <EuiFlyoutHeader>
           <EuiTitle>
             <h2>Sections</h2>
@@ -93,7 +91,7 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
     <div className="guide-header">
       <div className="guide-header__title">
         <EuiButtonIcon
-          onClick={handleFlyout}
+          onClick={toggleFlyout}
           aria-label="menu-flyout"
           iconType="menu"
           iconSize="l"
