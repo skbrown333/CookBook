@@ -32,7 +32,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
   const { title, character, tags, description } = guide;
   const { cookbook, user } = state;
   const redirectToGuide = () => {
-    history.push(`/recipes/${guide.id}`);
+    history.push(`/recipes/${guide._id}`);
   };
 
   return (

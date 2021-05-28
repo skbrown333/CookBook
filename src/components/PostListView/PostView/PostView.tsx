@@ -39,19 +39,7 @@ export const PostView: FunctionComponent<PostProps> = ({
 }) => {
   const [state] = useContext(Context);
   const { cookbook, user } = state;
-  const [author, setAuthor] = useState<any>(null);
   const { title, body, id, character, tags, cre_account } = post;
-
-  const getAuthor = async () => {
-    if (!cre_account) return;
-    const doc = await cre_account.get();
-    const author = doc.data();
-    setAuthor(author);
-  };
-
-  useEffect(() => {
-    getAuthor();
-  }, [post]);
 
   return (
     <EuiPanel
@@ -74,7 +62,7 @@ export const PostView: FunctionComponent<PostProps> = ({
           <div className="post__title--text">
             {title}
             <div className="post__title--text author">
-              {author && `@${author.username}`}
+              {cre_account && `@${cre_account.username}`}
             </div>
           </div>
           {user && cookbook.roles[user.uid] === 'admin' && (

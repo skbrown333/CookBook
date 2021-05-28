@@ -9,8 +9,7 @@ const NODE_ENV = process.env.NODE_ENV;
 
 const isLocal = NODE_ENV === 'development';
 const env: any = {};
-env.base_url = isLocal ? 'http://localhost:3000' : 'https://cookbook.gg';
-env.isLocal = isLocal;
+env.base_url = process.env.REACT_APP_API_URL;
 env.twitch_parent = isLocal ? 'localhost' : 'cookbook.gg';
 
 export const ENV = env;
@@ -19,7 +18,6 @@ export const ENV = env;
  * FUNCTIONS
  */
 export const FUNCTIONS = {
-  loginWithDiscord: `https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/loginWithDiscord`,
   getTwitchStreams: `https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/getTwitchStreams`,
 };
 
@@ -40,6 +38,46 @@ export const DISCORD = {
  */
 
 export const CHARACTERS = characterIcons;
+
+/**
+ * Cookbook
+ */
+
+export const COOKBOOK = {
+  route: '/cookbooks',
+};
+
+/**
+ * Guide
+ */
+
+export const GUIDE = {
+  route: '/guides',
+};
+
+/**
+ * Post
+ */
+
+export const POST = {
+  route: '/posts',
+};
+
+/**
+ * Tag
+ */
+
+export const TAG = {
+  route: '/tags',
+};
+
+/**
+ * User
+ */
+
+export const USER = {
+  route: '/users',
+};
 
 /**
  * Firestore
@@ -63,7 +101,6 @@ const sampleBody = `
  `;
 
 export const newSection: Post = {
-  id: '',
   title: '**replace with title',
   body: sampleBody,
   tags: Array<Tag>(),
