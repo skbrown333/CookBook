@@ -31,6 +31,25 @@ export class Firebase {
   }
 
   /**
+   * Gets a list of users given user ids
+   *
+   * @param userIds {Array} - array of user ids
+   * @returns
+   */
+  getUsers = async (userIds) => {
+    const snapshot = await this.firestore
+      .collection('user_profiles')
+      .where(app.firestore.FieldPath.documentId(), 'in', userIds)
+      .get();
+    const docs: any = [];
+    snapshot.forEach((doc: any) => {
+      docs.push({ ...doc.data(), ...{ doc_ref: doc.ref } });
+    });
+
+    return docs;
+  };
+
+  /**
    * Gets a user and token from a discord login code
    *
    * @param code {String} - autho code needed to get user
