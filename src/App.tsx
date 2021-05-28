@@ -64,7 +64,7 @@ export const App: FunctionComponent = () => {
       setLoading(false);
     }
     init();
-  }, [cookbook]);
+  }, []);
 
   const removeToast = (removedToast) => {
     dispatch(
