@@ -44,7 +44,6 @@ export const App: FunctionComponent = () => {
   useEffect(() => {
     async function init() {
       try {
-        setLoading(true);
         const domains = window.location.host.split('.');
         const subdomain =
           domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
@@ -65,7 +64,7 @@ export const App: FunctionComponent = () => {
       setLoading(false);
     }
     init();
-  }, []);
+  }, [cookbook]);
 
   const removeToast = (removedToast) => {
     dispatch(
@@ -77,7 +76,7 @@ export const App: FunctionComponent = () => {
     <FirebaseContext.Provider value={firebaseInstance}>
       <Router>
         <div id="cb-app">
-          {cookbook && !loading && (
+          {cookbook && (
             <>
               <Route path="/" component={HeaderBar} />
               <Switch>
