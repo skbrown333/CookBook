@@ -1,17 +1,13 @@
 @import '../../styles/responsive';
 
 .guide-list {
-  padding: 8px;
   display: flex;
-  // flex-direction: column;
+  flex-direction: column;
   align-items: center;
   overflow: hidden;
-  // width: 100%;
+  width: 100%;
   max-width: 800px;
-
-  @include respond-to(gt-md) {
-    margin-left: 258px;
-  }
+  padding: 0;
 
   &__content {
     display: grid;

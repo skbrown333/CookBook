@@ -4,18 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 100%;
   max-width: 800px;
   overflow: hidden;
+  padding: 0 !important;
   padding-top: 8px;
 
   @include respond-to(gt-xs) {
     padding: 8px;
-  }
-
-  @include respond-to(gt-md) {
-    margin-left: 258px;
   }
 
   &__content {
@@ -27,10 +22,6 @@
     align-items: center;
     padding-bottom: 48px;
     padding-top: 8px;
-
-    @include respond-to(gt-xs) {
-      padding-top: 8px;
-    }
 
     .euiPanel {
       &.euiPanel--hasBorder {

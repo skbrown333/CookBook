@@ -1,10 +1,23 @@
 @import '../../styles/responsive';
 
+@mixin width {
+  max-width: 800px;
+}
+.react-swipeable-view-container {
+  @include width;
+}
+
 #home-view {
   display: flex;
   justify-content: center;
   overflow: hidden;
   flex: 1;
+  .search-controls {
+    @include width;
+  }
+  @include respond-to(gt-md) {
+    margin-left: 258px;
+  }
   @include respond-to(xs) {
     .search-controls {
       padding: 8px;
@@ -21,12 +34,8 @@
       @include respond-to(gt-md) {
         display: block;
         margin-top: 70px;
-        margin-left: 4px;
+        margin-left: 12px;
       }
-    }
-
-    @include respond-to(gt-md) {
-      margin-left: 258px;
     }
   }
 }
