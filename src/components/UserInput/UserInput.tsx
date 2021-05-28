@@ -6,11 +6,11 @@ import React, {
 } from 'react';
 
 import { EuiComboBox } from '@elastic/eui';
-import { FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
 import { DISCORD } from '../../constants/constants';
 
 import './_user-input.scss';
+import UserService from '../../services/UserService/UserService';
 
 export interface UserInputInterface {
   initialSelected?: any;
@@ -24,51 +24,49 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
   const [users, setUsers] = useState<Array<any>>([]);
   const [selected, setSelected] = useState<any>(null);
   const [state] = useContext(Context);
-  const firebase = useContext(FirebaseContext);
-  const { cookbook, user } = state;
+  const { user } = state;
+  const userService = new UserService();
 
   useEffect(() => {
     async function init() {
-      const docs = await firebase?.getUsers(Object.keys(cookbook.roles));
+      const users = await userService.get();
       setUsers(
-        docs.map((_user) => {
-          const { id, avatar, username, discriminator, doc_ref } = _user;
+        users.map((_user) => {
+          const { discord_id, avatar, username, discriminator } = _user;
           return {
             label: `${username}#${discriminator}`,
             value: {
-              id,
+              discord_id,
               avatar,
-              doc_ref,
             },
           };
         }),
       );
       if (initialSelected) {
-        const doc = await initialSelected.get();
-        const author = doc.data();
-        const { id, avatar, username, discriminator, doc_ref } = author;
+        const user = await userService.getById(initialSelected);
+        const { discord_id, avatar, username, discriminator, _id } = user;
 
         setSelected([
           {
             label: `${username}#${discriminator}`,
             value: {
-              id,
+              discord_id,
               avatar,
-              doc_ref,
+              _id,
             },
           },
         ]);
       } else {
-        docs.forEach((_user) => {
-          if (user.id === _user.id) {
-            const { id, avatar, username, discriminator, doc_ref } = _user;
+        users.forEach((_user) => {
+          if (user._id === _user._id) {
+            const { discord_id, avatar, username, discriminator, _id } = _user;
             setSelected([
               {
                 label: `${username}#${discriminator}`,
                 value: {
-                  id,
+                  discord_id,
                   avatar,
-                  doc_ref,
+                  _id,
                 },
               },
             ]);
@@ -80,8 +78,8 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
   }, []);
 
   useEffect(() => {
-    if (selected && selected[0] && selected[0].value.doc_ref) {
-      handleUpdate(selected[0]);
+    if (selected && selected[0] && selected[0].value) {
+      handleUpdate(selected[0].value._id);
     }
   }, [selected]);
 
@@ -91,10 +89,10 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
 
   const renderOption = (_user) => {
     const { value, label } = _user;
-    const { id, avatar } = value;
+    const { discord_id, avatar } = value;
     return (
       <span className="user-input__user">
-        <img src={DISCORD.getAvatarUrl(id, avatar)} /> {label}
+        <img src={DISCORD.getAvatarUrl(discord_id, avatar)} /> {label}
       </span>
     );
   };

@@ -42,18 +42,15 @@ import { parsingList, processingList, uiList } from '../../plugins';
 import { Firebase, FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
 
-/* Constants */
-import { FIRESTORE } from '../../constants/constants';
-
 /* Services */
 import { ToastService } from '../../services/ToastService';
 import { updateTwitch } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
+import PostService from '../../services/PostService/PostService';
 
 export interface ListViewProps {}
 
 const emptyPost: Post = {
-  id: '',
   title: '',
   body: '',
   tags: Array<Tag>(),
@@ -70,12 +67,13 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook } = state;
+  const { cookbook, user } = state;
   const toast = new ToastService();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const [filters, setFilters] = useState<any>(undefined);
   const [searchText, setSearchText] = useState('');
+  const postService = new PostService(cookbook._id);
 
   const handleSearch = (event) => {
     const value = event?.target.value.toUpperCase();
@@ -123,15 +121,11 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     setLoading(true);
     try {
       const limit = 15;
-      const newPosts = await firebase?.getAll(
-        cookbook.id,
-        FIRESTORE.collections.posts,
-        'cre_date',
-        'desc',
-        limit,
-        posts.length > 0 ? posts[posts.length - 1].doc : undefined,
-        filters && filters.length > 0 ? filters : undefined,
-      );
+      const newPosts = await postService.get({
+        // limit,
+        // skip: posts.length,
+        // filters,
+      });
       if (newPosts.length < limit) {
         setHasNextPage(false);
       }
@@ -154,8 +148,10 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     try {
       const newPosts = [...posts];
       const { title, body, character, tags, cre_account } = post;
-      delete post.doc;
-      await post.doc_ref.set(post);
+      const token = await user.user.getIdToken();
+      await postService.update(post._id, post, {
+        Authorization: `Bearer ${token}`,
+      });
       newPosts[index] = {
         ...newPosts[index],
         ...{
@@ -177,15 +173,13 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const handleNewPost = async (event) => {
     event.preventDefault();
-
     try {
-      const ref = await firebase?.add(
-        cookbook.id,
-        FIRESTORE.collections.posts,
-        post,
-      );
+      const token = await user.user.getIdToken();
+      const newPost = await postService.create(post, {
+        Authorization: `Bearer ${token}`,
+      });
       cancelModal();
-      setPosts([...[{ ...post, ...{ doc_ref: ref } }], ...posts]);
+      setPosts([...[newPost], ...posts]);
       toast.successToast('Added new post');
     } catch (error) {
       toast.errorToast('Failed adding post', error.message);
@@ -200,7 +194,10 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const handleDelete = async () => {
     try {
-      await post.doc_ref.delete();
+      const token = await user.user.getIdToken();
+      await postService.delete(post._id, {
+        Authorization: `Bearer ${token}`,
+      });
       posts.splice(index, 1);
       setPosts([...posts]);
       cancelModal();
@@ -250,9 +247,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
             <EuiFormRow className="user-input">
               <UserInput
                 initialSelected={cre_account}
-                handleUpdate={(user) =>
-                  updateSection('cre_account', user.value.doc_ref)
-                }
+                handleUpdate={(user) => updateSection('cre_account', user)}
               />
             </EuiFormRow>
             <EuiFormRow fullWidth>

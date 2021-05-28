@@ -1,4 +1,9 @@
-import React, { useEffect, useContext, FunctionComponent } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  FunctionComponent,
+  useState,
+} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 /* Components */
@@ -12,7 +17,7 @@ import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 import { ToastService } from './services/ToastService';
 
 /* Constants */
-import { DISCORD } from './constants/constants';
+import { DISCORD, ENV } from './constants/constants';
 
 /* Store */
 import { Firebase, FirebaseContext } from './firebase';
@@ -22,14 +27,18 @@ import { updateUser, updateToasts, updateCookbook } from './store/actions';
 /* Styles */
 import '@elastic/eui/dist/eui_theme_amsterdam_dark.css';
 import './App.scss';
+import CookbookService from './services/CookbookService/CookbookService';
+import axios from './services/axios.instance';
 
 const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
+  const [loading, setLoading] = useState(true);
   const { toasts } = state;
   const toast = new ToastService();
   const { cookbook } = state;
+  const cookbookService = new CookbookService();
 
   useEffect(() => {
     async function init() {
@@ -37,18 +46,21 @@ export const App: FunctionComponent = () => {
         const domains = window.location.host.split('.');
         const subdomain =
           domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
-        let cookbooks = await firebaseInstance.getCookbookInfo(subdomain);
+        let cookbooks = await cookbookService.get({ subdomain: subdomain });
         // needed until domain gets switched over to vercel
         if (cookbooks.length === 0) {
-          cookbooks = await firebaseInstance.getCookbookInfo('falcon');
+          cookbooks = await cookbookService.get({ subdomain: 'falcon' });
         }
+
         dispatch(updateCookbook(cookbooks[0]));
       } catch (err) {
-        toast.errorToast('Error', err.message);
+        toast.errorToast('Error', err);
+        setLoading(false);
       }
 
       const user = await firebaseInstance.getCurrentUser();
       dispatch(updateUser(user));
+      setLoading(false);
     }
     init();
   }, []);
@@ -111,13 +123,13 @@ export const Login: FunctionComponent = () => {
   async function login() {
     if (!code) return;
     try {
-      const res = await firebaseInstance.loginWithDiscord(
+      const res: any = await axios.post(`${ENV.base_url}/login`, {
         code,
-        `${baseUrl}/login`,
-      );
-      await firebaseInstance.signInWithCustomToken(res.result);
+        redirectUrl: `${baseUrl}/login`,
+      });
+      await firebaseInstance.signInWithCustomToken(res.data);
     } catch (err) {
-      toast.errorToast('Error creating guide', err.message);
+      toast.errorToast('Error loggin in', err.message);
     } finally {
       window.location.replace(baseUrl);
     }
