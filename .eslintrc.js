@@ -19,7 +19,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    'no-console': 'error',
+    'no-console': 'off',
     'react/prop-types': 'off',
     'react/jsx-key': 'off',
     'no-sparse-arrays': 'off',

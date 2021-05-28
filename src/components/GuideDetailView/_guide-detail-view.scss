@@ -12,27 +12,6 @@
     padding: 8px 24px 0 24px;
   }
 
-  .guide-detail__controls {
-    display: flex;
-    justify-content: flex-end;
-    margin: 4px 8px 12px 0;
-
-    @include respond-to(gt-sm) {
-      margin-right: 260px;
-    }
-
-    @include respond-to(gt-xs) {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 12px;
-      margin-right: 0;
-    }
-
-    @include respond-to(gt-sm) {
-      margin-right: 260px;
-    }
-  }
-
   .guide-detail__content {
     display: flex;
     flex-direction: row;

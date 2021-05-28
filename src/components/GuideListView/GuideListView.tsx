@@ -40,11 +40,12 @@ import { Context } from '../../store/Store';
 import { updateTwitch } from '../../store/actions';
 
 /* Constants */
-import { CHARACTERS, FIRESTORE } from '../../constants/constants';
+import { CHARACTERS } from '../../constants/constants';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import GuideService from '../../services/GuideService/GuideService';
 
 export interface GuideListViewProps {}
 
@@ -73,11 +74,12 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [filters, setFilters] = useState<any>([]);
   const [searchText, setSearchText] = useState('');
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook } = state;
+  const { cookbook, user } = state;
   const toast = new ToastService();
+  const guideService = new GuideService(cookbook._id);
 
   const getGuides = async () => {
-    return await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides);
+    return await guideService.get();
   };
 
   useEffect(() => {
@@ -114,11 +116,10 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const deleteGuide = async () => {
     if (!guide) return;
     try {
-      await firebase?.deleteDocById(
-        cookbook.id,
-        FIRESTORE.collections.guides,
-        guide.id,
-      );
+      const token = await user.user.getIdToken();
+      await guideService.delete(guide._id, {
+        Authorization: `Bearer ${token}`,
+      });
       setGuides(await getGuides());
       toast.successToast(
         'Guide deleted',
@@ -188,13 +189,19 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const createGuide = async (newGuide) => {
     const { character, description, tags, title } = newGuide;
     try {
-      await firebase?.add(cookbook.id, FIRESTORE.collections.guides, {
-        character,
-        description,
-        sections: [],
-        tags,
-        title,
-      });
+      const token = await user.user.getIdToken();
+      await guideService.create(
+        {
+          character,
+          description,
+          sections: [],
+          tags,
+          title,
+        },
+        {
+          Authorization: `Bearer ${token}`,
+        },
+      );
       toast.successToast(
         guide.title,
         'Guide succesfully created',
@@ -210,9 +217,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     try {
       setCreating(true);
       await createGuide(guide);
-      setGuides(
-        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides),
-      );
+      setGuides(await guideService.get());
       setGuide(emptyGuide);
       setShowAdd(false);
     } finally {
@@ -221,13 +226,24 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   };
 
   const handleEditSave = async () => {
+    const { character, description, tags, title } = guide;
     try {
       setCreating(true);
-      await guide.doc_ref.set(guide);
-      toast.successToast('Guide Updated', `Edited guide: ${guide.title}`);
-      setGuides(
-        await firebase?.getAll(cookbook.id, FIRESTORE.collections.guides),
+      const token = await user.user.getIdToken();
+      await guideService.update(
+        guide._id,
+        {
+          character,
+          description,
+          tags,
+          title,
+        },
+        {
+          Authorization: `Bearer ${token}`,
+        },
       );
+      toast.successToast('Guide Updated', `Edited guide: ${guide.title}`);
+      setGuides(await guideService.get());
     } finally {
       setGuide(emptyGuide);
       setShowEdit(false);
