@@ -1,79 +1,57 @@
 @import '../../styles/responsive';
 
-#post-list {
+.post-list {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
   overflow: hidden;
-  flex: 1;
+  padding-top: 8px;
 
-  .post-list {
+  @include respond-to(gt-xs) {
+    padding: 8px;
+  }
+
+  @include respond-to(gt-md) {
+    margin-left: 258px;
+  }
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    height: 100%;
-    max-width: 800px;
-    overflow: hidden;
+    padding-bottom: 48px;
     padding-top: 8px;
 
     @include respond-to(gt-xs) {
-      padding: 8px;
-    }
-    @include respond-to(xs) {
-      .search-controls {
-        padding: 8px;
-      }
-    }
-
-    @include respond-to(gt-md) {
-      margin-left: 258px;
-    }
-
-    &__content {
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 48px;
       padding-top: 8px;
+    }
 
-      @include respond-to(gt-xs) {
-        padding-top: 8px;
+    .euiPanel {
+      &.euiPanel--hasBorder {
+        @include respond-to(xs) {
+          border-left: none;
+          border-right: none;
+        }
       }
 
-      .euiPanel {
-        &.euiPanel--hasBorder {
-          @include respond-to(xs) {
-            border-left: none;
-            border-right: none;
-          }
-        }
+      &.euiPanel--borderRadiusMedium {
+        border-radius: 0;
 
-        &.euiPanel--borderRadiusMedium {
-          border-radius: 0;
-
-          @include respond-to(gt-xs) {
-            border-radius: 4px;
-          }
+        @include respond-to(gt-xs) {
+          border-radius: 4px;
         }
       }
     }
+  }
 
-    &__twitch {
-      display: none;
-
-      @include respond-to(gt-md) {
-        display: block;
-        margin-top: 70px;
-        margin-left: 4px;
-      }
-    }
-
-    .post {
-      flex-grow: 0;
-    }
+  .post {
+    flex-grow: 0;
   }
 }
 

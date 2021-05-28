@@ -340,18 +340,12 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   return (
     <div id="post-list">
       <div className="post-list">
-        <SearchCreateBar
-          handlePlus={handlePlus}
-          handleSearch={handleSearch}
-          handleFilterChange={handleFilterChange}
-        />
         <div className="post-list__content">
           {buildPosts()}
           <div ref={sentryRef} />
           {loading && <EuiLoadingSpinner size="xl" />}
         </div>
       </div>
-      <TwitchSidebar className="post-list__twitch" />
 
       {showAdd && Modal('New Post', handleNewPost)}
       {showEdit && Modal('Edit Post', handleEditPost)}

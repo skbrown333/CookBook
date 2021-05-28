@@ -101,10 +101,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     init();
   }, []);
 
-  const handleFilterChange = (filters) => {
-    setFilters(filters);
-  };
-
   const deletePrompt = async (e, guide) => {
     e.stopPropagation();
     setGuide(guide);
@@ -241,11 +237,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     setGuide(emptyGuide);
   };
 
-  const handleSearch = (event) => {
-    const value = event.target.value.toUpperCase();
-    setSearchText(value);
-  };
-
   const buildGuides = () => {
     return guides
       .filter((guide) => {
@@ -305,20 +296,11 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   };
 
   return (
-    <div id="guide-list">
-      <div className="guide-list">
-        <SearchCreateBar
-          handleSearch={handleSearch}
-          handleFilterChange={handleFilterChange}
-          handlePlus={() => setShowAdd(true)}
-        />
-        {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
-        {showDelete && destroyModal}
-        {showEdit && Modal('Edit Guide', handleEditSave)}
-        <div className="guide-list__content">{buildGuides()}</div>
-      </div>
-
-      <TwitchSidebar className="guide-list__twitch" />
+    <div className="guide-list">
+      {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
+      {showDelete && destroyModal}
+      {showEdit && Modal('Edit Guide', handleEditSave)}
+      <div className="guide-list__content">{buildGuides()}</div>
     </div>
   );
 };
