@@ -4,9 +4,11 @@ export interface AppContext {
   twitch?: any;
   toasts: Array<any>;
   cookbook?: Cookbook;
+  add: boolean;
 }
 
 export const InitialState: AppContext = {
   twitch: null,
   toasts: [],
+  add: false,
 };
