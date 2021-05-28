@@ -5,7 +5,8 @@ import 'firebase/functions';
 import axios from 'axios';
 
 /* Constants */
-import { FIRESTORE, FUNCTIONS } from '../constants/constants';
+import { FUNCTIONS } from '../constants/constants';
+import UserService from '../services/UserService/UserService';
 
 export class Firebase {
   auth;
@@ -29,113 +30,6 @@ export class Firebase {
     this.googleProvider = new app.auth.GoogleAuthProvider();
   }
 
-  add = async (cookbook, collection, data) => {
-    const collectionRef = app
-      .firestore()
-      .collection(`cookbooks/${cookbook}/${collection}`);
-    return await collectionRef.add(data);
-  };
-
-  getAll = async (
-    cookbook,
-    collection,
-    key?,
-    order?,
-    limit?,
-    startAfter?,
-    filters?,
-  ) => {
-    let collectionRef: any = app
-      .firestore()
-      .collection(`cookbooks/${cookbook}/${collection}`);
-
-    if (key && order) {
-      collectionRef = collectionRef.orderBy(key, order).limit(limit);
-
-      if (startAfter) {
-        collectionRef = collectionRef.startAfter(startAfter);
-      }
-    }
-
-    if (filters) {
-      collectionRef = collectionRef.where(
-        FIRESTORE.collections.tags,
-        'array-contains-any',
-        filters,
-      );
-    }
-
-    const snapshot = await collectionRef.get();
-    const docs: any = [];
-    snapshot.forEach((doc: any) => {
-      docs.push({
-        ...doc.data(),
-        ...{ id: doc.id, doc_ref: doc.ref },
-        ...(limit ? { doc } : {}),
-      });
-    });
-    return docs;
-  };
-
-  getCookbookInfo = async (subdomain) => {
-    const collectionRef = app.firestore().collection('cookbooks');
-    const snapshot = await collectionRef
-      .where('subdomain', '==', subdomain)
-      .get();
-    const docs: any = [];
-    snapshot.forEach((doc: any) => {
-      docs.push({ ...doc.data(), ...{ id: doc.id } });
-    });
-    return docs;
-  };
-
-  deleteDocById = async (cookbook, collection, id) => {
-    const docRef = app
-      .firestore()
-      .collection(`cookbooks/${cookbook}/${collection}`)
-      .doc(id);
-    return await docRef.delete();
-  };
-
-  getDocById = async (cookbook, collection, id) => {
-    const collectionRef = app
-      .firestore()
-      .collection(`cookbooks/${cookbook}/${collection}`);
-    const snapshot = await collectionRef.doc(id).get();
-    return { ...snapshot.data(), id, doc_ref: snapshot.ref };
-  };
-
-  getByValue = async (cookbook, collection, key, value) => {
-    const collectionRef = app
-      .firestore()
-      .collection(`cookbooks/${cookbook}/${collection}`);
-    const snapshot = await collectionRef.where(key, '==', value).get();
-    const docs: any = [];
-    snapshot.forEach((doc: any) => {
-      docs.push({ ...doc.data(), ...{ id: doc.id, doc_ref: doc.ref } });
-    });
-    return docs;
-  };
-
-  /**
-   * Gets a list of users given user ids
-   *
-   * @param userIds {Array} - array of user ids
-   * @returns
-   */
-  getUsers = async (userIds) => {
-    const snapshot = await this.firestore
-      .collection('user_profiles')
-      .where(app.firestore.FieldPath.documentId(), 'in', userIds)
-      .get();
-    const docs: any = [];
-    snapshot.forEach((doc: any) => {
-      docs.push({ ...doc.data(), ...{ doc_ref: doc.ref } });
-    });
-
-    return docs;
-  };
-
   /**
    * Gets a user and token from a discord login code
    *
@@ -147,49 +41,6 @@ export class Firebase {
       data: streams,
     });
     return res.data.result;
-  };
-
-  /**
-   * Creates a new user with the provided email and password
-   *
-   * @param email {String} - email address
-   * @param password {String} - password
-   */
-  createUserWithEmailAndPassword = async (email: string, password: string) => {
-    await this.auth.createUserWithEmailAndPassword(email, password);
-  };
-
-  /**
-   * Signs a user in with the provided email and password
-   *
-   * @param email {String} - email address
-   * @param password {String} - password
-   */
-  signInWithEmailAndPassword = async (email: string, password: string) => {
-    await this.auth.signInWithEmailAndPassword(email, password);
-  };
-
-  /**
-   * Sings a user in with a Google account
-   */
-  signInWithGoogle = async () => {
-    await this.auth.signInWithPopup(this.googleProvider);
-  };
-
-  /**
-   * Gets a user and token from a discord login code
-   *
-   * @param code {String} - autho code needed to get user
-   */
-
-  loginWithDiscord = async (code: string, url: string) => {
-    const res = await axios.post(FUNCTIONS.loginWithDiscord, {
-      data: {
-        code,
-        redirectUrl: url,
-      },
-    });
-    return res.data;
   };
 
   /**
@@ -205,17 +56,19 @@ export class Firebase {
    * Gets the current user
    */
   getCurrentUser = async () => {
-    const user = this.auth.currentUser;
-
-    if (user) {
-      const doc = await this.firestore
-        .collection('user_profiles')
-        .doc(user.uid)
-        .get();
-      return { ...doc.data(), ...{ uid: user.uid } };
-    }
-
-    return null;
+    const userService = new UserService();
+    return new Promise((resolve) => {
+      this.auth.onAuthStateChanged(async function (user) {
+        if (user) {
+          try {
+            const users = await userService.get({ uid: user.uid });
+            resolve({ ...users[0], ...{ user } });
+          } catch (err) {
+            resolve(user);
+          }
+        }
+      });
+    });
   };
 
   /**

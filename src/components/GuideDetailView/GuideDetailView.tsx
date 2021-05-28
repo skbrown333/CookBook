@@ -29,12 +29,11 @@ import { GuideDetailSection } from './GuideDetailSection/GuideDetailSection';
 import { GuideDetailHeader } from './GuideDetailHeader/GuideDetailHeader';
 
 /* Firebase */
-import FirebaseContext from '../../firebase/context';
 import { Context } from '../../store/Store';
-import { FIRESTORE } from '../../constants/constants';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
+import GuideService from '../../services/GuideService/GuideService';
 
 export interface GuideDetailViewProps {}
 
@@ -45,20 +44,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       Array<boolean>(),
     );
     const [guide, setGuide] = useState<Guide | null>(null);
-    const firebase = useContext(FirebaseContext);
     const [state] = useContext(Context);
     const { cookbook, user } = state;
-    const guide_id = useParams().recipe;
+    const guideId = useParams().recipe;
     const toast = new ToastService();
     const showControls = user && cookbook.roles[user.uid] === 'admin';
+    const guideService = new GuideService(cookbook._id);
 
     const getGuide = async () => {
-      const guide: any = await firebase?.getDocById(
-        cookbook.id,
-        FIRESTORE.collections.guides,
-        guide_id,
-      );
-
+      const guide: any = await guideService.getById(guideId);
       setGuide(guide);
     };
 
@@ -108,7 +102,14 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const handleSave = async () => {
       if (!guide) return;
       try {
-        await guide.doc_ref.update({ sections: guide.sections });
+        const token = await user.user.getIdToken();
+        await guideService.update(
+          guide._id,
+          { sections: guide.sections },
+          {
+            Authorization: `Bearer ${token}`,
+          },
+        );
         toast.successToast('Guide saved!', 'Guide saved');
         setCollapsed(Array(guide.sections.length).fill(false));
         await getGuide();
