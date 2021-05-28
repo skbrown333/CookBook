@@ -1,4 +1,9 @@
-import React, { useEffect, useContext, FunctionComponent } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  FunctionComponent,
+  useState,
+} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 /* Components */
@@ -30,6 +35,7 @@ const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
+  const [loading, setLoading] = useState(true);
   const { toasts } = state;
   const toast = new ToastService();
   const { cookbook } = state;
@@ -38,6 +44,7 @@ export const App: FunctionComponent = () => {
   useEffect(() => {
     async function init() {
       try {
+        setLoading(true);
         const domains = window.location.host.split('.');
         const subdomain =
           domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
@@ -50,10 +57,12 @@ export const App: FunctionComponent = () => {
         dispatch(updateCookbook(cookbooks[0]));
       } catch (err) {
         toast.errorToast('Error', err);
+        setLoading(false);
       }
 
       const user = await firebaseInstance.getCurrentUser();
       dispatch(updateUser(user));
+      setLoading(false);
     }
     init();
   }, []);
@@ -68,7 +77,7 @@ export const App: FunctionComponent = () => {
     <FirebaseContext.Provider value={firebaseInstance}>
       <Router>
         <div id="cb-app">
-          {cookbook && (
+          {cookbook && !loading && (
             <>
               <Route path="/" component={HeaderBar} />
               <Switch>
