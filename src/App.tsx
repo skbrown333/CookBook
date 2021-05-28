@@ -5,8 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import { HeaderBar } from './components/Header/Header';
 import { GuideDetailView } from './components/GuideDetailView/GuideDetailView';
-import { GuideListView } from './components/GuideListView/GuideListView';
-import { PostListView } from './components/PostListView/PostListView';
+import { HomePageView } from './components/HomePageView/HomePageView';
 import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 
 /* Services */
@@ -82,10 +81,10 @@ export const App: FunctionComponent = () => {
                   <GuideDetailView />
                 </Route>
                 <Route path="/recipes">
-                  <GuideListView />
+                  <HomePageView index={1} />
                 </Route>
                 <Route path="/">
-                  <PostListView />
+                  <HomePageView />
                 </Route>
               </Switch>
             </>
