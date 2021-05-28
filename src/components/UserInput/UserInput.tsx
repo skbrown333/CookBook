@@ -6,7 +6,6 @@ import React, {
 } from 'react';
 
 import { EuiComboBox } from '@elastic/eui';
-import { FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
 import { DISCORD } from '../../constants/constants';
 
@@ -25,8 +24,7 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
   const [users, setUsers] = useState<Array<any>>([]);
   const [selected, setSelected] = useState<any>(null);
   const [state] = useContext(Context);
-  const firebase = useContext(FirebaseContext);
-  const { cookbook, user } = state;
+  const { user } = state;
   const userService = new UserService();
 
   useEffect(() => {
@@ -46,7 +44,7 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
       );
       if (initialSelected) {
         const user = await userService.getById(initialSelected);
-        const { discord_id, avatar, username, discriminator } = user;
+        const { discord_id, avatar, username, discriminator, _id } = user;
 
         setSelected([
           {
@@ -54,19 +52,21 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
             value: {
               discord_id,
               avatar,
+              _id,
             },
           },
         ]);
       } else {
         users.forEach((_user) => {
           if (user._id === _user._id) {
-            const { discord_id, avatar, username, discriminator } = _user;
+            const { discord_id, avatar, username, discriminator, _id } = _user;
             setSelected([
               {
                 label: `${username}#${discriminator}`,
                 value: {
                   discord_id,
                   avatar,
+                  _id,
                 },
               },
             ]);
@@ -78,8 +78,8 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
   }, []);
 
   useEffect(() => {
-    if (selected && selected[0] && selected[0].value.doc_ref) {
-      handleUpdate(selected[0]);
+    if (selected && selected[0] && selected[0].value) {
+      handleUpdate(selected[0].value._id);
     }
   }, [selected]);
 

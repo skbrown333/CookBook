@@ -13,7 +13,7 @@ import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 import { ToastService } from './services/ToastService';
 
 /* Constants */
-import { DISCORD } from './constants/constants';
+import { DISCORD, ENV } from './constants/constants';
 
 /* Store */
 import { Firebase, FirebaseContext } from './firebase';
@@ -24,6 +24,7 @@ import { updateUser, updateToasts, updateCookbook } from './store/actions';
 import '@elastic/eui/dist/eui_theme_amsterdam_dark.css';
 import './App.scss';
 import CookbookService from './services/CookbookService/CookbookService';
+import axios from './services/axios.instance';
 
 const firebaseInstance = new Firebase();
 
@@ -48,7 +49,6 @@ export const App: FunctionComponent = () => {
 
         dispatch(updateCookbook(cookbooks[0]));
       } catch (err) {
-        console.log(err);
         toast.errorToast('Error', err);
       }
 
@@ -116,13 +116,11 @@ export const Login: FunctionComponent = () => {
   async function login() {
     if (!code) return;
     try {
-      const res = await firebaseInstance.loginWithDiscord(
+      const res: any = await axios.post(`${ENV.base_url}/login`, {
         code,
-        `${baseUrl}/login`,
-      );
-      await firebaseInstance.signInWithCustomToken(res.result);
-      const user = await firebaseInstance.getCurrentUser();
-      console.log(user);
+        redirectUrl: `${baseUrl}/login`,
+      });
+      await firebaseInstance.signInWithCustomToken(res.data);
     } catch (err) {
       toast.errorToast('Error loggin in', err.message);
     } finally {

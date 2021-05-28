@@ -12,8 +12,8 @@ export class BaseService {
     return res.data;
   }
 
-  async update(id, params?) {
-    const res = await axios.patch(this.route + '/' + id, { params });
+  async update(id, params?, headers?) {
+    const res = await axios.patch(this.route + '/' + id, params, { headers });
     return res.data;
   }
 
@@ -22,12 +22,12 @@ export class BaseService {
     return res.data;
   }
 
-  async delete(id) {
-    return await axios.delete(this.route + '/' + id);
+  async delete(id, headers?) {
+    return await axios.delete(this.route + '/' + id, { headers });
   }
 
   async create(params, headers?) {
     const res = await axios.post(this.route, params, { headers });
-    return res.data.model;
+    return res.data;
   }
 }

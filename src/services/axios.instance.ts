@@ -12,7 +12,7 @@ axios.interceptors.response.use(
     // Do something with response data
     return response;
   },
-  function (error) {
+  function () {
     // Do something with the response error
     return Promise.reject();
   },

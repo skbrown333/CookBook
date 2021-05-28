@@ -51,14 +51,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
     async function init() {
       setLoading(true);
       setItems([]);
-      const docs = await tagService.get();
-
-      const tags = Array<any>();
-      docs?.forEach((doc) => {
-        tags.push({
-          name: doc.value,
-        });
-      });
+      const tags = await tagService.get();
       setItems([...tags]);
       setLoading(false);
     }
@@ -97,7 +90,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
           .filter((item) => item.checked && item.checked === 'on')
           .map((i) => {
             return {
-              label: i.name,
+              label: i.label,
             };
           }),
       );
@@ -143,7 +136,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
               items.length > 0 &&
               items
                 .filter((item) => {
-                  return item.name.toUpperCase().indexOf(searchText) > -1;
+                  return item.label.toUpperCase().indexOf(searchText) > -1;
                 })
                 .map((item, index) => (
                   <EuiFilterSelectItem
@@ -153,7 +146,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
                       updateItem(item);
                     }}
                   >
-                    {item.name}
+                    {item.label}
                   </EuiFilterSelectItem>
                 ))}
             {/*

@@ -29,7 +29,6 @@ import { GuideDetailSection } from './GuideDetailSection/GuideDetailSection';
 import { GuideDetailHeader } from './GuideDetailHeader/GuideDetailHeader';
 
 /* Firebase */
-import FirebaseContext from '../../firebase/context';
 import { Context } from '../../store/Store';
 
 /* Services */
@@ -45,7 +44,6 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       Array<boolean>(),
     );
     const [guide, setGuide] = useState<Guide | null>(null);
-    const firebase = useContext(FirebaseContext);
     const [state] = useContext(Context);
     const { cookbook, user } = state;
     const guideId = useParams().recipe;
@@ -104,7 +102,14 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const handleSave = async () => {
       if (!guide) return;
       try {
-        await guideService.update({ sections: guide.sections });
+        const token = await user.user.getIdToken();
+        await guideService.update(
+          guide._id,
+          { sections: guide.sections },
+          {
+            Authorization: `Bearer ${token}`,
+          },
+        );
         toast.successToast('Guide saved!', 'Guide saved');
         setCollapsed(Array(guide.sections.length).fill(false));
         await getGuide();

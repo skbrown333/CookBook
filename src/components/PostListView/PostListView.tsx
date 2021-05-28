@@ -42,9 +42,6 @@ import { parsingList, processingList, uiList } from '../../plugins';
 import { Firebase, FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
 
-/* Constants */
-import { FIRESTORE } from '../../constants/constants';
-
 /* Services */
 import { ToastService } from '../../services/ToastService';
 import { updateTwitch } from '../../store/actions';
@@ -151,8 +148,10 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     try {
       const newPosts = [...posts];
       const { title, body, character, tags, cre_account } = post;
-      delete post.doc;
-      await post.doc_ref.set(post);
+      const token = await user.user.getIdToken();
+      await postService.update(post._id, post, {
+        Authorization: `Bearer ${token}`,
+      });
       newPosts[index] = {
         ...newPosts[index],
         ...{
@@ -174,13 +173,13 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const handleNewPost = async (event) => {
     event.preventDefault();
-    const token = await user.user.getIdToken();
     try {
-      const ref = await postService.create(post, {
+      const token = await user.user.getIdToken();
+      const newPost = await postService.create(post, {
         Authorization: `Bearer ${token}`,
       });
       cancelModal();
-      setPosts([...[{ ...post, ...{ doc_ref: ref } }], ...posts]);
+      setPosts([...[newPost], ...posts]);
       toast.successToast('Added new post');
     } catch (error) {
       toast.errorToast('Failed adding post', error.message);
@@ -195,7 +194,10 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
 
   const handleDelete = async () => {
     try {
-      await postService.delete(post._id);
+      const token = await user.user.getIdToken();
+      await postService.delete(post._id, {
+        Authorization: `Bearer ${token}`,
+      });
       posts.splice(index, 1);
       setPosts([...posts]);
       cancelModal();
@@ -245,9 +247,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
             <EuiFormRow className="user-input">
               <UserInput
                 initialSelected={cre_account}
-                handleUpdate={(user) =>
-                  updateSection('cre_account', user.value.doc_ref)
-                }
+                handleUpdate={(user) => updateSection('cre_account', user)}
               />
             </EuiFormRow>
             <EuiFormRow fullWidth>

@@ -44,22 +44,6 @@ export class Firebase {
   };
 
   /**
-   * Gets a user and token from a discord login code
-   *
-   * @param code {String} - autho code needed to get user
-   */
-
-  loginWithDiscord = async (code: string, url: string) => {
-    const res = await axios.post(FUNCTIONS.loginWithDiscord, {
-      data: {
-        code,
-        redirectUrl: url,
-      },
-    });
-    return res.data;
-  };
-
-  /**
    * Signs a user in with a custom auth token
    *
    * @param token {String} - sign in token
@@ -72,9 +56,8 @@ export class Firebase {
    * Gets the current user
    */
   getCurrentUser = async () => {
-    const user = this.auth.currentUser;
     const userService = new UserService();
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.auth.onAuthStateChanged(async function (user) {
         if (user) {
           try {

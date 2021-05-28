@@ -15,9 +15,7 @@ import './_tag-input.scss';
 import { Tag } from '../../models/Tag';
 
 /* Store */
-import FirebaseContext from '../../firebase/context';
 import { Context } from '../../store/Store';
-import { FIRESTORE } from '../../constants/constants';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
@@ -34,11 +32,10 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   handleUpdate,
 }) => {
   const [state] = useContext(Context);
-  const firebase = useContext(FirebaseContext);
   const [selected, setSelected] = useState(initialTags);
   const [options, setOptions] = useState(Array<any>());
   const [loading, setLoading] = useState(false);
-  const { cookbook } = state;
+  const { cookbook, user } = state;
   const toast = new ToastService();
   const tagService = new TagService(cookbook._id);
 
@@ -59,7 +56,10 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const createTag = async (newOption) => {
     try {
-      const tag = await tagService.create(newOption);
+      const token = await user.user.getIdToken();
+      const tag = await tagService.create(newOption, {
+        Authorization: `Bearer ${token}`,
+      });
       setOptions([...options, tag]);
       setSelected([...selected, tag]);
       toast.successToast(`Added tag: ${tag.label}`);
