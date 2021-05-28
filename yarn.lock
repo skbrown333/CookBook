@@ -10756,14 +10756,6 @@ react-swipeable-views-core@^0.13.7:
     "@babel/runtime" "7.0.0"
     warning "^4.0.1"
 
-react-swipeable-views-core@^0.14.0-alpha.0:
-  version "0.14.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/react-swipeable-views-core/-/react-swipeable-views-core-0.14.0-alpha.0.tgz#1c40dd1c328c97048a8f2cb9de504ee611ae21dd"
-  integrity sha512-TQm58RJv01EseBfaeY0kZUIBmhs1NyKXwhJL52iN/UlzbQSiaIE2kk+mSGicUriBK0H7UlScgLeJR91AJ7SVcA==
-  dependencies:
-    "@babel/runtime" "7.0.0"
-    warning "^4.0.1"
-
 react-swipeable-views-utils@^0.13.9:
   version "0.13.9"
   resolved "https://registry.yarnpkg.com/react-swipeable-views-utils/-/react-swipeable-views-utils-0.13.9.tgz#a66e98f2f4502d8b00182901f80d13b2f903e10f"
@@ -10774,18 +10766,6 @@ react-swipeable-views-utils@^0.13.9:
     prop-types "^15.6.0"
     react-event-listener "^0.6.0"
     react-swipeable-views-core "^0.13.7"
-    shallow-equal "^1.2.1"
-
-react-swipeable-views-utils@^0.14.0-alpha.0:
-  version "0.14.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/react-swipeable-views-utils/-/react-swipeable-views-utils-0.14.0-alpha.0.tgz#1bc91cf89d13417a0ca8edc11b4a2c55c4a889b9"
-  integrity sha512-Ya9Xtr4uE1CYxyrPwtcImzcZFcOr3PP51kRgIOTx3Dx9SF31OtF0t2CgXuypTYTs7G4StRE3NzWlvSBiMZSVtQ==
-  dependencies:
-    "@babel/runtime" "7.0.0"
-    keycode "^2.1.7"
-    prop-types "^15.6.0"
-    react-event-listener "^0.6.0"
-    react-swipeable-views-core "^0.14.0-alpha.0"
     shallow-equal "^1.2.1"
 
 react-swipeable-views@^0.13.9:
