@@ -144,22 +144,11 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
     event.preventDefault();
     try {
       const newPosts = [...posts];
-      const { title, body, character, tags, cre_account } = post;
       const token = await user.user.getIdToken();
-      await postService.update(post._id, post, {
+      const updatedPost = await postService.update(post._id, post, {
         Authorization: `Bearer ${token}`,
       });
-      newPosts[index] = {
-        ...newPosts[index],
-        ...{
-          title,
-          cre_account,
-          ...(body ? { body } : {}),
-          ...(character ? { character } : {}),
-          ...(tags ? { tags } : {}),
-        },
-      };
-
+      newPosts[index] = updatedPost;
       setPosts([...newPosts]);
       cancelModal();
       toast.successToast('Edit successful');
