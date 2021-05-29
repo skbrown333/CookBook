@@ -177,6 +177,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
       });
       cancelModal();
       setPosts([...[newPost], ...posts]);
+      dispatch(updateAddStatus(false));
       toast.successToast('Added new post');
     } catch (error) {
       toast.errorToast('Failed adding post', error.message);

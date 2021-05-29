@@ -226,6 +226,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       await createGuide(guide);
       setGuides(await guideService.get());
       setGuide(emptyGuide);
+      dispatch(updateAddStatus(false));
       setShowAdd(false);
     } finally {
       setCreating(false);
