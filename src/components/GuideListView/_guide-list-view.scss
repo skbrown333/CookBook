@@ -13,10 +13,14 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, 100%);
     grid-gap: 10px;
-    width: 100%;
+    width: calc(100% - 16px);
     justify-content: center;
     overflow: auto;
     padding-top: 8px;
+
+    @include respond-to(gt-xs) {
+      width: 100%;
+    }
 
     .euiFlexItem {
       margin-bottom: 0 !important;

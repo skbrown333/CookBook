@@ -95,16 +95,8 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   ];
 
   return (
-    <EuiPage id="home-view">
+    <div id="home-view">
       <div className="home-view">
-        <SearchCreateBar
-          handleSearch={handleSearch}
-          handleFilterChange={handleFilterChange}
-          handlePlus={() => {
-            setAdding(route);
-            dispatch(updateAddStatus(true));
-          }}
-        />
         <EuiButtonGroup
           className="home-view__nav"
           legend="This is a disabled group"
@@ -116,6 +108,14 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
           }}
           buttonSize="m"
           isIconOnly
+        />
+        <SearchCreateBar
+          handleSearch={handleSearch}
+          handleFilterChange={handleFilterChange}
+          handlePlus={() => {
+            setAdding(route);
+            dispatch(updateAddStatus(true));
+          }}
         />
         <SwipeableViews
           onChangeIndex={handleChange}
@@ -135,6 +135,6 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
         </SwipeableViews>
       </div>
       <TwitchSidebar className="home-view__twitch" />
-    </EuiPage>
+    </div>
   );
 };
