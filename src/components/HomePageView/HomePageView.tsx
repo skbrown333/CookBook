@@ -12,7 +12,6 @@ import { PostListView } from '../PostListView/PostListView';
 import { GuideListView } from '../GuideListView/GuideListView';
 import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
-import { EuiButtonGroup, EuiPage } from '@elastic/eui';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
@@ -41,17 +40,14 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const [searchText, setSearchText] = useState('');
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(route);
-  const [toggleIdSelected, setToggleIdSelected] = useState(route);
 
   const handleChange = (index) => {
     switch (index) {
       case 0:
         history.push('/');
-        setToggleIdSelected('/');
         break;
       case 1:
         history.push('/recipes');
-        setToggleIdSelected('/recipes');
         break;
     }
     setRoute(history.location.pathname);
@@ -81,34 +77,9 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     setFilters(filters);
   };
 
-  const toggleButtons = [
-    {
-      id: '/',
-      label: 'posts',
-      iconType: 'home',
-    },
-    {
-      id: '/recipes',
-      label: 'guides',
-      iconType: 'discoverApp',
-    },
-  ];
-
   return (
     <div id="home-view">
       <div className="home-view">
-        <EuiButtonGroup
-          className="home-view__nav"
-          legend="This is a disabled group"
-          options={toggleButtons}
-          idSelected={toggleIdSelected}
-          onChange={(id) => {
-            setToggleIdSelected(id);
-            history.push(id);
-          }}
-          buttonSize="m"
-          isIconOnly
-        />
         <SearchCreateBar
           handleSearch={handleSearch}
           handleFilterChange={handleFilterChange}
@@ -117,11 +88,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
             dispatch(updateAddStatus(true));
           }}
         />
-        <SwipeableViews
-          onChangeIndex={handleChange}
-          index={index}
-          enableMouseEvents
-        >
+        <SwipeableViews onChangeIndex={handleChange} index={index}>
           <PostListView
             adding={adding}
             filters={filters}
