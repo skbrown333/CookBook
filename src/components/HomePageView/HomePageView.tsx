@@ -12,7 +12,7 @@ import { PostListView } from '../PostListView/PostListView';
 import { GuideListView } from '../GuideListView/GuideListView';
 import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
-import { EuiButtonGroup } from '@elastic/eui';
+import { EuiButtonGroup, EuiPage } from '@elastic/eui';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
@@ -20,7 +20,7 @@ import { ToastService } from '../../services/ToastService';
 /* Context */
 import { Context } from '../../store/Store';
 import { Firebase, FirebaseContext } from '../../firebase';
-import { updateAddStatus, updateTwitch, UPDATE_ADD } from '../../store/actions';
+import { updateAddStatus, updateTwitch } from '../../store/actions';
 
 /* Styles */
 import './_home-page-view.scss';
@@ -95,7 +95,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   ];
 
   return (
-    <div id="home-view">
+    <EuiPage id="home-view">
       <div className="home-view">
         <SearchCreateBar
           handleSearch={handleSearch}
@@ -135,6 +135,6 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
         </SwipeableViews>
       </div>
       <TwitchSidebar className="home-view__twitch" />
-    </div>
+    </EuiPage>
   );
 };
