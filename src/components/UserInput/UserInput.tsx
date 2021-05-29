@@ -32,12 +32,13 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
       const users = await userService.get();
       setUsers(
         users.map((_user) => {
-          const { discord_id, avatar, username, discriminator } = _user;
+          const { discord_id, avatar, username, discriminator, _id } = _user;
           return {
             label: `${username}#${discriminator}`,
             value: {
               discord_id,
               avatar,
+              _id,
             },
           };
         }),
