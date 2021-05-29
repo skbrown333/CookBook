@@ -244,7 +244,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
             </EuiFormRow>
             <EuiFormRow className="user-input">
               <UserInput
-                initialSelected={cre_account}
+                initialSelected={cre_account._id}
                 handleUpdate={(user) => updateSection('cre_account', user)}
               />
             </EuiFormRow>
