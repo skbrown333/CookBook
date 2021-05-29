@@ -28,6 +28,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    &__nav {
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
     &__twitch {
       display: none;
 
