@@ -111,7 +111,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
       setPost(emptyPost);
       setShowAdd(true);
     }
-  }, [add]);
+  }, [add, adding]);
 
   const getPosts = async () => {
     setLoading(true);

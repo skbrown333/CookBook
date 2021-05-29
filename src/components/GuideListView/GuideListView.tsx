@@ -112,7 +112,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       setGuide(emptyGuide);
       setShowAdd(true);
     }
-  }, [adding]);
+  }, [adding, add]);
 
   const deletePrompt = async (e, guide) => {
     e.stopPropagation();
