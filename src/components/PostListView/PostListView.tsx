@@ -6,10 +6,8 @@ import React, {
 } from 'react';
 
 /* Components */
-import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TagInput } from '../TagInput/TagInput';
 import { PostView } from './PostView/PostView';
-import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
 import {
   EuiModal,
@@ -44,11 +42,15 @@ import { Context } from '../../store/Store';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
-import { updateTwitch } from '../../store/actions';
+import { updateAddStatus, updateTwitch } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
 import PostService from '../../services/PostService/PostService';
 
-export interface ListViewProps {}
+export interface ListViewProps {
+  filters: any;
+  searchText: string;
+  adding: string;
+}
 
 const emptyPost: Post = {
   title: '',
@@ -58,7 +60,11 @@ const emptyPost: Post = {
   doc_ref: '',
 };
 
-export const PostListView: FunctionComponent<ListViewProps> = () => {
+export const PostListView: FunctionComponent<ListViewProps> = ({
+  filters,
+  searchText,
+  adding,
+}) => {
   const [state, dispatch] = useContext(Context);
   const [posts, setPosts] = useState(Array<Post>());
   const [post, setPost] = useState(emptyPost);
@@ -67,18 +73,11 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook, user } = state;
+  const { cookbook, user, add } = state;
   const toast = new ToastService();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
-  const [filters, setFilters] = useState<any>(undefined);
-  const [searchText, setSearchText] = useState('');
   const postService = new PostService(cookbook._id);
-
-  const handleSearch = (event) => {
-    const value = event?.target.value.toUpperCase();
-    setSearchText(value);
-  };
 
   useEffect(() => {
     async function init() {
@@ -92,7 +91,6 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
         }
       }
     }
-
     init();
   }, []);
 
@@ -108,14 +106,12 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     }
   }, [posts, hasNextPage]);
 
-  const handleFilterChange = (filters) => {
-    setFilters(filters);
-  };
-
-  const handlePlus = () => {
-    setPost(emptyPost);
-    setShowAdd(true);
-  };
+  useEffect(() => {
+    if (add && adding === '/') {
+      setPost(emptyPost);
+      setShowAdd(true);
+    }
+  }, [add, adding]);
 
   const getPosts = async () => {
     setLoading(true);
@@ -141,6 +137,7 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
     setShowEdit(false);
     setShowAdd(false);
     setShowDelete(false);
+    dispatch(updateAddStatus(false));
   };
 
   const handleEditPost = async (event) => {
@@ -335,18 +332,12 @@ export const PostListView: FunctionComponent<ListViewProps> = () => {
   return (
     <div id="post-list">
       <div className="post-list">
-        <SearchCreateBar
-          handlePlus={handlePlus}
-          handleSearch={handleSearch}
-          handleFilterChange={handleFilterChange}
-        />
         <div className="post-list__content">
           {buildPosts()}
           <div ref={sentryRef} />
           {loading && <EuiLoadingSpinner size="xl" />}
         </div>
       </div>
-      <TwitchSidebar className="post-list__twitch" />
 
       {showAdd && Modal('New Post', handleNewPost)}
       {showEdit && Modal('Edit Post', handleEditPost)}
