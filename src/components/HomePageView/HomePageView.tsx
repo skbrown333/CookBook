@@ -36,10 +36,9 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const history = useHistory();
-  const [route, setRoute] = useState(history.location.pathname);
   const [searchText, setSearchText] = useState('');
   const [filters, setFilters] = useState<any>([]);
-  const [adding, setAdding] = useState(route);
+  const [adding, setAdding] = useState(history.location.pathname);
 
   const handleChange = (index) => {
     switch (index) {
@@ -50,7 +49,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
         history.push('/recipes');
         break;
     }
-    setRoute(history.location.pathname);
+    setAdding(history.location.pathname);
   };
 
   useEffect(() => {
@@ -84,7 +83,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
           handleSearch={handleSearch}
           handleFilterChange={handleFilterChange}
           handlePlus={() => {
-            setAdding(route);
+            setAdding(history.location.pathname);
             dispatch(updateAddStatus(true));
           }}
         />
