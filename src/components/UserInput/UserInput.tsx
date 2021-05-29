@@ -42,8 +42,8 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
           };
         }),
       );
-      if (initialSelected) {
-        const user = await userService.getById(initialSelected);
+      if (initialSelected && initialSelected._id) {
+        const user = await userService.getById(initialSelected._id);
         const { discord_id, avatar, username, discriminator, _id } = user;
 
         setSelected([
