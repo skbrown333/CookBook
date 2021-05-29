@@ -11,7 +11,6 @@ import { Tag } from '../../models/Tag';
 
 /* Components */
 import { GuideCard } from './GuideCard/GuideCard';
-import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 
 import {
   EuiButton,
@@ -37,17 +36,20 @@ import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
 /* Context */
 import { Firebase, FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
-import { updateTwitch } from '../../store/actions';
+import { updateAddStatus, updateTwitch } from '../../store/actions';
 
 /* Constants */
 import { CHARACTERS } from '../../constants/constants';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
-import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 import GuideService from '../../services/GuideService/GuideService';
 
-export interface GuideListViewProps {}
+export interface GuideListViewProps {
+  filters: any;
+  searchText: any;
+  adding: string;
+}
 
 const emptyGuide: Guide = {
   title: '',
@@ -63,7 +65,11 @@ export interface AddForm {
   tags?: Array<Tag>;
 }
 
-export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
+export const GuideListView: FunctionComponent<GuideListViewProps> = ({
+  filters,
+  searchText,
+  adding,
+}) => {
   const [state, dispatch] = useContext(Context);
   const [guides, setGuides] = useState<Guide[]>([]);
   const [showAdd, setShowAdd] = useState<boolean>(false);
@@ -71,10 +77,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [creating, setCreating] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
-  const [filters, setFilters] = useState<any>([]);
-  const [searchText, setSearchText] = useState('');
   const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook, user } = state;
+  const { cookbook, user, add } = state;
   const toast = new ToastService();
   const guideService = new GuideService(cookbook._id);
 
@@ -103,9 +107,12 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     init();
   }, []);
 
-  const handleFilterChange = (filters) => {
-    setFilters(filters);
-  };
+  useEffect(() => {
+    if (add && adding === '/recipes') {
+      setGuide(emptyGuide);
+      setShowAdd(true);
+    }
+  }, [adding, add]);
 
   const deletePrompt = async (e, guide) => {
     e.stopPropagation();
@@ -219,6 +226,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
       await createGuide(guide);
       setGuides(await guideService.get());
       setGuide(emptyGuide);
+      dispatch(updateAddStatus(false));
       setShowAdd(false);
     } finally {
       setCreating(false);
@@ -255,11 +263,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
     setShowAdd(false);
     setShowEdit(false);
     setGuide(emptyGuide);
-  };
-
-  const handleSearch = (event) => {
-    const value = event.target.value.toUpperCase();
-    setSearchText(value);
+    dispatch(updateAddStatus(false));
   };
 
   const buildGuides = () => {
@@ -321,20 +325,11 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = () => {
   };
 
   return (
-    <div id="guide-list">
-      <div className="guide-list">
-        <SearchCreateBar
-          handleSearch={handleSearch}
-          handleFilterChange={handleFilterChange}
-          handlePlus={() => setShowAdd(true)}
-        />
-        {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
-        {showDelete && destroyModal}
-        {showEdit && Modal('Edit Guide', handleEditSave)}
-        <div className="guide-list__content">{buildGuides()}</div>
-      </div>
-
-      <TwitchSidebar className="guide-list__twitch" />
+    <div className="guide-list">
+      {showAdd === true && firebase && Modal('Add Guide', handleNewSave)}
+      {showDelete && destroyModal}
+      {showEdit && Modal('Edit Guide', handleEditSave)}
+      <div className="guide-list__content">{buildGuides()}</div>
     </div>
   );
 };

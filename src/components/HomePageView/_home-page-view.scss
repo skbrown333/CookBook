@@ -1,0 +1,51 @@
+@import '../../styles/responsive';
+
+.react-swipeable-view-container {
+  max-width: 800px;
+  height: 100%;
+}
+
+#home-view {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+
+  .search-controls {
+    max-width: 800px;
+  }
+  @include respond-to(gt-md) {
+    margin-left: 258px;
+  }
+  @include respond-to(xs) {
+    .search-controls {
+      padding: 8px;
+    }
+  }
+
+  .home-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    max-width: 800px;
+    & > div {
+      max-width: 100%;
+      width: 100%;
+    }
+    &__nav {
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    &__twitch {
+      display: none;
+
+      @include respond-to(gt-md) {
+        display: block;
+        margin-top: 62px;
+        margin-left: 12px;
+      }
+    }
+  }
+}
