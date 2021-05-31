@@ -98,6 +98,8 @@ const sampleBody = `
     gif:gifUrl
  ## video template 
     vid:youtube/clipUrl
+ ## tweet template 
+    tweet:link/tweet_id
  `;
 
 export const newSection: Post = {
