@@ -77,6 +77,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
   const toast = new ToastService();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+  const [page, setPage] = useState(1);
   const postService = new PostService(cookbook._id);
 
   useEffect(() => {
@@ -118,13 +119,16 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
     try {
       const limit = 15;
       const newPosts = await postService.get({
-        // limit,
-        // skip: posts.length,
-        // filters,
+        sort: 'cre_date',
+        limit,
+        ...(posts.length > 0 ? { page } : {}),
+        filters: filters.map((filter) => filter._id),
+        ...(searchText && searchText.length > 0 ? { search: searchText } : {}),
       });
       if (newPosts.length < limit) {
         setHasNextPage(false);
       }
+      setPage(page + 1);
       setPosts([...posts, ...newPosts]);
     } catch (err) {
       toast.errorToast('Error Fetching Posts', err.message);
@@ -316,7 +320,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
     // `rootMargin` is passed to `IntersectionObserver`.
     // We can use it to trigger 'onLoadMore' when the sentry comes near to become
     // visible, instead of becoming fully visible on the screen.
-    rootMargin: '0px 0px 400px 0px',
+    rootMargin: '0px 0px 0px 0px',
   });
 
   return (

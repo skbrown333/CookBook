@@ -1,4 +1,5 @@
 import axios from './axios.instance';
+import qs from 'qs';
 
 export class BaseService {
   route: string;
@@ -8,7 +9,12 @@ export class BaseService {
   }
 
   async get(params?) {
-    const res = await axios.get(this.route, { params });
+    const res = await axios.get(this.route, {
+      params,
+      paramsSerializer: (params) => {
+        return qs.stringify(params, { arrayFormat: 'repeat' });
+      },
+    });
     return res.data;
   }
 
