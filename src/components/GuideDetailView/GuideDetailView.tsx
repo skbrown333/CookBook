@@ -208,10 +208,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
               </div>
             }
 
-            <div
-              className="guide-detail__content"
-              style={showControls ? { paddingBottom: 64 } : {}}
-            >
+            <div className="guide-detail__content">
               <GuideDetailSideNav
                 editing={editing}
                 title={guide.title}
