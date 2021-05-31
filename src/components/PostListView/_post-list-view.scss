@@ -1,4 +1,5 @@
 @import '../../styles/responsive';
+@import '../../styles/general';
 
 .post-list {
   display: flex;
@@ -8,6 +9,8 @@
   overflow: hidden;
   padding: 0 !important;
   padding-top: 8px;
+
+  @include twitter-holder;
 
   @include respond-to(gt-xs) {
     padding: 8px;
