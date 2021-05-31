@@ -91,6 +91,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
           .map((i) => {
             return {
               label: i.label,
+              _id: i._id,
             };
           }),
       );
