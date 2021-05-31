@@ -1,0 +1,6 @@
+@mixin twitter-holder {
+  div[twdiv] {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -54,7 +54,11 @@ function TweetMarkdownParser() {
 }
 
 const GifMarkdownRenderer = ({ tweet }) => {
-  return <Tweet tweetId={tweet.id} />;
+  return (
+    <div className="markdown_tweet">
+      <Tweet tweetId={tweet.id} />
+    </div>
+  );
 };
 
 export const tweetPlug = {
