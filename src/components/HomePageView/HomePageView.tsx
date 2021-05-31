@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useState,
   useContext,
+  useCallback,
 } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +13,7 @@ import { PostListView } from '../PostListView/PostListView';
 import { GuideListView } from '../GuideListView/GuideListView';
 import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import debounce from 'lodash.debounce';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
@@ -39,6 +41,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const [searchText, setSearchText] = useState('');
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(history.location.pathname);
+  const [dbSearch, setDbSearch] = useState('');
 
   const handleChange = (index) => {
     switch (index) {
@@ -51,6 +54,11 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     }
     setAdding(history.location.pathname);
   };
+
+  const debouncedSearch = useCallback(
+    debounce((search) => setDbSearch(search), 500),
+    [], // will be created only once initially
+  );
 
   useEffect(() => {
     async function init() {
@@ -70,6 +78,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const handleSearch = (event) => {
     const value = event.target.value.toUpperCase();
     setSearchText(value);
+    debouncedSearch(value);
   };
 
   const handleFilterChange = (filters) => {
@@ -91,7 +100,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
           <PostListView
             adding={adding}
             filters={filters}
-            searchText={searchText}
+            searchText={dbSearch}
           />
           <GuideListView
             adding={adding}

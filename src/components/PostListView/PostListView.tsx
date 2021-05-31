@@ -98,14 +98,21 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
   useEffect(() => {
     setHasNextPage(true);
     setPosts([]);
-  }, [filters]);
+  }, [filters, searchText]);
 
   useEffect(() => {
     if (!hasNextPage) return;
     if (posts.length === 0) {
-      getPosts();
+      setPage(1);
     }
   }, [posts, hasNextPage]);
+
+  useEffect(() => {
+    if (!hasNextPage) return;
+    if (posts.length === 0 && page === 1) {
+      getPosts();
+    }
+  }, [page]);
 
   useEffect(() => {
     if (add && adding === '/') {
@@ -284,30 +291,23 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
   };
 
   const buildPosts = () => {
-    return posts
-      .filter((post) => {
-        return (
-          post.title.toUpperCase().indexOf(searchText) > -1 ||
-          post.body.toUpperCase().indexOf(searchText) > -1
-        );
-      })
-      .map((post, index) => {
-        return (
-          <PostView
-            post={post}
-            handleEdit={() => {
-              setPost(post);
-              setIndex(index);
-              setShowEdit(true);
-            }}
-            handleDelete={() => {
-              setPost(post);
-              setIndex(index);
-              setShowDelete(true);
-            }}
-          />
-        );
-      });
+    return posts.map((post, index) => {
+      return (
+        <PostView
+          post={post}
+          handleEdit={() => {
+            setPost(post);
+            setIndex(index);
+            setShowEdit(true);
+          }}
+          handleDelete={() => {
+            setPost(post);
+            setIndex(index);
+            setShowDelete(true);
+          }}
+        />
+      );
+    });
   };
 
   const [sentryRef] = useInfiniteScroll({
