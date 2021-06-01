@@ -10,7 +10,7 @@ const NODE_ENV = process.env.NODE_ENV;
 const isLocal = NODE_ENV === 'development';
 const env: any = {};
 env.base_url = process.env.REACT_APP_API_URL;
-env.twitch_parent = isLocal ? 'localhost' : 'cookbook.gg';
+env.twitch_parent = isLocal ? 'localhost' : window.location.host;
 
 export const ENV = env;
 
