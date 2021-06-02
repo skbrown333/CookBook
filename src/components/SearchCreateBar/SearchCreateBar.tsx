@@ -43,12 +43,6 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   className,
   actualSearchText,
 }) => {
-  const locationHook = useLocation();
-  // const locationDom = window.location;
-  // console.log('hook', locationHook.search)
-  // console.log('native', locationDom.search);
-  const startQuery = locationHook.search.slice(locationHook.search.indexOf('=') + 1).toUpperCase();
-  console.log(startQuery);
 
   const [state] = useContext(Context);
   const { cookbook, user } = state;
@@ -127,7 +121,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   return (
     <div className={`${className} search-controls`}>
       <EuiFilterGroup className="search-controls__filters">
-        <EuiFieldSearch onChange={handleSearch} value = {decodeURI(actualSearchText?.toLowerCase() as string)} fullWidth />
+        <EuiFieldSearch onChange={handleSearch} value = {actualSearchText as string} fullWidth />
         <EuiPopover
           id="popoverExampleMultiSelect"
           button={button}

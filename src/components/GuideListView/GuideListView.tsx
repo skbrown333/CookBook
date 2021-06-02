@@ -282,9 +282,9 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       })
       .filter((guide) => {
         return (
-          guide.title.toUpperCase().indexOf(searchText) > -1 ||
+          guide.title.toUpperCase().indexOf(searchText.toUpperCase()) > -1 ||
           (guide.description &&
-            guide.description.toUpperCase().indexOf(searchText) > -1)
+            guide.description.toUpperCase().indexOf(searchText.toUpperCase()) > -1)
         );
       })
       .map((guide, index) => {
