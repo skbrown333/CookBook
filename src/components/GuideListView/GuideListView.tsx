@@ -5,7 +5,7 @@ import React, {
   useEffect,
 } from 'react';
 
-import { useParams, useHistory } from 'react-router-dom';
+
 
 /* Models */
 import { Guide } from '../../models/Guide';

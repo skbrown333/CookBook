@@ -5,7 +5,7 @@ import React, {
   useContext,
 } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 /* Components */
 import { PostListView } from '../PostListView/PostListView';
@@ -66,6 +66,20 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     }
     init();
   }, []);
+
+  useEffect(() => {
+    // here 
+    console.log("this useEffect called")
+    const params = new URLSearchParams();
+    if (searchText) {
+      params.append("search", searchText);
+      console.log(searchText)
+    } else {
+      params.delete("search");
+      console.log('searchText empty')
+    }
+    history.replace({search: params.toString()})
+  }, [searchText]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toUpperCase();

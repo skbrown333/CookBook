@@ -58,6 +58,23 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
     init();
   }, []);
 
+  // useEffect(() => {
+  //   // here 
+  //   console.log("this useEffect called")
+  //   const params = new URLSearchParams();
+  //   if (searchText) {
+  //     params.append("search", searchText);
+  //     console.log(searchText)
+  //   } else {
+  //     // params.delete("search");
+  //     params.append('cool', 'verycool')
+  //     console.log('not searchText')
+  //   }
+  //   history.replace({search: params.toString()})
+  // }, [searchText]);
+
+
+
   const handleSearchFilter = (event) => {
     const value = event.target.value.toUpperCase();
     setSearchText(value);
