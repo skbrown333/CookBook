@@ -5,7 +5,7 @@ import React, {
   useContext,
 } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 
 /* Components */
 import { PostListView } from '../PostListView/PostListView';
@@ -31,14 +31,23 @@ export interface HomePageViewProps {
 export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   index = 0,
 }) => {
+
+  const locationHook = useLocation();
+  // const locationDom = window.location;
+  // console.log('hook', locationHook.search)
+  // console.log('native', locationDom.search);
+  const startQuery = locationHook.search.slice(locationHook.search.indexOf('=') + 1).toUpperCase();
+  console.log(startQuery);
+
   const [state, dispatch] = useContext(Context);
   const toast = new ToastService();
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const history = useHistory();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState(startQuery);
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(history.location.pathname);
+
 
   const handleChange = (index) => {
     switch (index) {
@@ -71,15 +80,16 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     // here 
     console.log("this useEffect called")
     const params = new URLSearchParams();
+
     if (searchText) {
-      params.append("search", searchText);
+      params.append("search", searchText.toLowerCase());
       console.log(searchText)
     } else {
       params.delete("search");
       console.log('searchText empty')
     }
     history.replace({search: params.toString()})
-  }, [searchText]);
+  }, [history, searchText]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toUpperCase();
