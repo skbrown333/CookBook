@@ -128,6 +128,12 @@ export const Login: FunctionComponent = () => {
         redirectUrl: `${baseUrl}/login`,
       });
       await firebaseInstance.signInWithCustomToken(res.data);
+      const user: any = await firebaseInstance.getCurrentUser();
+      const token = await user.user.getIdToken();
+      await axios.get(`${ENV.base_url}/session`, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
     } catch (err) {
       toast.errorToast('Error loggin in', err.message);
     } finally {
