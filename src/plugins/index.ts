@@ -1,6 +1,7 @@
 /* Plugins */
 import { gifPlug } from './GifPlugin';
 import { vidPlug } from './iFramePlugin';
+import { tweetPlug } from './TwitterPlugin';
 
 /* Defaults */
 import {
@@ -9,7 +10,7 @@ import {
   getDefaultEuiMarkdownUiPlugins,
 } from '@elastic/eui';
 
-const plugs = [gifPlug, vidPlug];
+const plugs = [gifPlug, vidPlug, tweetPlug];
 
 export const processingList = getDefaultEuiMarkdownProcessingPlugins();
 export const parsingList = getDefaultEuiMarkdownParsingPlugins();

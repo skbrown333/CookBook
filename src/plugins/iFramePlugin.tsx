@@ -5,9 +5,14 @@ import { EuiAspectRatio } from '@elastic/eui';
 import { ENV } from '../constants/constants';
 
 function formattedUrl(url) {
-  const urlEnd = url.split('/').pop();
+  let urlEnd = url.split('/').pop();
+  urlEnd = urlEnd.includes('?') ? urlEnd.split('?')[0] : urlEnd;
   if (url.includes('twitch')) {
-    return `https://clips.twitch.tv/embed?clip=${urlEnd}&parent=${ENV.twitch_parent}`;
+    if (url.includes('clips.') || url.includes('/clip/')) {
+      return `https://clips.twitch.tv/embed?clip=${urlEnd}&parent=${ENV.twitch_parent}`;
+    } else if (url.includes('/videos/')) {
+      return `https://player.twitch.tv/?video=${urlEnd}&parent=${ENV.twitch_parent}&autoplay=false`;
+    }
   }
   if (url.includes('youtube')) {
     const ytbReg = /watch\?v=(\w*)/;
