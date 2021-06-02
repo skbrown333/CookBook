@@ -44,6 +44,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const history = useHistory();
+  console.log(history);
   const [searchText, setSearchText] = useState(startQuery);
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(history.location.pathname);
@@ -88,8 +89,8 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
       params.delete("search");
       console.log('searchText empty')
     }
-    history.replace({search: params.toString()})
-  }, [history, searchText]);
+    history.push({search: params.toString()})
+  }, [history, searchText, index]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toUpperCase();
@@ -110,6 +111,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
             setAdding(history.location.pathname);
             dispatch(updateAddStatus(true));
           }}
+          actualSearchText = {searchText}
         />
         <SwipeableViews onChangeIndex={handleChange} index={index}>
           <PostListView

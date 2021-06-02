@@ -5,6 +5,8 @@ import React, {
   useEffect,
 } from 'react';
 
+import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
+
 /* Styles */
 import './_search-create-bar.scss';
 
@@ -31,6 +33,7 @@ export interface SearchCreateBarProp {
   handleSearch: (e) => void;
   handleFilterChange?: (filters: any) => void;
   className?: string;
+  actualSearchText?: string,
 }
 
 export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
@@ -38,7 +41,15 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   handleSearch,
   handleFilterChange,
   className,
+  actualSearchText,
 }) => {
+  const locationHook = useLocation();
+  // const locationDom = window.location;
+  // console.log('hook', locationHook.search)
+  // console.log('native', locationDom.search);
+  const startQuery = locationHook.search.slice(locationHook.search.indexOf('=') + 1).toUpperCase();
+  console.log(startQuery);
+
   const [state] = useContext(Context);
   const { cookbook, user } = state;
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -132,7 +143,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   return (
     <div className={`${className} search-controls`}>
       <EuiFilterGroup className="search-controls__filters">
-        <EuiFieldSearch onChange={handleSearch} fullWidth />
+        <EuiFieldSearch onChange={handleSearch} value = {actualSearchText?.toLowerCase()} fullWidth />
         <EuiPopover
           id="popoverExampleMultiSelect"
           button={button}
