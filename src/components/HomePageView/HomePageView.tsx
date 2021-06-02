@@ -40,7 +40,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   // console.log('native', locationDom.search);
   const params = new URLSearchParams(locationHook.search);
   // const startQuery = locationHook.search.slice(locationHook.search.indexOf('=') + 1);
-  const startQuery:any = params.get('search');
+  const startQuery:any = params.get('search') || '';
   console.log(startQuery);
 
   const [state, dispatch] = useContext(Context);
