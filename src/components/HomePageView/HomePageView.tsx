@@ -38,7 +38,9 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   // const locationDom = window.location;
   // console.log('hook', locationHook.search)
   // console.log('native', locationDom.search);
-  const startQuery = locationHook.search.slice(locationHook.search.indexOf('=') + 1).toUpperCase();
+  const params = new URLSearchParams(locationHook.search);
+  // const startQuery = locationHook.search.slice(locationHook.search.indexOf('=') + 1);
+  const startQuery:any = params.get('search');
   console.log(startQuery);
 
   const [state, dispatch] = useContext(Context);
@@ -54,6 +56,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
 
   const handleChange = (index) => {
+    console.log('hello');
     switch (index) {
       case 0:
         history.push('/');
@@ -98,7 +101,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
       console.log('searchText empty')
     }
     history.push({search: params.toString()})
-  }, [history, searchText, index]);
+  }, [searchText, index]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toUpperCase();

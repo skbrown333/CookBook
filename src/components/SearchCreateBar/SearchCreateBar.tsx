@@ -69,23 +69,6 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
     init();
   }, []);
 
-  // useEffect(() => {
-  //   // here 
-  //   console.log("this useEffect called")
-  //   const params = new URLSearchParams();
-  //   if (searchText) {
-  //     params.append("search", searchText);
-  //     console.log(searchText)
-  //   } else {
-  //     // params.delete("search");
-  //     params.append('cool', 'verycool')
-  //     console.log('not searchText')
-  //   }
-  //   history.replace({search: params.toString()})
-  // }, [searchText]);
-
-
-
   const handleSearchFilter = (event) => {
     const value = event.target.value.toUpperCase();
     setSearchText(value);
@@ -144,7 +127,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   return (
     <div className={`${className} search-controls`}>
       <EuiFilterGroup className="search-controls__filters">
-        <EuiFieldSearch onChange={handleSearch} value = {actualSearchText?.toLowerCase()} fullWidth />
+        <EuiFieldSearch onChange={handleSearch} value = {decodeURI(actualSearchText?.toLowerCase() as string)} fullWidth />
         <EuiPopover
           id="popoverExampleMultiSelect"
           button={button}
