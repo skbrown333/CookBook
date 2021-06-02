@@ -6,7 +6,6 @@ import React, {
 } from 'react';
 
 
-
 /* Models */
 import { Guide } from '../../models/Guide';
 import { Tag } from '../../models/Tag';
