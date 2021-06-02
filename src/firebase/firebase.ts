@@ -76,7 +76,7 @@ export class Firebase {
    */
   getCurrentUser = async () => {
     const userService = new UserService();
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.auth.onAuthStateChanged(async function (user) {
         if (user) {
           try {
@@ -85,6 +85,8 @@ export class Firebase {
           } catch (err) {
             resolve(user);
           }
+        } else {
+          reject(new Error('User not found'));
         }
       });
     });
