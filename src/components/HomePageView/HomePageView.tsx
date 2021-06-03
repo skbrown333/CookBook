@@ -52,7 +52,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const [searchText, setSearchText] = useState(startQuery);
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(history.location.pathname);
-  const [dbSearch, setDbSearch] = useState('');
+  const [dbSearch, setDbSearch] = useState(startQuery);
 
 
   const handleChange = (index) => {
