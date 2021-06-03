@@ -8,6 +8,8 @@ import React, {
 import SwipeableViews from 'react-swipeable-views';
 import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 
+import qs from 'qs';
+
 /* Components */
 import { PostListView } from '../PostListView/PostListView';
 import { GuideListView } from '../GuideListView/GuideListView';
@@ -90,7 +92,6 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
   useEffect(() => {
     // here 
-    console.log("this useEffect called")
     const params = new URLSearchParams();
 
     if (searchText) {
@@ -100,8 +101,44 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
       params.delete("search");
       console.log('searchText empty')
     }
-    history.push({search: params.toString()})
-  }, [searchText, index]);
+
+    if (filters.length > 0) {
+      const filterStrings = filters.map((filter) => encodeURI(filter.label));
+      // edge cases for input string
+      // filterStrings.push(encodeURI('ice climbers'))
+      // filterStrings.push(encodeURI('&&%%'))
+      const filterString = filterStrings.join(' ');
+      params.append("filters", filterString);
+
+      // multiple filter params
+      // for (let i = 0; i < filterStrings.length; i++) {
+      //   params.append("filters", filterStrings[i]);
+      // }
+
+    } else {
+      params.delete("filters");
+      console.log('filters empty')
+    }
+    history.push({search: decodeURI(params.toString())})
+    console.log(params.toString());
+    console.log(decodeURI(params.toString()))
+
+  }, [searchText, filters, index]);
+
+  // useEffect(() => {
+  //   // here 
+  //   console.log("filters useEffect called")
+  //   const params = new URLSearchParams();
+
+  //   if (filters.length > 0) {
+  //     params.append("filters", filters[0].label);
+  //     console.log(filters[0]);
+  //   } else {
+  //     params.delete("filters");
+  //     console.log('filters empty')
+  //   }
+  //   history.push({search: params.toString()})
+  // }, [filters, index]);
 
   const handleSearch = (event) => {
     const value = event.target.value;
