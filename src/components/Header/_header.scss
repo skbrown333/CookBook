@@ -1,5 +1,15 @@
 #header {
   &.euiHeader {
     height: 58px;
+
+    > .euiHeaderSectionItem:first-of-type {
+      border-right: 1px solid #25272d;
+    }
+
+    .euiSuperSelectControl {
+      box-shadow: none;
+      background: none;
+      font-weight: 600;
+    }
   }
 }
