@@ -56,7 +56,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
         },
         {
           items: [
-            ...(user && cookbook && cookbook.roles[user.uid] === 'admin'
+            ...(user
               ? [
                   <EuiHeaderSectionItemButton aria-label="Account menu">
                     <EuiAvatar
@@ -68,6 +68,10 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                       size="m"
                     />
                   </EuiHeaderSectionItemButton>,
+                ]
+              : [<></>]),
+            ...(user && cookbook && cookbook.roles[user.uid] === 'admin'
+              ? [
                   <EuiHeaderLinks
                     aria-label="App navigation dark theme example"
                     popoverBreakpoints="all"
