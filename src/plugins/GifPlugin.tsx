@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { EuiAspectRatio } from '@elastic/eui';
+
 // const GifPlugin = {
 //   name: "GifPlugin",
 //   button: {
@@ -24,7 +26,12 @@ function GifMarkdownParser() {
     const tokenMatch = value.match(/gif:(.*)\s*/);
 
     if (!tokenMatch) return false; // no match
-    const [, url] = tokenMatch;
+    let [, urls] = tokenMatch;
+    if (urls.includes(',')) {
+      urls = urls.split(',');
+    } else {
+      urls = [urls];
+    }
 
     const gfyTransform = (url) => {
       const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
@@ -35,7 +42,10 @@ function GifMarkdownParser() {
       splitUrl[2] = thumb + gfy;
       return splitUrl.join('/');
     };
-    const fixedUrl = url.includes('gfy') ? gfyTransform(url) : url;
+
+    urls = urls.map((url) => {
+      return url.includes('gfy') ? gfyTransform(url) : url;
+    });
 
     if (silent) {
       return true;
@@ -43,7 +53,7 @@ function GifMarkdownParser() {
 
     return eat(tokenMatch.input)({
       type: 'gifPlugin',
-      gif: { fixedUrl },
+      gif: { urls },
     });
   }
 
@@ -56,7 +66,12 @@ function GifMarkdownParser() {
 }
 
 const GifMarkdownRenderer = ({ gif }) => {
-  return <img className="markdown__gif" src={gif.fixedUrl} />;
+  const gifs = gif.urls.map((url) => (
+    <EuiAspectRatio width={16} height={9} maxWidth={800}>
+      <img className="guide-section__markdown__gifs__gif" src={url} />
+    </EuiAspectRatio>
+  ));
+  return <div className="guide-section__markdown_gifs">{gifs}</div>;
 };
 
 export const gifPlug = {

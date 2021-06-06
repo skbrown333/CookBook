@@ -96,6 +96,8 @@ const sampleBody = `
   place both on their own lines with a full line of space on top and bottom
  ## gif template
     gif:gifUrl
+ ## multiple gif template
+    gif:gifUrl,gifUrl2
  ## video template 
     vid:youtube/clipUrl
  ## tweet template 

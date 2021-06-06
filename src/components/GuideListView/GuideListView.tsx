@@ -83,7 +83,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
   const guideService = new GuideService(cookbook._id);
 
   const getGuides = async () => {
-    return await guideService.get();
+    const guides = await guideService.get();
+    return guides.sort((a, b) => b.sections.length - a.sections.length);
   };
 
   useEffect(() => {
