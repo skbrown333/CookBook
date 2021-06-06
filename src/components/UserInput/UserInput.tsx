@@ -24,12 +24,12 @@ export const UserInput: FunctionComponent<UserInputInterface> = ({
   const [users, setUsers] = useState<Array<any>>([]);
   const [selected, setSelected] = useState<any>(null);
   const [state] = useContext(Context);
-  const { user } = state;
+  const { user, cookbook } = state;
   const userService = new UserService();
 
   useEffect(() => {
     async function init() {
-      const users = await userService.get();
+      const users = await userService.get({ in: Object.keys(cookbook.roles) });
       setUsers(
         users.map((_user) => {
           const { discord_id, avatar, username, discriminator, _id } = _user;
