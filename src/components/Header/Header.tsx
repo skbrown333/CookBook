@@ -20,8 +20,6 @@ import {
   EuiHeaderSectionItemButton,
   EuiHideFor,
   EuiSuperSelect,
-  EuiText,
-  EuiTitle,
 } from '@elastic/eui';
 import { EuiAvatar } from '@elastic/eui';
 
