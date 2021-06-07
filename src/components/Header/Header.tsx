@@ -70,6 +70,14 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
               </span>
             ),
           });
+          options.push({
+            value: 'localhost',
+            inputDisplay: (
+              <span className="character-select__character">
+                <img src={CHARACTERS['falcon']} /> {`localhost`}
+              </span>
+            ),
+          });
         }
 
         setCookbooks(options);
@@ -81,6 +89,10 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
   }, [user]);
 
   const handleOnChange = (value) => {
+    if (value === 'localhost') {
+      window.location.replace(`http://localhost:3001`);
+      return;
+    }
     window.location.replace(`https://${value}.cookbook.gg`);
   };
 
