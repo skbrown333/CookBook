@@ -33,8 +33,8 @@ export interface SearchCreateBarProp {
   handleSearch: (e) => void;
   handleFilterChange?: (filters: any) => void;
   className?: string;
-  actualSearchText?: string,
-  selectedFilterStrings?: any,
+  actualSearchText?: string;
+  selectedFilterStrings?: any;
 }
 
 export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
@@ -45,7 +45,6 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   actualSearchText,
   selectedFilterStrings,
 }) => {
-
   const [state] = useContext(Context);
   const { cookbook, user } = state;
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -66,8 +65,8 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
             tag.checked = 'on';
           }
           return tag;
-        })
-    
+        });
+
         if (handleFilterChange) {
           handleFilterChange(
             tags
@@ -80,13 +79,12 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
               }),
           );
         }
-    
+
         setItems([...tags]);
         setLoading(false);
-      } catch(err) {
+      } catch (err) {
         toast.errorToast('Error Fetching Tags', err.message);
       }
-
     }
     init();
   }, []);
@@ -149,7 +147,11 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   return (
     <div className={`${className} search-controls`}>
       <EuiFilterGroup className="search-controls__filters">
-        <EuiFieldSearch onChange={handleSearch} value = {actualSearchText as string} fullWidth />
+        <EuiFieldSearch
+          onChange={handleSearch}
+          value={actualSearchText as string}
+          fullWidth
+        />
         <EuiPopover
           id="popoverExampleMultiSelect"
           button={button}

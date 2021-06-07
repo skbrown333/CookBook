@@ -5,7 +5,6 @@ import React, {
   useEffect,
 } from 'react';
 
-
 /* Models */
 import { Guide } from '../../models/Guide';
 import { Tag } from '../../models/Tag';
@@ -284,7 +283,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
         return (
           guide.title.toUpperCase().indexOf(searchText.toUpperCase()) > -1 ||
           (guide.description &&
-            guide.description.toUpperCase().indexOf(searchText.toUpperCase()) > -1)
+            guide.description.toUpperCase().indexOf(searchText.toUpperCase()) >
+              -1)
         );
       })
       .map((guide, index) => {
