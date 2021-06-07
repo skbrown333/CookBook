@@ -1,5 +1,26 @@
 #header {
   &.euiHeader {
     height: 58px;
+
+    > .euiHeaderSectionItem:first-of-type {
+      border-right: 1px solid #25272d;
+    }
+
+    .euiSuperSelect__item:focus {
+      text-decoration: none;
+      background-color: rgba(54, 162, 239, 0.3);
+    }
+
+    .euiSuperSelectControl {
+      box-shadow: none;
+      background: none;
+      font-weight: 600;
+    }
+
+    .character-select {
+      &__character {
+        font-weight: bold;
+      }
+    }
   }
 }
