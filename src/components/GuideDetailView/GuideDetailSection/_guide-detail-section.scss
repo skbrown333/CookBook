@@ -99,6 +99,9 @@
           flex-wrap: wrap;
         }
       }
+      .markdown__gifs {
+        display: flex;
+      }
 
       .markdown__gif {
         margin-left: auto;

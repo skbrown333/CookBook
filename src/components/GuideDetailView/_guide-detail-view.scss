@@ -13,7 +13,7 @@
   }
 
   @include respond-to(gt-xs) {
-    .guide-section__markdown_gifs {
+    .markdown_gifs {
       display: flex;
       & > div {
         margin: 4px;

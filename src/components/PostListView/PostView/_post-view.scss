@@ -10,6 +10,15 @@
     margin-bottom: 14px;
   }
 
+  @include respond-to(gt-xs) {
+    .markdown_gifs {
+      display: flex;
+      & > div {
+        margin: 4px;
+        width: 48%;
+      }
+    }
+  }
   &.euiPanel {
     flex-grow: 0;
 
@@ -61,6 +70,12 @@
     }
   }
 
+  .markdown__gif {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 800px;
+  }
   &__title {
     display: flex;
     align-items: center;
@@ -94,6 +109,7 @@
   }
 
   &__body {
+    padding: 16px;
     .euiComboBox .euiComboBox__inputWrap {
       border-radius: 0;
     }

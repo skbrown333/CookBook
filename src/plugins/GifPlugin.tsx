@@ -34,13 +34,8 @@ function GifMarkdownParser() {
     }
 
     const gfyTransform = (url) => {
-      const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
-      if (url.includes(thumb) && url.includes(size)) return url;
-      const splitUrl = url.split('/');
-      const [, , gfy, path] = splitUrl;
-      splitUrl[3] = path + size;
-      splitUrl[2] = thumb + gfy;
-      return splitUrl.join('/');
+      const urlEnd = url.split('/').pop();
+      return `https://www.gfycat.com/ifr/${urlEnd}`;
     };
 
     urls = urls.map((url) => {
@@ -66,12 +61,25 @@ function GifMarkdownParser() {
 }
 
 const GifMarkdownRenderer = ({ gif }) => {
-  const gifs = gif.urls.map((url) => (
-    <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      <img className="guide-section__markdown__gifs__gif" src={url} />
-    </EuiAspectRatio>
-  ));
-  return <div className="guide-section__markdown_gifs">{gifs}</div>;
+  const gifs = gif.urls.map((url) => {
+    const content = url.includes('gfycat') ? (
+      <iframe
+        className="markdown_gif"
+        frameBorder="0"
+        allowFullScreen={true}
+        scrolling="no"
+        src={url}
+      />
+    ) : (
+      <img className="markdown_gif" src={url} />
+    );
+    return (
+      <EuiAspectRatio width={16} height={9} maxWidth={800}>
+        {content}
+      </EuiAspectRatio>
+    );
+  });
+  return <div className="markdown_gifs">{gifs}</div>;
 };
 
 export const gifPlug = {
