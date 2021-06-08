@@ -84,7 +84,6 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   }, []);
 
   useEffect(() => {
-    // here
     const params = new URLSearchParams();
 
     if (searchText) {
