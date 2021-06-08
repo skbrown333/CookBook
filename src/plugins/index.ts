@@ -1,6 +1,7 @@
 /* Plugins */
 import { gifPlug } from './GifPlugin';
 import { vidPlug } from './iFramePlugin';
+import { loopPlug } from './loopedPlugin';
 import { tweetPlug } from './TwitterPlugin';
 
 /* Defaults */
@@ -10,7 +11,7 @@ import {
   getDefaultEuiMarkdownUiPlugins,
 } from '@elastic/eui';
 
-const plugs = [gifPlug, vidPlug, tweetPlug];
+const plugs = [gifPlug, vidPlug, loopPlug, tweetPlug];
 
 export const processingList = getDefaultEuiMarkdownProcessingPlugins();
 export const parsingList = getDefaultEuiMarkdownParsingPlugins();
