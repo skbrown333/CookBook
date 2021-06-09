@@ -31,8 +31,9 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
   const [state] = useContext(Context);
   const { title, character, tags, description } = guide;
   const { cookbook, user } = state;
+  const guideParam = guide.slug != undefined ? guide.slug : guide._id;
   const redirectToGuide = () => {
-    history.push(`/recipes/${guide._id}`);
+    history.push(`/recipes/${guideParam}`);
   };
 
   return (

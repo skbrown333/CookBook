@@ -191,11 +191,17 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
         />
       </EuiFormRow>
+      <EuiFormRow label="Custom URL Slug (optional)">
+        <EuiFieldText
+          value={guide.slug}
+          onChange={(e) => setGuide({ ...guide, ...{ slug: e.target.value } })}
+        />
+      </EuiFormRow>
     </EuiForm>
   );
 
   const createGuide = async (newGuide) => {
-    const { character, description, tags, title } = newGuide;
+    const { character, description, tags, title, slug } = newGuide;
     try {
       const token = await user.user.getIdToken();
       await guideService.create(
@@ -205,6 +211,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           sections: [],
           tags,
           title,
+          slug,
         },
         {
           Authorization: `Bearer ${token}`,
@@ -235,7 +242,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
   };
 
   const handleEditSave = async () => {
-    const { character, description, tags, title } = guide;
+    const { character, description, tags, title, slug } = guide;
     try {
       setCreating(true);
       const token = await user.user.getIdToken();
@@ -246,6 +253,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           description,
           tags,
           title,
+          slug,
         },
         {
           Authorization: `Bearer ${token}`,

@@ -52,8 +52,8 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const guideService = new GuideService(cookbook._id);
 
     const getGuide = async () => {
-      const guide: any = await guideService.getById(guideId);
-      setGuide(guide);
+      const guide: any = await guideService.get({slug: guideId});
+      setGuide(guide[0]);
     };
 
     useEffect(() => {
