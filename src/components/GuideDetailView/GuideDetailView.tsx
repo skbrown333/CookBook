@@ -52,7 +52,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const guideService = new GuideService(cookbook._id);
 
     const getGuide = async () => {
-      const guide: any = await guideService.get({slug: guideId.toLowerCase()});
+      const guide: any = await guideService.get({
+        slug: guideId.toLowerCase(),
+      });
       setGuide(guide[0]);
     };
 
