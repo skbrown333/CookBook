@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 /* Components */
 import { PostListView } from '../PostListView/PostListView';
@@ -33,15 +33,23 @@ export interface HomePageViewProps {
 export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   index = 0,
 }) => {
+  const locationHook = useLocation();
+  const params = new URLSearchParams(locationHook.search);
+  const startQuery: any = params.get('search') || '';
+  const filterString: any = locationHook.search.includes('filters=')
+    ? locationHook.search.slice(locationHook.search.indexOf('filters=') + 8)
+    : '';
+  const filterStringArray =
+    filterString.length > 0 ? filterString.split('+') : [];
   const [state, dispatch] = useContext(Context);
   const toast = new ToastService();
   const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook } = state;
   const history = useHistory();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState(startQuery);
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(history.location.pathname);
-  const [dbSearch, setDbSearch] = useState('');
+  const [dbSearch, setDbSearch] = useState(startQuery);
 
   const handleChange = (index) => {
     switch (index) {
@@ -75,14 +83,33 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     init();
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (searchText) {
+      params.append('search', searchText);
+    } else {
+      params.delete('search');
+    }
+
+    if (filters.length > 0) {
+      const filterStrings = filters.map((filter) => encodeURI(filter.label));
+      const filterString = filterStrings.join(' ');
+      params.append('filters', filterString);
+    } else {
+      params.delete('filters');
+    }
+    history.push({ search: decodeURI(params.toString()) });
+  }, [searchText, filters, index]);
+
   const handleSearch = (event) => {
-    const value = event.target.value.toUpperCase();
+    const value = event.target.value;
     setSearchText(value);
     debouncedSearch(value);
   };
 
   const handleFilterChange = (filters) => {
-    setFilters(filters);
+    setFilters([...filters]);
   };
 
   return (
@@ -95,6 +122,8 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
             setAdding(history.location.pathname);
             dispatch(updateAddStatus(true));
           }}
+          actualSearchText={searchText}
+          selectedFilterStrings={filterStringArray}
         />
         <SwipeableViews onChangeIndex={handleChange} index={index}>
           <PostListView

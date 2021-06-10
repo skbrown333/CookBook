@@ -26,11 +26,15 @@ import {
 import { Context } from '../../store/Store';
 import TagService from '../../services/TagService/TagService';
 
+import { ToastService } from '../../services/ToastService';
+
 export interface SearchCreateBarProp {
   handlePlus: () => void;
   handleSearch: (e) => void;
   handleFilterChange?: (filters: any) => void;
   className?: string;
+  actualSearchText?: string;
+  selectedFilterStrings?: any;
 }
 
 export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
@@ -38,6 +42,8 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   handleSearch,
   handleFilterChange,
   className,
+  actualSearchText,
+  selectedFilterStrings,
 }) => {
   const [state] = useContext(Context);
   const { cookbook, user } = state;
@@ -46,14 +52,39 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   const [items, setItems] = useState<any>([]);
   const [searchText, setSearchText] = useState('');
   const tagService = new TagService(cookbook._id);
+  const toast = new ToastService();
 
   useEffect(() => {
     async function init() {
       setLoading(true);
       setItems([]);
-      const tags = await tagService.get();
-      setItems([...tags]);
-      setLoading(false);
+      try {
+        let tags = await tagService.get();
+        tags = tags.map((tag) => {
+          if (selectedFilterStrings.includes(tag.label)) {
+            tag.checked = 'on';
+          }
+          return tag;
+        });
+
+        if (handleFilterChange) {
+          handleFilterChange(
+            tags
+              .filter((item) => item.checked && item.checked === 'on')
+              .map((i) => {
+                return {
+                  label: i.label,
+                  _id: i._id,
+                };
+              }),
+          );
+        }
+
+        setItems([...tags]);
+        setLoading(false);
+      } catch (err) {
+        toast.errorToast('Error Fetching Tags', err.message);
+      }
     }
     init();
   }, []);
@@ -116,7 +147,11 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   return (
     <div className={`${className} search-controls`}>
       <EuiFilterGroup className="search-controls__filters">
-        <EuiFieldSearch onChange={handleSearch} fullWidth />
+        <EuiFieldSearch
+          onChange={handleSearch}
+          value={actualSearchText as string}
+          fullWidth
+        />
         <EuiPopover
           id="popoverExampleMultiSelect"
           button={button}
