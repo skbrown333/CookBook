@@ -34,7 +34,10 @@ function GifMarkdownParser() {
     }
 
     const gfyTransform = (url) => {
-      const urlEnd = url.split('/').pop();
+      let urlEnd = url.split('/').pop();
+      if (url.includes('thumbs')) {
+        urlEnd = urlEnd.slice(0, urlEnd.indexOf('-'));
+      }
       return `https://www.gfycat.com/ifr/${urlEnd}`;
     };
 
@@ -64,7 +67,7 @@ const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => {
     const content = url.includes('gfycat') ? (
       <iframe
-        className="markdown_gif"
+        className="markdown__gif"
         frameBorder="0"
         allowFullScreen={true}
         scrolling="no"

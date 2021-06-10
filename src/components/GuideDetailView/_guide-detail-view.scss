@@ -12,15 +12,6 @@
     padding: 8px 24px 0 24px;
   }
 
-  @include respond-to(gt-xs) {
-    .markdown_gifs {
-      display: flex;
-      & > div {
-        margin: 4px;
-      }
-    }
-  }
-
   .guide-detail__content {
     display: flex;
     flex-direction: row;
