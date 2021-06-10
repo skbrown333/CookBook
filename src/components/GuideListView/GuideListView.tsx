@@ -165,6 +165,18 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
     </EuiConfirmModal>
   );
 
+  const handleSlugChange = async (e) => {
+    if (
+      e.target.value.length === 0 ||
+      /^[a-zA-Z0-9_-]{3,45}$/g.test(e.target.value)
+    ) {
+      setShowErrors(false);
+    } else {
+      setShowErrors(true);
+    }
+    setGuide({ ...guide, ...{ slug: e.target.value } });
+  }
+
   const guideForm = (
     <EuiForm id="guideForm" component="form">
       <EuiFormRow label="Title">
@@ -202,17 +214,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       >
         <EuiFieldText
           value={guide.slug !== guide._id ? guide.slug : ''}
-          onChange={(e) => {
-            if (
-              e.target.value.length === 0 ||
-              /^[a-zA-Z0-9_-]{3,45}$/g.test(e.target.value)
-            ) {
-              setShowErrors(false);
-            } else {
-              setShowErrors(true);
-            }
-            setGuide({ ...guide, ...{ slug: e.target.value } });
-          }}
+          onChange={handleSlugChange}
           isInvalid={showErrors}
         />
       </EuiFormRow>

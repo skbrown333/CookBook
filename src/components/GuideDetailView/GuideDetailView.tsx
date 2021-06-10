@@ -46,14 +46,14 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const [guide, setGuide] = useState<Guide | null>(null);
     const [state] = useContext(Context);
     const { cookbook, user } = state;
-    const guideId = useParams().recipe;
+    const guideSlug = useParams().recipe;
     const toast = new ToastService();
     const showControls = user && cookbook.roles[user.uid] === 'admin';
     const guideService = new GuideService(cookbook._id);
 
     const getGuide = async () => {
       const guide: any = await guideService.get({
-        slug: guideId.toLowerCase(),
+        slug: guideSlug.toLowerCase(),
       });
       setGuide(guide[0]);
     };
