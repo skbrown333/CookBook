@@ -81,6 +81,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
   const { cookbook, user, add } = state;
   const toast = new ToastService();
   const guideService = new GuideService(cookbook._id);
+  const [showErrors, setShowErrors] = useState(true);
+  const slugErrors = ['An invalid URL slug was specified'];
 
   const getGuides = async () => {
     const guides = await guideService.get();
@@ -112,6 +114,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
     if (add && adding === '/recipes') {
       setGuide(emptyGuide);
       setShowAdd(true);
+      setShowErrors(false);
     }
   }, [adding, add]);
 
@@ -145,6 +148,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
     event.stopPropagation();
     setGuide(guide);
     setShowEdit(true);
+    setShowErrors(false);
   };
 
   const destroyModal = (
@@ -191,37 +195,48 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
         />
       </EuiFormRow>
-      <EuiFormRow label="Custom URL Slug (optional)">
+      <EuiFormRow label="Custom URL Slug (optional)" isInvalid = {showErrors} error = {slugErrors}>
         <EuiFieldText
           value={guide.slug}
-          onChange={(e) => setGuide({ ...guide, ...{ slug: e.target.value } })}
+          onChange={(e) => {
+            if (e.target.value.length === 0 || /^[a-zA-Z0-9_-]{3,45}$/g.test(e.target.value)) {
+              setShowErrors(false);
+            } else {
+              setShowErrors(true);
+            }
+            setGuide({ ...guide, ...{ slug: e.target.value }});
+          }}
+          isInvalid = {showErrors}
         />
       </EuiFormRow>
     </EuiForm>
   );
 
   const createGuide = async (newGuide) => {
-    const { character, description, tags, title, slug } = newGuide;
+    const { character, description, tags, title } = newGuide;
+    const slug = (newGuide.slug.length > 0) ? newGuide.slug : undefined;
     try {
       const token = await user.user.getIdToken();
-      await guideService.create(
-        {
-          character,
-          description,
-          sections: [],
-          tags,
-          title,
-          slug,
-        },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
-      toast.successToast(
-        guide.title,
-        'Guide succesfully created',
-        character ? CHARACTERS[character] : null,
-      );
+      if (!showErrors) {
+        await guideService.create(
+          {
+            character,
+            description,
+            sections: [],
+            tags,
+            title,
+            slug,
+          },
+          {
+            Authorization: `Bearer ${token}`,
+          },
+        );
+        toast.successToast(
+          guide.title,
+          'Guide succesfully created',
+          character ? CHARACTERS[character] : null,
+        );
+      }
     } catch (err) {
       toast.errorToast('Failed to create guide', err.message);
     }
@@ -229,44 +244,49 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
 
   const handleNewSave = async (event) => {
     event?.preventDefault();
-    try {
-      setCreating(true);
-      await createGuide(guide);
-      setGuides(await guideService.get());
-      setGuide(emptyGuide);
-      dispatch(updateAddStatus(false));
-      setShowAdd(false);
-    } finally {
-      setCreating(false);
+    if (!showErrors) {
+      try {
+        setCreating(true);
+        await createGuide(guide);
+        setGuides(await guideService.get());
+        setGuide(emptyGuide);
+        dispatch(updateAddStatus(false));
+        setShowAdd(false);
+      } finally {
+        setCreating(false);
+      }
     }
   };
 
   const handleEditSave = async () => {
-    const { character, description, tags, title, slug } = guide;
-    try {
-      setCreating(true);
-      const token = await user.user.getIdToken();
-      await guideService.update(
-        guide._id,
-        {
-          character,
-          description,
-          tags,
-          title,
-          slug,
-        },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
-      toast.successToast('Guide Updated', `Edited guide: ${guide.title}`);
-      setGuides(await guideService.get());
-    } catch (err) {
-      toast.errorToast('Failed to save changes', err.message);
-    } finally {
-      setGuide(emptyGuide);
-      setShowEdit(false);
-      setCreating(false);
+    const { character, description, tags, title } = guide;
+    const slug = guide.slug && guide.slug.length > 0 ? guide.slug : undefined;
+    if (!showErrors) {
+      try {
+        setCreating(true);
+        const token = await user.user.getIdToken();
+        await guideService.update(
+          guide._id,
+          {
+            character,
+            description,
+            tags,
+            title,
+            slug,
+          },
+          {
+            Authorization: `Bearer ${token}`,
+          },
+        );
+        toast.successToast('Guide Updated', `Edited guide: ${guide.title}`);
+        setGuides(await guideService.get());
+      } catch (err) {
+        toast.errorToast('Failed to save changes', err.message);
+      } finally {
+        setGuide(emptyGuide);
+        setShowEdit(false);
+        setCreating(false);
+      }
     }
   };
 
