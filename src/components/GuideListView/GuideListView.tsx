@@ -197,7 +197,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       </EuiFormRow>
       <EuiFormRow label="Custom URL Slug (optional)" isInvalid = {showErrors} error = {slugErrors}>
         <EuiFieldText
-          value={guide.slug}
+          value={(guide.slug !== guide._id) ? guide.slug : ''}
           onChange={(e) => {
             if (e.target.value.length === 0 || /^[a-zA-Z0-9_-]{3,45}$/g.test(e.target.value)) {
               setShowErrors(false);
@@ -214,10 +214,9 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
 
   const createGuide = async (newGuide) => {
     const { character, description, tags, title } = newGuide;
-    const slug = (newGuide.slug.length > 0) ? newGuide.slug : undefined;
+    const slug = (newGuide.slug.length > 0) ? newGuide.slug.toLowerCase() : undefined;
     try {
       const token = await user.user.getIdToken();
-      if (!showErrors) {
         await guideService.create(
           {
             character,
@@ -236,7 +235,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           'Guide succesfully created',
           character ? CHARACTERS[character] : null,
         );
-      }
     } catch (err) {
       toast.errorToast('Failed to create guide', err.message);
     }
@@ -244,7 +242,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
 
   const handleNewSave = async (event) => {
     event?.preventDefault();
-    if (!showErrors) {
       try {
         setCreating(true);
         await createGuide(guide);
@@ -255,13 +252,11 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       } finally {
         setCreating(false);
       }
-    }
   };
 
   const handleEditSave = async () => {
     const { character, description, tags, title } = guide;
-    const slug = guide.slug && guide.slug.length > 0 ? guide.slug : undefined;
-    if (!showErrors) {
+    const slug = guide.slug && guide.slug.length > 0 ? guide.slug.toLowerCase() : undefined;
       try {
         setCreating(true);
         const token = await user.user.getIdToken();
@@ -287,7 +282,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
         setShowEdit(false);
         setCreating(false);
       }
-    }
   };
 
   const handleCancel = () => {
@@ -346,7 +340,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
             form="guideForm"
             onClick={save}
             fill
-            disabled={!guide.title || guide.title.length === 0}
+            disabled={!guide.title || guide.title.length === 0 || showErrors}
             isLoading={creating}
           >
             Save
