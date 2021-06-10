@@ -261,6 +261,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       );
       toast.successToast('Guide Updated', `Edited guide: ${guide.title}`);
       setGuides(await guideService.get());
+    } catch (err) {
+      toast.errorToast('Failed to save changes', err.message);
     } finally {
       setGuide(emptyGuide);
       setShowEdit(false);
