@@ -175,7 +175,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       setShowErrors(true);
     }
     setGuide({ ...guide, ...{ slug: e.target.value } });
-  }
+  };
 
   const guideForm = (
     <EuiForm id="guideForm" component="form">
