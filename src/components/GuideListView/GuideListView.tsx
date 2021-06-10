@@ -81,6 +81,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
   const { cookbook, user, add } = state;
   const toast = new ToastService();
   const guideService = new GuideService(cookbook._id);
+  const [showErrors, setShowErrors] = useState(true);
+  const slugErrors = ['An invalid URL slug was specified'];
 
   const getGuides = async () => {
     const guides = await guideService.get();
@@ -112,6 +114,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
     if (add && adding === '/recipes') {
       setGuide(emptyGuide);
       setShowAdd(true);
+      setShowErrors(false);
     }
   }, [adding, add]);
 
@@ -145,6 +148,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
     event.stopPropagation();
     setGuide(guide);
     setShowEdit(true);
+    setShowErrors(false);
   };
 
   const destroyModal = (
@@ -160,6 +164,18 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       <p>You&rsquo;re about to delete this guide permanently</p>
     </EuiConfirmModal>
   );
+
+  const handleSlugChange = async (e) => {
+    if (
+      e.target.value.length === 0 ||
+      /^[a-zA-Z0-9_-]{3,45}$/g.test(e.target.value)
+    ) {
+      setShowErrors(false);
+    } else {
+      setShowErrors(true);
+    }
+    setGuide({ ...guide, ...{ slug: e.target.value } });
+  };
 
   const guideForm = (
     <EuiForm id="guideForm" component="form">
@@ -191,11 +207,24 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           handleUpdate={(tags) => setGuide({ ...guide, ...{ tags: tags } })}
         />
       </EuiFormRow>
+      <EuiFormRow
+        label="Custom URL Slug (optional)"
+        isInvalid={showErrors}
+        error={slugErrors}
+      >
+        <EuiFieldText
+          value={guide.slug !== guide._id ? guide.slug : ''}
+          onChange={handleSlugChange}
+          isInvalid={showErrors}
+        />
+      </EuiFormRow>
     </EuiForm>
   );
 
   const createGuide = async (newGuide) => {
     const { character, description, tags, title } = newGuide;
+    const slug =
+      newGuide.slug.length > 0 ? newGuide.slug.toLowerCase() : undefined;
     try {
       const token = await user.user.getIdToken();
       await guideService.create(
@@ -205,6 +234,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           sections: [],
           tags,
           title,
+          slug,
         },
         {
           Authorization: `Bearer ${token}`,
@@ -236,6 +266,10 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
 
   const handleEditSave = async () => {
     const { character, description, tags, title } = guide;
+    const slug =
+      guide.slug && guide.slug.length > 0
+        ? guide.slug.toLowerCase()
+        : undefined;
     try {
       setCreating(true);
       const token = await user.user.getIdToken();
@@ -246,6 +280,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
           description,
           tags,
           title,
+          slug,
         },
         {
           Authorization: `Bearer ${token}`,
@@ -253,6 +288,8 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       );
       toast.successToast('Guide Updated', `Edited guide: ${guide.title}`);
       setGuides(await guideService.get());
+    } catch (err) {
+      toast.errorToast('Failed to save changes', err.message);
     } finally {
       setGuide(emptyGuide);
       setShowEdit(false);
@@ -316,7 +353,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
             form="guideForm"
             onClick={save}
             fill
-            disabled={!guide.title || guide.title.length === 0}
+            disabled={!guide.title || guide.title.length === 0 || showErrors}
             isLoading={creating}
           >
             Save
