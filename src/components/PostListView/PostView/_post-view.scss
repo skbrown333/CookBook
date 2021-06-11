@@ -147,13 +147,16 @@
       table,
       .euiCheckbox {
         line-height: normal;
+        padding: 0 16px;
       }
 
-      img {
+      img,
+      .markdown_gifs,
+      .markdown__video {
         margin-left: -16px;
         margin-right: -16px;
         max-width: calc(100% + 32px);
-        width: calc(100% + 32px);
+        width: calc(100% + 32px) !important;
       }
     }
   }
