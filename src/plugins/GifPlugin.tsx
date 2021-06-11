@@ -67,7 +67,7 @@ const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => {
     const content = url.includes('gfycat') ? (
       <iframe
-        className="markdown__gif"
+        className="markdown__gif markdown__media"
         frameBorder="0"
         allowFullScreen={true}
         scrolling="no"
