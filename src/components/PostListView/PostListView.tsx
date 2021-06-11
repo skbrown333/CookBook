@@ -112,7 +112,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
     if (posts.length === 0 && page === 1) {
       getPosts();
     }
-  }, [page]);
+  }, [page, filters]);
 
   useEffect(() => {
     if (add && adding === '/') {

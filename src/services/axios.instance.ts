@@ -12,9 +12,9 @@ axios.interceptors.response.use(
     // Do something with response data
     return response;
   },
-  function () {
+  function (err) {
     // Do something with the response error
-    return Promise.reject();
+    return Promise.reject(err);
   },
 );
 

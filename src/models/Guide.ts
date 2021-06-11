@@ -9,4 +9,5 @@ export interface Guide {
   character: string | null;
   description?: string;
   doc_ref?: any;
+  slug?: string;
 }
