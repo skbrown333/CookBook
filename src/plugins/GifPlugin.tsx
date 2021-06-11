@@ -38,7 +38,7 @@ function GifMarkdownParser() {
       if (url.includes('thumbs')) {
         urlEnd = urlEnd.slice(0, urlEnd.indexOf('-'));
       }
-      return `https://www.gfycat.com/ifr/${urlEnd}`;
+      return `https://www.gfycat.com/ifr/${urlEnd}?controls=0`;
     };
 
     urls = urls.map((url) => {
@@ -74,7 +74,7 @@ const GifMarkdownRenderer = ({ gif }) => {
         src={url}
       />
     ) : (
-      <img className="markdown_gif" src={url} />
+      <img className="markdown__gif markdown__media" src={url} />
     );
     return (
       <EuiAspectRatio width={16} height={9} maxWidth={800}>
