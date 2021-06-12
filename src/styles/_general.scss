@@ -1,6 +1,19 @@
+@import './responsive';
+
 @mixin twitter-holder {
   div[twdiv] {
     display: flex;
     justify-content: center;
+  }
+}
+
+@mixin gfys {
+  @include respond-to(gt-xs) {
+    .markdown_gifs {
+      display: flex;
+      & > div {
+        flex-grow: 1;
+      }
+    }
   }
 }

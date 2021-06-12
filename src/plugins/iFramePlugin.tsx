@@ -72,7 +72,7 @@ const iFramePluginRenderer = ({ fixedUrl }) => {
   return (
     <EuiAspectRatio width={16} height={9}>
       <iframe
-        className="markdown__video"
+        className="markdown__video markdown__media"
         frameBorder="0"
         allowFullScreen={true}
         scrolling="no"

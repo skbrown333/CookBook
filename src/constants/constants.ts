@@ -109,5 +109,4 @@ export const newSection: Post = {
   body: sampleBody,
   tags: Array<Tag>(),
   cre_date: new Date(),
-  doc_ref: '',
 };
