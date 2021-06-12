@@ -6,8 +6,6 @@
   width: 100%;
   margin-bottom: 14px;
 
-  @include twitter-holder;
-
   .euiAspectRatio {
     width: 100%;
     max-width: 800px;
@@ -63,6 +61,8 @@
 
   &__body {
     padding: 16px;
+    @include twitter-holder;
+    @include gfys;
 
     .euiComboBox .euiComboBox__inputWrap {
       border-radius: 0;
@@ -98,13 +98,6 @@
           flex-direction: row;
           flex-wrap: wrap;
         }
-      }
-
-      .markdown__gif {
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;
-        max-width: 800px;
       }
 
       img {
