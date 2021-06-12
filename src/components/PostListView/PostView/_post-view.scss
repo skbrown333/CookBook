@@ -46,8 +46,18 @@
   .euiAspectRatio {
     width: 100%;
     max-width: 800px;
+    position: relative;
     margin-right: auto;
     margin-left: auto;
+    .media__cover {
+      z-index: 9;
+    }
+
+    .markdown__media {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 
   .euiMarkdownFormat table {

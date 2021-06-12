@@ -1,5 +1,8 @@
 import React from 'react';
 
+/* Listeners */
+import { MediaClickHandler } from '../constants/listeners';
+
 import { EuiAspectRatio } from '@elastic/eui';
 
 // const GifPlugin = {
@@ -78,6 +81,7 @@ const GifMarkdownRenderer = ({ gif }) => {
     );
     return (
       <EuiAspectRatio width={16} height={9} maxWidth={800}>
+        <div className="media__cover" onClick={MediaClickHandler} />
         {content}
       </EuiAspectRatio>
     );

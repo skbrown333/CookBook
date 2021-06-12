@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 
 /* Components */
 import {
@@ -40,7 +35,6 @@ export const PostView: FunctionComponent<PostProps> = ({
   const [state] = useContext(Context);
   const { cookbook, user } = state;
   const { title, body, id, character, tags, cre_account } = post;
-
   return (
     <EuiPanel
       id={`post-${id}`}
