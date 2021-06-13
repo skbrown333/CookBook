@@ -13,7 +13,7 @@ import {
 import './_post-view.scss';
 
 /* Constants */
-import { CHARACTERS } from '../../../constants/constants';
+import { CHARACTERS, ROLES } from '../../../constants/constants';
 
 /* Plugins */
 import { parsingList, processingList } from '../../../plugins';
@@ -59,7 +59,7 @@ export const PostView: FunctionComponent<PostProps> = ({
               {cre_account && `@${cre_account.username}`}
             </div>
           </div>
-          {user && cookbook.roles[user.uid] === 'admin' && (
+          {user && ROLES.admin.includes(cookbook.roles[user.uid]) && (
             <div className="post__controls">
               <EuiButtonIcon
                 aria-label="edit"

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
 /* Constants */
-import { CHARACTERS } from '../../../constants/constants';
+import { CHARACTERS, ROLES } from '../../../constants/constants';
 
 /* Models */
 import { Guide } from '../../../models/Guide';
@@ -53,7 +53,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
           ></EuiAvatar>
           {title}
         </div>
-        {user && cookbook.roles[user.uid] === 'admin' && (
+        {user && ROLES.admin.includes(cookbook.roles[user.uid]) && (
           <div className="guide-card__header__controls">
             <EuiButtonIcon
               aria-label="edit"

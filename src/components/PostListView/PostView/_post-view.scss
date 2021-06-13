@@ -84,7 +84,7 @@
     padding: 8px 16px;
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 
     &__avatar {
       margin-right: 8px;
@@ -162,17 +162,26 @@
       blockquote,
       table,
       .euiCheckbox {
-        line-height: normal;
-        padding: 0 16px;
+        margin: 16px;
+        width: calc(100% - 32px);
+        line-height: 0;
       }
 
-      img,
-      .markdown_gifs,
-      .markdown__video {
+      .markdown__gif,
+      .markdown__video,
+      img {
         margin-left: -16px;
         margin-right: -16px;
         @include post-width;
       }
     }
+  }
+
+  &__footer {
+    padding-left: 8px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
   }
 }
