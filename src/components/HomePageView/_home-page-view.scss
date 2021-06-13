@@ -13,9 +13,7 @@
   .search-controls {
     max-width: 800px;
   }
-  @include respond-to(gt-md) {
-    margin-left: 258px;
-  }
+
   @include respond-to(xs) {
     .search-controls {
       padding: 8px;
@@ -40,11 +38,13 @@
     }
     &__twitch {
       display: none;
+      flex: 1;
 
       @include respond-to(gt-md) {
         display: block;
         margin-top: 62px;
         margin-left: 12px;
+        margin-right: 12px;
       }
     }
   }
