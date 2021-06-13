@@ -13,6 +13,7 @@ import { PostListView } from '../PostListView/PostListView';
 import { GuideListView } from '../GuideListView/GuideListView';
 import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import { ContributorSideBar } from '../ContributorSideBar/ContributorSideBar';
 import debounce from 'lodash.debounce';
 
 /* Services */
@@ -116,6 +117,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
   return (
     <div id="home-view">
+      <ContributorSideBar />
       <div className="home-view">
         <SearchCreateBar
           handleSearch={handleSearch}

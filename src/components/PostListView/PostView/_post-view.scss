@@ -67,7 +67,7 @@
     padding: 8px 16px;
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 
     &__avatar {
       margin-right: 8px;
@@ -128,24 +128,25 @@
       .euiCheckbox {
         margin: 16px;
         width: calc(100% - 32px);
-        line-height: normal;
+        line-height: 0;
       }
 
       .markdown__gif,
-      .euiAspectRatio,
+      .markdown__video,
       img {
         margin-left: -16px;
         margin-right: -16px;
-        max-width: calc(100% + 32px);
-        width: calc(100% + 32px);
+        max-width: calc(100% + 32px) !important;
+        width: calc(100% + 32px) !important;
       }
     }
   }
 
   &__footer {
-    margin-left: 8px;
+    padding-left: 8px;
     height: 36px;
     display: flex;
     align-items: center;
+    background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
   }
 }

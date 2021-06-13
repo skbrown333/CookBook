@@ -40,6 +40,14 @@ export const DISCORD = {
 export const CHARACTERS = characterIcons;
 
 /**
+ * Roles
+ */
+
+export const ROLES = {
+  admin: ['admin', 'chef'],
+};
+
+/**
  * Cookbook
  */
 
@@ -77,19 +85,6 @@ export const TAG = {
 
 export const USER = {
   route: '/users',
-};
-
-/**
- * Firestore
- */
-
-export const FIRESTORE = {
-  collections: {
-    guides: 'guides',
-    tags: 'tags',
-    posts: 'posts',
-    cookbooks: 'cookbooks',
-  },
 };
 
 const sampleBody = `

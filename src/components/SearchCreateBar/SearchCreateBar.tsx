@@ -27,6 +27,7 @@ import { Context } from '../../store/Store';
 import TagService from '../../services/TagService/TagService';
 
 import { ToastService } from '../../services/ToastService';
+import { ROLES } from '../../constants/constants';
 
 export interface SearchCreateBarProp {
   handlePlus: () => void;
@@ -210,7 +211,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
           </div>
         </EuiPopover>
       </EuiFilterGroup>
-      {user && cookbook.roles[user.uid] === 'admin' && (
+      {user && ROLES.admin.includes(cookbook.roles[user.uid]) && (
         <EuiButtonIcon
           aria-label="add"
           className="search-controls__button"

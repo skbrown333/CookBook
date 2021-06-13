@@ -224,7 +224,9 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
   const createGuide = async (newGuide) => {
     const { character, description, tags, title } = newGuide;
     const slug =
-      newGuide.slug.length > 0 ? newGuide.slug.toLowerCase() : undefined;
+      newGuide.slug && newGuide.slug.length > 0
+        ? newGuide.slug.toLowerCase()
+        : undefined;
     try {
       const token = await user.user.getIdToken();
       await guideService.create(
