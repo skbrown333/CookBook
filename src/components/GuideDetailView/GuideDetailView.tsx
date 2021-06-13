@@ -23,7 +23,7 @@ import './_guide-detail-view.scss';
 import { Guide } from '../../models/Guide';
 
 /* Constants */
-import { newSection } from '../../constants/constants';
+import { newSection, ROLES } from '../../constants/constants';
 import { GuideDetailSideNav } from './GuideDetailSideNav/GuideDetailSideNav';
 import { GuideDetailSection } from './GuideDetailSection/GuideDetailSection';
 import { GuideDetailHeader } from './GuideDetailHeader/GuideDetailHeader';
@@ -48,7 +48,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const { cookbook, user } = state;
     const guideSlug = useParams().recipe;
     const toast = new ToastService();
-    const showControls = user && cookbook.roles[user.uid] === 'admin';
+    const showControls = user && ROLES.admin.includes(cookbook.roles[user.uid]);
     const guideService = new GuideService(cookbook._id);
 
     const getGuide = async () => {
