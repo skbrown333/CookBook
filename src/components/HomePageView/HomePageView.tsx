@@ -40,7 +40,9 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     ? locationHook.search.slice(locationHook.search.indexOf('filters=') + 8)
     : '';
   const filterStringArray =
-    filterString.length > 0 ? filterString.split('+') : [];
+    filterString.length > 0
+      ? filterString.split('+').map((filter) => decodeURI(filter))
+      : [];
   const [state, dispatch] = useContext(Context);
   const toast = new ToastService();
   const firebase = useContext<Firebase | null>(FirebaseContext);
