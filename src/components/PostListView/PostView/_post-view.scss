@@ -2,6 +2,11 @@
 @import '../../../styles/general';
 @import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
+@mixin post-width {
+  max-width: calc(100% + 32px);
+  width: calc(100% + 32px) !important;
+}
+
 .post {
   margin-bottom: 8px;
   width: 100%;
@@ -51,6 +56,7 @@
     margin-left: auto;
     .media__cover {
       z-index: 9;
+      @include post-width;
     }
 
     .markdown__media {
@@ -165,8 +171,7 @@
       .markdown__video {
         margin-left: -16px;
         margin-right: -16px;
-        max-width: calc(100% + 32px);
-        width: calc(100% + 32px) !important;
+        @include post-width;
       }
     }
   }

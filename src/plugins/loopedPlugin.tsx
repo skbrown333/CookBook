@@ -5,18 +5,12 @@ import { MediaClickHandler } from '../constants/listeners';
 
 import { EuiAspectRatio } from '@elastic/eui';
 
+import { YoutubeEmbed } from '../components/YoutubeEmbed/YoutubeEmbed';
+
 function formattedUrl(url) {
   let urlEnd = url.split('/').pop();
-  urlEnd = urlEnd.includes('?') ? urlEnd.split('?')[0] : urlEnd;
-  if (url.includes('youtube')) {
-    const ytbReg = /watch\?v=(\w*)/;
-    return `https://www.youtube.com/embed/${
-      url.match(ytbReg)[1]
-    }?autoplay=1&loop=1&controls=0&mute=1&modestbranding=1&playlist=${urlEnd}&playsinline=1&rel=0&disablekb=1`;
-  }
-  if (url.includes('youtu.be')) {
-    return `https://www.youtube.com/embed/${urlEnd}?autoplay=1&loop=1&controls=0&mute=1&modestbranding=1&playlist=${urlEnd}&playsinline=1&rel=0&disablekb=1`;
-  }
+  urlEnd = urlEnd.includes('?v=') ? urlEnd.split('?v=')[1] : urlEnd;
+  return urlEnd;
 }
 
 // const IFramePlugin = {
@@ -67,14 +61,7 @@ function loopedParser() {
 const loopedPluginRenderer = ({ fixedUrl }) => {
   return (
     <EuiAspectRatio width={16} height={9}>
-      <div className="media__cover" onClick={MediaClickHandler} />
-      <iframe
-        className="markdown__video markdown__media"
-        frameBorder="0"
-        allowFullScreen={true}
-        scrolling="no"
-        src={fixedUrl}
-      />
+      <YoutubeEmbed id={fixedUrl} />
     </EuiAspectRatio>
   );
 };
