@@ -115,6 +115,13 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
             </EuiHeaderLink>
           </Link>
         </div>
+        <div className="nav-item">
+          <Link to="/about">
+            <EuiHeaderLink iconType="questionInCircle" color="success">
+              <span className="link-text">About</span>
+            </EuiHeaderLink>
+          </Link>
+        </div>
       </>
     );
   };
@@ -163,8 +170,13 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                       </EuiHeaderLink>
                     </Link>
                     <Link to="/recipes">
-                      <EuiHeaderLink iconType="discoverApp" color="success">
+                      <EuiHeaderLink color="success">
                         <span className="link-text">Guides</span>
+                      </EuiHeaderLink>
+                    </Link>
+                    <Link to="/about">
+                      <EuiHeaderLink color="success">
+                        <span className="link-text">About</span>
                       </EuiHeaderLink>
                     </Link>
                   </EuiHeaderLinks>
