@@ -42,7 +42,7 @@ export const PostView: FunctionComponent<PostProps> = ({
   const { title, body, id, character, tags, cre_account } = post;
 
   return (
-    <EuiPanel id={`post-${id}`} className="post" key={id}>
+    <EuiPanel id={`post-${id}`} hasShadow={false} className="post" key={id}>
       <div className="post__content">
         <div className="post__title">
           <EuiAvatar

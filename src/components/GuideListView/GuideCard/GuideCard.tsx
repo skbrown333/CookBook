@@ -36,7 +36,11 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
   };
 
   return (
-    <EuiPanel className="guide-card" onClick={redirectToGuide}>
+    <EuiPanel
+      className="guide-card"
+      hasShadow={false}
+      onClick={redirectToGuide}
+    >
       <div className="guide-card__header">
         <div className="guide-card__header__title">
           <EuiAvatar
