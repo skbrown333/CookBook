@@ -2,9 +2,6 @@ import React from 'react';
 
 import { EuiAspectRatio } from '@elastic/eui';
 
-/* Listeners */
-import { MediaClickHandler } from '../constants/listeners';
-
 import { ENV } from '../constants/constants';
 
 function formattedUrl(url) {
@@ -74,7 +71,6 @@ function iFrameParser() {
 const iFramePluginRenderer = ({ fixedUrl }) => {
   return (
     <EuiAspectRatio width={16} height={9}>
-      <div className="media__cover" onClick={MediaClickHandler} />
       <iframe
         className="markdown__video markdown__media"
         frameBorder="0"

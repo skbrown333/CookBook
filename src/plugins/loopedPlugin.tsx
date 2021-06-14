@@ -1,8 +1,5 @@
 import React from 'react';
 
-/* Listeners */
-import { MediaClickHandler } from '../constants/listeners';
-
 import { EuiAspectRatio } from '@elastic/eui';
 
 import { YoutubeEmbed } from '../components/YoutubeEmbed/YoutubeEmbed';
