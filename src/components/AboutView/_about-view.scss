@@ -1,0 +1,97 @@
+@import '../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+
+#about-view {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  background-color: $euiColorEmptyShade;
+  padding: 24px;
+  color: lighten($euiColorEmptyShade, 60%);
+  font-weight: 600;
+  font-size: 16px;
+
+  h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+  }
+  h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 12px 0;
+    color: white;
+  }
+
+  a {
+    color: lighten($euiColorEmptyShade, 80%);
+    border-bottom: 1px dashed;
+  }
+
+  ul {
+    padding-left: 24px;
+    padding-top: 18px;
+    list-style: inside;
+  }
+
+  .about-view {
+    max-width: 800px;
+
+    &__bio {
+      margin-bottom: 24px;
+
+      div {
+        margin-bottom: 12px;
+      }
+    }
+
+    &__contribute {
+      margin-bottom: 24px;
+    }
+
+    &__donate {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 24px;
+
+      .euiButton__text {
+        display: flex;
+        align-items: center;
+      }
+
+      button {
+        margin-top: 12px;
+      }
+    }
+    &__developers {
+      overflow: auto;
+      margin-bottom: 24px;
+
+      .dev {
+        display: flex;
+        width: 100%;
+        padding: 16px 8px;
+
+        &-info {
+          width: 100%;
+          margin-left: 8px;
+
+          .icon {
+            margin: 0 4px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+          }
+
+          &__username {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #8b89e2;
+            margin-bottom: 6px;
+          }
+        }
+      }
+    }
+  }
+}
