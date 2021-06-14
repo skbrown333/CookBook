@@ -45,13 +45,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   handleDelete,
 }) => {
   return (
-    <EuiPanel
-      id={`section-${index}`}
-      hasShadow={false}
-      hasBorder
-      className="guide-section"
-      key={index}
-    >
+    <EuiPanel id={`section-${index}`} className="guide-section" key={index}>
       <div className="guide-section__title">
         {editing ? (
           <>
