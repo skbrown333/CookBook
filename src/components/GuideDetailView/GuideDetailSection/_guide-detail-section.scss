@@ -40,8 +40,7 @@
   &__title {
     display: flex;
     align-items: center;
-    padding: 8px 16px;
-    background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+    padding: 8px 0;
     font-size: 24px;
     font-weight: 600;
     text-transform: capitalize;

@@ -6,7 +6,6 @@ import {
   EuiFieldText,
   EuiMarkdownEditor,
   EuiMarkdownFormat,
-  EuiPanel,
   EuiSpacer,
   EuiBadge,
 } from '@elastic/eui';
@@ -45,7 +44,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   handleDelete,
 }) => {
   return (
-    <EuiPanel id={`section-${index}`} className="guide-section" key={index}>
+    <div id={`section-${index}`} className="guide-section" key={index}>
       <div className="guide-section__title">
         {editing ? (
           <>
@@ -120,6 +119,6 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
           )}
         </div>
       )}
-    </EuiPanel>
+    </div>
   );
 };

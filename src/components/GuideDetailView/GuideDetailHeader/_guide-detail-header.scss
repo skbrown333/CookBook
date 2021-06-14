@@ -10,9 +10,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
 
   @include respond-to(gt-sm) {
-    margin-right: 260px;
     margin-bottom: 12px;
     justify-content: flex-end;
     .guide-header__title {
