@@ -15,6 +15,7 @@ import {
   RiPatreonLine,
   RiYoutubeLine,
   RiTwitchLine,
+  RiDiscordLine,
 } from 'react-icons/ri';
 
 /* Models */
@@ -75,6 +76,15 @@ export const ContributorSideBar: FunctionComponent<ContributorSideBar> = () => {
         <RiTwitchLine
           className="icon"
           onClick={() => window.open(links.twitch, '_blank')}
+        />,
+      );
+    }
+
+    if (links.discord) {
+      linkElements.push(
+        <RiDiscordLine
+          className="icon"
+          onClick={() => window.open(links.discord, '_blank')}
         />,
       );
     }
