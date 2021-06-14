@@ -6,9 +6,9 @@ import {
   EuiFieldText,
   EuiMarkdownEditor,
   EuiMarkdownFormat,
-  EuiPanel,
   EuiSpacer,
   EuiBadge,
+  EuiPanel,
 } from '@elastic/eui';
 import { TagInput } from '../../TagInput/TagInput';
 
@@ -48,11 +48,13 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
     <EuiPanel
       id={`section-${index}`}
       hasShadow={false}
-      hasBorder
       className="guide-section"
       key={index}
     >
-      <div className="guide-section__title">
+      <div
+        className="guide-section__title"
+        style={isCollapsed ? { borderRadius: '4px', borderBottom: 'none' } : {}}
+      >
         {editing ? (
           <>
             <EuiFieldText

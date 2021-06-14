@@ -10586,6 +10586,11 @@ react-focus-on@^3.5.0:
     use-callback-ref "^1.2.5"
     use-sidecar "^1.0.5"
 
+react-icons@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
+  integrity sha512-rmzEDFt+AVXRzD7zDE21gcxyBizD/3NqjbX6cmViAgdqfJ2UiLer8927/QhhrXQV7dEj/1EGuOTPp7JnLYVJKQ==
+
 react-infinite-scroll-hook@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-infinite-scroll-hook/-/react-infinite-scroll-hook-4.0.1.tgz#0fea9de7a84764975aad1209baeff286681d83b9"
