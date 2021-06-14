@@ -51,7 +51,10 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
       className="guide-section"
       key={index}
     >
-      <div className="guide-section__title">
+      <div
+        className="guide-section__title"
+        style={isCollapsed ? { borderRadius: '4px', borderBottom: 'none' } : {}}
+      >
         {editing ? (
           <>
             <EuiFieldText
