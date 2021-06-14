@@ -152,7 +152,7 @@ export const AboutView: FunctionComponent<AboutViewProps> = () => {
             </div>
             <div>
               We are currently still building the site and looking for more
-              people to contribute to content for other Super Smash Bros. Melee
+              people to contribute content for other Super Smash Bros. Melee
               characters.
             </div>
             <div>
