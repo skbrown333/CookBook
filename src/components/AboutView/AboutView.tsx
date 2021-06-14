@@ -147,7 +147,7 @@ export const AboutView: FunctionComponent<AboutViewProps> = () => {
               >
                 Cookbook Discord <RiDiscordLine />
               </a>
-              , &nbsp; it has become a much broader application available to any
+              , but it has become a much broader application available to any
               character and eventually any game.
             </div>
             <div>
