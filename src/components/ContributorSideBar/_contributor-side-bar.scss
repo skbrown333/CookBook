@@ -9,8 +9,9 @@
     margin-right: 12px;
     margin-left: 12px;
     flex: 1;
-    min-width: 254px;
     height: calc(100% - 70px);
+    display: flex;
+    justify-content: flex-end;
   }
 
   .contributor-sidebar {
@@ -18,6 +19,7 @@
     flex-direction: column;
     max-height: calc(100% - 54px);
     overflow: hidden;
+    width: 300px;
 
     &__header {
       display: flex;
@@ -40,7 +42,6 @@
       .chef {
         display: flex;
         width: 100%;
-        max-width: 358px;
         padding: 16px 8px;
         cursor: pointer;
 
