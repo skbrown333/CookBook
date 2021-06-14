@@ -72,13 +72,6 @@ export const PostView: FunctionComponent<PostProps> = ({
             </div>
           )}
         </div>
-        <div className="post__tags">
-          {tags.map((tag, index) => (
-            <EuiBadge key={index} className="tag" color="hollow">
-              #{tag.label}
-            </EuiBadge>
-          ))}
-        </div>
 
         <div className={`post__body`}>
           <EuiMarkdownFormat
@@ -88,6 +81,15 @@ export const PostView: FunctionComponent<PostProps> = ({
             {body}
           </EuiMarkdownFormat>
         </div>
+        {tags.length > 0 && (
+          <div className="post__tags post__footer">
+            {tags.map((tag, index) => (
+              <EuiBadge key={index} className="tag" color="hollow">
+                #{tag.label}
+              </EuiBadge>
+            ))}
+          </div>
+        )}
       </div>
     </EuiPanel>
   );
