@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext } from 'react';
 
-import { EuiPanel, EuiAvatar, EuiListGroup, EuiHealth } from '@elastic/eui';
+import { EuiAvatar, EuiListGroup, EuiHealth } from '@elastic/eui';
 
 /* Styles */
 import './_twitch-sidebar.scss';
@@ -82,17 +82,12 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
 
   return (
     <div className={props.className}>
-      <EuiPanel
-        paddingSize="m"
-        hasShadow={false}
-        hasBorder
-        className="twitch-sidebar"
-      >
+      <div className="twitch-sidebar">
         <div className="twitch-sidebar__header">Twitch</div>
         <div className="twitch-sidebar__streams">
           <EuiListGroup gutterSize="none">{buildStreams()}</EuiListGroup>
         </div>
-      </EuiPanel>
+      </div>
     </div>
   );
 };

@@ -3,7 +3,6 @@ import React, { FunctionComponent } from 'react';
 /* Components */
 import {
   EuiAvatar,
-  EuiPanel,
   EuiIcon,
   EuiDragDropContext,
   EuiDroppable,
@@ -95,11 +94,9 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
   };
 
   return (
-    <EuiPanel
+    <div
       className="guide-content__side-nav"
       style={editing ? { marginTop: 8 } : {}}
-      hasShadow={false}
-      hasBorder
     >
       <div className="side-nav__header">
         <EuiAvatar
@@ -139,6 +136,6 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
           />
         </div>
       )}
-    </EuiPanel>
+    </div>
   );
 };

@@ -12,12 +12,27 @@
     padding: 8px 24px 0 24px;
   }
 
+  @include respond-to(gt-xs) {
+    .guide-section__markdown_gifs {
+      display: flex;
+      & > div {
+        margin: 4px;
+      }
+    }
+  }
+
+  .guide-detail__header {
+    display: flex;
+    justify-content: center;
+  }
+
   .guide-detail__content {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     height: 100%;
     padding-bottom: 64px;
+    justify-content: center;
 
     .guide-content {
       &__droppable {
@@ -31,6 +46,7 @@
         flex: 1;
         height: 100%;
         overflow: auto;
+        max-width: 800px;
 
         .euiPanel {
           flex-grow: 0;
