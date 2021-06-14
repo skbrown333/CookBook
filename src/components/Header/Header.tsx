@@ -116,7 +116,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
           </Link>
         </div>
         <div className="nav-item">
-          <Link to="/about">
+          <Link to="/about" onClick={toggleFlyout}>
             <EuiHeaderLink iconType="questionInCircle" color="success">
               <span className="link-text">About</span>
             </EuiHeaderLink>
