@@ -8,6 +8,7 @@ import {
   EuiMarkdownFormat,
   EuiSpacer,
   EuiBadge,
+  EuiPanel,
 } from '@elastic/eui';
 import { TagInput } from '../../TagInput/TagInput';
 
@@ -44,7 +45,7 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
   handleDelete,
 }) => {
   return (
-    <div id={`section-${index}`} className="guide-section" key={index}>
+    <EuiPanel id={`section-${index}`} className="guide-section" key={index}>
       <div className="guide-section__title">
         {editing ? (
           <>
@@ -119,6 +120,6 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
           )}
         </div>
       )}
-    </div>
+    </EuiPanel>
   );
 };
