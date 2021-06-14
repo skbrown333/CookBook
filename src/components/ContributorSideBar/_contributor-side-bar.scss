@@ -39,7 +39,6 @@
 
       .chef {
         display: flex;
-        align-items: center;
         width: 100%;
         max-width: 358px;
         padding: 16px 8px;
@@ -54,11 +53,19 @@
           width: 100%;
           margin-left: 8px;
 
+          .icon {
+            margin: 0 4px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+          }
+
           &__username {
             display: flex;
             align-items: center;
             font-weight: bold;
             color: #8b89e2;
+            margin-bottom: 6px;
           }
         }
       }
