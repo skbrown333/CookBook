@@ -63,7 +63,7 @@ export const YoutubeEmbed: FunctionComponent<YoutubeEmbedProps> = ({ id }) => {
   return (
     <>
       <div className="media__cover" onClick={clickHandler} />
-      <div id={div_id} className="markdown__video markdown__media" />;
+      <div id={div_id} className="markdown__video markdown__media" />
     </>
   );
 };
