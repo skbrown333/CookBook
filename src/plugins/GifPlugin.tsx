@@ -1,8 +1,5 @@
 import React from 'react';
 
-/* Listeners */
-import { MediaClickHandler } from '../constants/listeners';
-
 import { EuiAspectRatio } from '@elastic/eui';
 
 // const GifPlugin = {
@@ -37,11 +34,13 @@ function GifMarkdownParser() {
     }
 
     const gfyTransform = (url) => {
-      let urlEnd = url.split('/').pop();
-      if (url.includes('thumbs')) {
-        urlEnd = urlEnd.slice(0, urlEnd.indexOf('-'));
-      }
-      return `https://www.gfycat.com/ifr/${urlEnd}?controls=0`;
+      const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
+      if (url.includes(thumb) && url.includes(size)) return url;
+      const splitUrl = url.split('/');
+      const [, , gfy, path] = splitUrl;
+      splitUrl[3] = path + size;
+      splitUrl[2] = thumb + gfy;
+      return splitUrl.join('/');
     };
 
     urls = urls.map((url) => {
@@ -68,21 +67,9 @@ function GifMarkdownParser() {
 
 const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => {
-    const content = url.includes('gfycat') ? (
-      <iframe
-        className="markdown__gif markdown__media"
-        frameBorder="0"
-        allowFullScreen={true}
-        scrolling="no"
-        src={url}
-      />
-    ) : (
-      <img className="markdown__gif markdown__media" src={url} />
-    );
     return (
       <EuiAspectRatio width={16} height={9} maxWidth={800}>
-        <div className="media__cover" onClick={MediaClickHandler} />
-        {content}
+        <img className="markdown__gif markdown__media" src={url} />
       </EuiAspectRatio>
     );
   });
