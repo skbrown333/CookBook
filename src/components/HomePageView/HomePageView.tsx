@@ -54,6 +54,20 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const [adding, setAdding] = useState(history.location.pathname);
   const [dbSearch, setDbSearch] = useState(startQuery);
 
+  const scrollHandler = (e) => {
+    const views = document.querySelectorAll('div[data-swipeable');
+    const scrollVal = 80;
+    views.forEach((view) =>
+      e.wheelDeltaY > 0
+        ? (view.scrollTop -= scrollVal)
+        : (view.scrollTop += scrollVal),
+    );
+  };
+
+  window.onload = (e) => {
+    window.addEventListener('wheel', scrollHandler);
+  };
+
   const handleChange = (index) => {
     switch (index) {
       case 0:
