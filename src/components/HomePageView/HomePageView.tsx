@@ -55,8 +55,8 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const [dbSearch, setDbSearch] = useState(startQuery);
 
   const scrollHandler = (e) => {
-    const views = document.querySelectorAll('div[data-swipeable');
-    const scrollVal = 80;
+    const views = document.querySelectorAll('div[data-swipeable]');
+    const scrollVal = 40;
     views.forEach((view) =>
       e.wheelDeltaY > 0
         ? (view.scrollTop -= scrollVal)
