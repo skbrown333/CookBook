@@ -170,7 +170,7 @@ export const AboutView: FunctionComponent<AboutViewProps> = () => {
             for people to join in on the process! If you would like to become a
             chef or if you want to be a part of our dev team come vist our&nbsp;
             <a
-              href="https://discord.gg/69FUEphs"
+              href="https://discord.gg/JYbF6uY5cW"
               target="_blank"
               rel="noreferrer"
             >
