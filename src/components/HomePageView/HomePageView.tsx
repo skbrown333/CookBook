@@ -56,7 +56,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
   const scrollHandler = (e) => {
     const views = document.querySelectorAll('div[data-swipeable]');
-    const scrollVal = 40;
+    const scrollVal = 70;
     views.forEach((view) =>
       e.wheelDeltaY > 0
         ? (view.scrollTop -= scrollVal)
@@ -65,7 +65,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   };
 
   window.onload = (e) => {
-    window.addEventListener('wheel', scrollHandler);
+    window.addEventListener('wheel', scrollHandler, { passive: true });
   };
 
   const handleChange = (index) => {
