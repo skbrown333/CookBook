@@ -45,11 +45,6 @@
         padding: 16px 8px;
         cursor: pointer;
 
-        &:hover {
-          background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
-          border-radius: 4px;
-        }
-
         &-info {
           width: 100%;
           margin-left: 8px;
