@@ -133,11 +133,13 @@
 
       .markdown__gif,
       .markdown__video,
+      video,
       img {
         margin-left: -16px;
         margin-right: -16px;
         max-width: calc(100% + 32px) !important;
         width: calc(100% + 32px) !important;
+        object-fit: cover;
       }
     }
   }

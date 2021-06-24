@@ -34,12 +34,18 @@ function GifMarkdownParser() {
     }
 
     const gfyTransform = (url) => {
-      const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
-      if (url.includes(thumb) && url.includes(size)) return url;
+      const [giant, mp4] = ['giant.', '.mp4'];
+      const [thumb, size] = ['thumb.', '-size_restricted.gif'];
+      if (url.includes(giant) && url.includes(mp4)) return url;
+      if (url.includes(thumb) && url.includes(size)) {
+        url = url.replace(thumb, giant);
+        url = url.replace(size, mp4);
+        return url;
+      }
       const splitUrl = url.split('/');
       const [, , gfy, path] = splitUrl;
-      splitUrl[3] = path + size;
-      splitUrl[2] = thumb + gfy;
+      splitUrl[3] = path + mp4;
+      splitUrl[2] = giant + gfy;
       return splitUrl.join('/');
     };
 
@@ -68,7 +74,12 @@ function GifMarkdownParser() {
 const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => (
     <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      <img className="guide-section__markdown__gifs__gif" src={url} />
+      <video
+        className="guide-section__markdown__gifs__gif"
+        src={url}
+        autoPlay
+        loop
+      />
     </EuiAspectRatio>
   ));
   return <div className="guide-section__markdown_gifs">{gifs}</div>;
