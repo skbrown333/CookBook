@@ -92,7 +92,13 @@ function GifMarkdownParser() {
 const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => (
     <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      <video className="guide-section__markdown__gifs__gif" autoPlay loop muted>
+      <video
+        className="guide-section__markdown__gifs__gif"
+        autoPlay
+        loop
+        muted
+        disableRemotePlayback
+      >
         <source src={url.giant} type="video/mp4"></source>
         <source src={url.thumbnail} type="video/mp4"></source>
       </video>
