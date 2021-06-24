@@ -198,7 +198,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       <EuiFormRow label="Select Character (optional)">
         <CharacterSelect
           onChange={(value) => setGuide({ ...guide, ...{ character: value } })}
-          value={guide.character}
+          value={guide.character ? guide.character._id : null}
         />
       </EuiFormRow>
       <EuiFormRow label="Tags (optional)">
