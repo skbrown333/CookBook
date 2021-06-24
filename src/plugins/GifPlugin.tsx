@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EuiAspectRatio } from '@elastic/eui';
+import { EuiAspectRatio, EuiHideFor } from '@elastic/eui';
 
 // const GifPlugin = {
 //   name: "GifPlugin",
@@ -99,7 +99,9 @@ const GifMarkdownRenderer = ({ gif }) => {
         muted
         disableRemotePlayback
       >
-        <source src={url.giant} type="video/mp4"></source>
+        <EuiHideFor sizes={['xs', 's']}>
+          <source src={url.giant} type="video/mp4"></source>
+        </EuiHideFor>
         <source src={url.thumbnail} type="video/mp4"></source>
       </video>
     </EuiAspectRatio>
