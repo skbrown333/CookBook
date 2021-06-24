@@ -34,7 +34,7 @@ function GifMarkdownParser() {
     }
 
     const gfyTransform = (url) => {
-      const urlObject = { thumbnail: url, giant: url };
+      const urlObject = { thumbnail: url, giant: url, gif: url };
       const [thumb, size, mobile, mp4, giant] = [
         'thumbs.',
         '-size_restricted.gif',
@@ -54,14 +54,15 @@ function GifMarkdownParser() {
 
       if (url.includes(mp4) && !url.includes(mobile)) {
         urlObject.thumbnail = urlObject.thumbnail.replace(mp4, mobile);
-      }
-
-      if (url.includes(mobile)) {
+        urlObject.gif = urlObject.gif.replace(mp4, size);
+      } else if (url.includes(mobile)) {
         urlObject.giant = urlObject.giant.replace(mobile, mp4);
+        urlObject.gif = urlObject.gif.replace(mobile, size);
       }
 
       if (url.includes(giant)) {
         urlObject.thumbnail = url.replace(giant, thumb);
+        urlObject.gif = urlObject.gif.replace(giant, thumb);
       }
 
       return urlObject;
@@ -92,18 +93,21 @@ function GifMarkdownParser() {
 const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => (
     <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      <video
-        className="guide-section__markdown__gifs__gif"
-        autoPlay
-        loop
-        muted
-        disableRemotePlayback
-      >
-        <EuiHideFor sizes={['xs', 's']}>
+      <EuiHideFor sizes={['xs', 's']}>
+        <video
+          className="guide-section__markdown__gifs__gif"
+          autoPlay
+          loop
+          muted
+          disableRemotePlayback
+        >
           <source src={url.giant} type="video/mp4"></source>
-        </EuiHideFor>
-        <source src={url.thumbnail} type="video/mp4"></source>
-      </video>
+          <source src={url.thumbnail} type="video/mp4"></source>
+        </video>
+      </EuiHideFor>
+      <EuiHideFor sizes={['m', 'l', 'xl']}>
+        <img className="guide-section__markdown__gifs__gif" src={url.gif}></img>
+      </EuiHideFor>
     </EuiAspectRatio>
   ));
   return <div className="guide-section__markdown_gifs">{gifs}</div>;
