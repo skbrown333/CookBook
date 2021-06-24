@@ -38,6 +38,9 @@ export const DISCORD = {
  */
 
 export const CHARACTERS = characterIcons;
+export const CHARACTER = {
+  route: '/characters',
+};
 
 /**
  * Roles

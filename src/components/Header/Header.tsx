@@ -54,7 +54,8 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
             value: d.subdomain,
             inputDisplay: (
               <span className="character-select__character">
-                <img src={CHARACTERS[d.name]} /> {`${d.subdomain}.cookbook.gg`}
+                <img src={CHARACTERS[d.character.name]} />{' '}
+                {`${d.subdomain}.cookbook.gg`}
               </span>
             ),
           };

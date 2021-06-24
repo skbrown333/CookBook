@@ -22,7 +22,7 @@ export interface GuideDetailSideNavProps {
   editing: boolean;
   title: string;
   sections: Array<Post>;
-  character: string | null;
+  character: any | null;
   handleDragEnd: (result) => void;
 }
 
@@ -104,7 +104,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
           className="side-nav__header__avatar"
           name={title}
           color={null}
-          iconType={character ? CHARACTERS[character] : CHARACTERS.sandbag}
+          iconType={character ? CHARACTERS[character.name] : CHARACTERS.sandbag}
         ></EuiAvatar>
         {title}
       </div>

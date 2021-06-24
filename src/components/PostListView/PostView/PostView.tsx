@@ -49,7 +49,9 @@ export const PostView: FunctionComponent<PostProps> = ({
             className="post__title__avatar"
             name={title}
             color={null}
-            iconType={character ? CHARACTERS[character] : CHARACTERS.sandbag}
+            iconType={
+              character ? CHARACTERS[character.name] : CHARACTERS.sandbag
+            }
             iconSize="xl"
             size="l"
           ></EuiAvatar>
