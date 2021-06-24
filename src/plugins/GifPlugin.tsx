@@ -34,23 +34,37 @@ function GifMarkdownParser() {
     }
 
     const gfyTransform = (url) => {
-      const [giant, mp4] = ['giant.', '.mp4'];
-      const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
-      if (url.includes(giant) && url.includes(mp4)) return url;
-      if (
-        url.includes(thumb) &&
-        (url.includes(size) || url.includes('-mobile.mp4'))
-      ) {
-        url = url.replace(thumb, giant);
-        url = url.replace(size, mp4);
-        url = url.replace('-mobile.mp4', mp4);
-        return url;
+      const urlObject = { thumbnail: url, giant: url };
+      const [thumb, size, mobile, mp4, giant] = [
+        'thumbs.',
+        '-size_restricted.gif',
+        '-mobile.mp4',
+        '.mp4',
+        'giant.',
+      ];
+
+      if (url.includes(thumb)) {
+        urlObject.giant = url.replace(thumb, giant);
       }
-      const splitUrl = url.split('/');
-      const [, , gfy, path] = splitUrl;
-      splitUrl[3] = path + mp4;
-      splitUrl[2] = giant + gfy;
-      return splitUrl.join('/');
+
+      if (url.includes(size)) {
+        urlObject.thumbnail = urlObject.thumbnail.replace(size, mobile);
+        urlObject.giant = urlObject.giant.replace(size, mp4);
+      }
+
+      if (url.includes(mp4) && !url.includes(mobile)) {
+        urlObject.thumbnail = urlObject.thumbnail.replace(mp4, mobile);
+      }
+
+      if (url.includes(mobile)) {
+        urlObject.giant = urlObject.giant.replace(mobile, mp4);
+      }
+
+      if (url.includes(giant)) {
+        urlObject.thumbnail = url.replace(giant, thumb);
+      }
+
+      return urlObject;
     };
 
     urls = urls.map((url) => {
@@ -80,10 +94,14 @@ const GifMarkdownRenderer = ({ gif }) => {
     <EuiAspectRatio width={16} height={9} maxWidth={800}>
       <video
         className="guide-section__markdown__gifs__gif"
-        src={url}
         autoPlay
         loop
-      />
+        muted
+        disableRemotePlayback
+      >
+        <source src={url.giant} type="video/mp4"></source>
+        <source src={url.thumbnail} type="video/mp4"></source>
+      </video>
     </EuiAspectRatio>
   ));
   return <div className="guide-section__markdown_gifs">{gifs}</div>;
