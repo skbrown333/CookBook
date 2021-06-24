@@ -35,11 +35,12 @@ function GifMarkdownParser() {
 
     const gfyTransform = (url) => {
       const [giant, mp4] = ['giant.', '.mp4'];
-      const [thumb, size] = ['thumb.', '-size_restricted.gif'];
+      const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
       if (url.includes(giant) && url.includes(mp4)) return url;
-      if (url.includes(thumb) && url.includes(size)) {
+      if (url.includes(thumb) && (url.includes(size) || url.includes('-mobile.mp4'))) {
         url = url.replace(thumb, giant);
         url = url.replace(size, mp4);
+        url = url.replace('-mobile.mp4', mp4);
         return url;
       }
       const splitUrl = url.split('/');
