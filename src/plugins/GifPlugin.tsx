@@ -37,7 +37,10 @@ function GifMarkdownParser() {
       const [giant, mp4] = ['giant.', '.mp4'];
       const [thumb, size] = ['thumbs.', '-size_restricted.gif'];
       if (url.includes(giant) && url.includes(mp4)) return url;
-      if (url.includes(thumb) && (url.includes(size) || url.includes('-mobile.mp4'))) {
+      if (
+        url.includes(thumb) &&
+        (url.includes(size) || url.includes('-mobile.mp4'))
+      ) {
         url = url.replace(thumb, giant);
         url = url.replace(size, mp4);
         url = url.replace('-mobile.mp4', mp4);
