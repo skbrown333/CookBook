@@ -20,15 +20,9 @@
     padding: 16px;
   }
 
-  &__streams {
-    overflow: auto;
+  &__input {
+    margin-top: 4px;
   }
-
-  &__add {
-    margin: 8px auto;
-    width: 100% !important;
-  }
-
   .stream {
     display: flex;
     align-items: center;
@@ -38,6 +32,7 @@
 
     &__delete {
       flex-shrink: 0;
+      border-radius: 50%;
     }
 
     &:hover {

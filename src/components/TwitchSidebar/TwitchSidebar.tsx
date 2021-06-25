@@ -116,7 +116,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
       return isAdmin() ? (
         <EuiButtonIcon
           className="stream__delete"
-          aria-label="delete stream"
+          aria-label={`Remove ${user_name}`}
           iconType="minusInCircle"
           size="m"
           color="danger"
@@ -126,6 +126,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
         <></>
       );
     };
+
     online = streams.data.map((stream, index) => {
       const { user_name, game_name, viewer_count, user_login } = stream;
       let img;
