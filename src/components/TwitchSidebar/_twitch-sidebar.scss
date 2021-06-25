@@ -36,6 +36,10 @@
     padding: 16px 8px;
     cursor: pointer;
 
+    &__delete {
+      flex-shrink: 0;
+    }
+
     &:hover {
       background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
       border-radius: 4px;

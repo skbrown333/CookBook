@@ -118,7 +118,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
         <EuiButtonIcon
           className="stream__delete"
           aria-label="delete stream"
-          iconType="cross"
+          iconType="minusInCircle"
           size="m"
           color="danger"
           onClick={(e) => removeStream(e, user_name)}
