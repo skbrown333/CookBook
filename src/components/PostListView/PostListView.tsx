@@ -37,12 +37,11 @@ import { Tag } from '../../models/Tag';
 import { parsingList, processingList, uiList } from '../../plugins';
 
 /* Context */
-import { Firebase, FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
-import { updateAddStatus, updateTwitch } from '../../store/actions';
+import { updateAddStatus } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
 import PostService from '../../services/PostService/PostService';
 
@@ -72,28 +71,12 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const firebase = useContext<Firebase | null>(FirebaseContext);
   const { cookbook, user, add } = state;
   const toast = new ToastService();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const [page, setPage] = useState(1);
   const postService = new PostService(cookbook._id);
-
-  useEffect(() => {
-    async function init() {
-      if (firebase) {
-        try {
-          dispatch(
-            updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
-          );
-        } catch (err) {
-          toast.errorToast('Error Getting Streams', err.message);
-        }
-      }
-    }
-    init();
-  }, []);
 
   useEffect(() => {
     setHasNextPage(true);
