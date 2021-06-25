@@ -58,7 +58,6 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   }, []);
 
   const handleClick = (login) => {
-    console.log(login);
     window.open('https://www.twitch.tv/' + login, '_blank');
   };
 
