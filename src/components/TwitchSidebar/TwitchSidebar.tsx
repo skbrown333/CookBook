@@ -1,29 +1,134 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 
-import { EuiAvatar, EuiListGroup, EuiHealth } from '@elastic/eui';
+import {
+  EuiAvatar,
+  EuiListGroup,
+  EuiHealth,
+  EuiFieldText,
+  EuiButtonIcon,
+} from '@elastic/eui';
+
+/* Constants */
+import { ROLES } from '../../constants/constants';
 
 /* Styles */
 import './_twitch-sidebar.scss';
 
 /* Store */
+import { updateTwitch } from '../../store/actions';
+
+/* Context */
+import { Firebase, FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
+
+/* Services */
+import CookbookService from '../../services/CookbookService/CookbookService';
+import { ToastService } from '../../services/ToastService';
 
 export interface TwitchSidebarProps {
   className: string;
 }
 export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   const { twitch } = useContext(Context)[0];
+  const [streamInput, setStreamInput] = useState('');
+  const [state, dispatch] = useContext(Context);
+  const { cookbook, user } = state;
+  const cookbookService = new CookbookService();
+  const firebase = useContext<Firebase | null>(FirebaseContext);
+  const toast = new ToastService();
 
-  const handleClick = (url) => {
-    window.open(url, '_blank');
+  useEffect(() => {
+    async function init() {
+      if (firebase) {
+        try {
+          dispatch(
+            updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
+          );
+        } catch (err) {
+          toast.errorToast('Error Getting Streams', err.message);
+        }
+      }
+    }
+    init();
+  }, []);
+
+  const handleClick = (login) => {
+    console.log(login);
+    window.open('https://www.twitch.tv/' + login, '_blank');
   };
+
+  const isAdmin = () => {
+    return user && ROLES.admin.includes(cookbook.roles[user.uid]);
+  };
+
+  const updateStreams = async (streams) => {
+    const token = await user.user.getIdToken();
+    await cookbookService.update(
+      cookbook._id,
+      { streams: streams },
+      {
+        Authorization: `Bearer ${token}`,
+      },
+    );
+    if (firebase) {
+      dispatch(updateTwitch(await firebase.getTwitchStreams(streams)));
+    }
+  };
+
+  const currentStreams = () => {
+    const { streams, users } = twitch;
+    const cookStreams = streams.data
+      .map((entry) => entry.user_login)
+      .concat(users.data.map((entry) => entry.login));
+    return cookStreams;
+  };
+
+  const removeStream = (e, stream) => {
+    e.stopPropagation();
+    const cookStreams = currentStreams().filter((entry) => entry !== stream);
+    updateStreams(cookStreams);
+    toast.successToast('Removed ' + stream);
+  };
+
+  const addStream = async (e) => {
+    if (e.keyCode === 13) {
+      const cookStreams = currentStreams();
+      if (!cookStreams.includes(streamInput.toLowerCase())) {
+        const newStreams = cookStreams.concat(streamInput);
+        updateStreams(newStreams);
+        toast.successToast('Added ' + streamInput);
+      }
+      setStreamInput('');
+    }
+  };
+
   const buildStreams = () => {
     if (!twitch) return;
     const { streams, users } = twitch;
     let online = [];
     let offline = [];
+
+    const deleteElem = (user_name) => {
+      return isAdmin() ? (
+        <EuiButtonIcon
+          className="stream__delete"
+          aria-label="delete stream"
+          iconType="cross"
+          size="m"
+          color="danger"
+          onClick={(e) => removeStream(e, user_name)}
+        />
+      ) : (
+        <></>
+      );
+    };
     online = streams.data.map((stream, index) => {
-      const { user_name, game_name, viewer_count } = stream;
+      const { user_name, game_name, viewer_count, user_login } = stream;
       let img;
       users.data.forEach((user: any) => {
         if (user.id === stream.user_id) {
@@ -33,7 +138,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
       return (
         <div
           className="stream"
-          onClick={() => handleClick('https://www.twitch.tv/' + user_name)}
+          onClick={() => handleClick(user_login)}
           key={`online-${index}`}
         >
           <EuiAvatar imageUrl={img} size="l" name="avatar" />
@@ -46,6 +151,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
             </div>
             <div className="stream-info__game">{game_name}</div>
           </div>
+          {deleteElem(user_login)}
         </div>
       );
     });
@@ -61,7 +167,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
       return (
         <div
           className="stream"
-          onClick={() => handleClick('https://www.twitch.tv/' + login)}
+          onClick={() => handleClick(login)}
           key={`offline-${index}`}
         >
           <EuiAvatar
@@ -74,6 +180,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
             <div className="stream-info__title">{display_name}</div>
             <div className="stream-info__game">Offline</div>
           </div>
+          {deleteElem(login)}
         </div>
       );
     });
@@ -86,6 +193,15 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
         <div className="twitch-sidebar__header">Twitch</div>
         <div className="twitch-sidebar__streams">
           <EuiListGroup gutterSize="none">{buildStreams()}</EuiListGroup>
+          {isAdmin() && (
+            <EuiFieldText
+              className="twitch-sidebar__input"
+              placeholder="new stream username"
+              value={streamInput}
+              onChange={(e) => setStreamInput(e.target.value)}
+              onKeyDown={addStream}
+            />
+          )}
         </div>
       </div>
     </div>
