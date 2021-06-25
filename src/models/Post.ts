@@ -5,7 +5,7 @@ export interface Post {
   cre_account?: any;
   body: string;
   tags: Array<Tag>;
-  character?: string;
+  character?: any;
   cre_date: Date;
   doc_ref?: any;
   doc?: any;

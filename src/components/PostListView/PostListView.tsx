@@ -268,7 +268,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
             </EuiFormRow>
             <EuiFormRow label="Select Character (optional)">
               <CharacterSelect
-                value={character}
+                value={character ? character._id : null}
                 onChange={(value) => updateSection('character', value)}
               />
             </EuiFormRow>
