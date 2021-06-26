@@ -20,6 +20,7 @@ import { Tag } from '../../../models/Tag';
 
 /* Plugins */
 import { parsingList, processingList, uiList } from '../../../plugins';
+import { TagHolder } from '../../TagHolder/TagHolder';
 
 export interface GuideDetailSectionProps {
   title: string;
@@ -117,13 +118,10 @@ export const GuideDetailSection: FunctionComponent<GuideDetailSectionProps> = ({
                 {body}
               </EuiMarkdownFormat>
               <EuiSpacer size="s" />
-              <div className="tag-holder guide-section__tags">
-                {tags.map((tag, index) => (
-                  <EuiBadge key={index} className="tag" color="hollow">
-                    #{tag.label}
-                  </EuiBadge>
-                ))}
-              </div>
+              <TagHolder
+                className="tag-holder guide-section__tags"
+                tags={tags}
+              />
             </>
           )}
         </div>

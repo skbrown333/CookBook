@@ -15,6 +15,7 @@ import { Context } from '../../../store/Store';
 
 /* Styles */
 import './_guide-card.scss';
+import { TagHolder } from '../../TagHolder/TagHolder';
 
 export interface GuideCardProps {
   guide: Guide;
@@ -76,16 +77,9 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
       </div>
       <div className="guide-card__content">
         <div className="guide-card__content__description">{description}</div>
-        <div className="guide-card__content__footer">
-          {tags &&
-            tags.map((tag, index) => {
-              return (
-                <EuiBadge key={`tag-${index}`} color="hollow">
-                  {tag.label}
-                </EuiBadge>
-              );
-            })}
-        </div>
+        {tags && (
+          <TagHolder tags={tags} className="guide-card__content__footer" />
+        )}
       </div>
     </EuiPanel>
   );

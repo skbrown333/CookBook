@@ -13,6 +13,7 @@ import {
   EuiButtonIcon,
   EuiAvatar,
 } from '@elastic/eui';
+import { TagHolder } from '../../TagHolder/TagHolder';
 
 /* Styles */
 import './_post-view.scss';
@@ -89,13 +90,7 @@ export const PostView: FunctionComponent<PostProps> = ({
             {body}
           </EuiMarkdownFormat>
         </div>
-        <div className="post__footer">
-          {tags.map((tag, index) => (
-            <EuiBadge key={index} className="tag" color="hollow">
-              #{tag.label}
-            </EuiBadge>
-          ))}
-        </div>
+        <TagHolder className="post__footer" tags={tags} />
       </div>
     </EuiPanel>
   );
