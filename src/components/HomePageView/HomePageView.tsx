@@ -16,9 +16,6 @@ import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 import { ContributorSideBar } from '../ContributorSideBar/ContributorSideBar';
 import debounce from 'lodash.debounce';
 
-/* Services */
-import { ToastService } from '../../services/ToastService';
-
 /* Context */
 import { Context } from '../../store/Store';
 import { updateAddStatus } from '../../store/actions';
