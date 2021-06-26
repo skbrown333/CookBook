@@ -1,15 +1,9 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 
 /* Components */
 import {
   EuiMarkdownFormat,
   EuiPanel,
-  EuiBadge,
   EuiButtonIcon,
   EuiAvatar,
 } from '@elastic/eui';
