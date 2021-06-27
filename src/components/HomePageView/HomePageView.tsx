@@ -20,8 +20,12 @@ import debounce from 'lodash.debounce';
 import { Context } from '../../store/Store';
 import { updateAddStatus } from '../../store/actions';
 
+/* Services */
+import TagService from '../../services/TagService/TagService';
+
 /* Styles */
 import './_home-page-view.scss';
+import { Tag } from '../../models/Tag';
 
 export interface HomePageViewProps {
   index?: number;
@@ -47,6 +51,19 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const [adding, setAdding] = useState(history.location.pathname);
   const [dbSearch, setDbSearch] = useState(startQuery);
 
+  const [state] = useContext(Context);
+  const { cookbook } = state;
+  const tagService = new TagService(cookbook._id);
+  const [tags, setTags] = useState(Array<Tag>());
+
+  useEffect(() => {
+    const init = async () => {
+      const tags = await tagService.get();
+      setTags(tags);
+    };
+    init();
+  }, []);
+
   const handleChange = (index) => {
     switch (index) {
       case 0:
@@ -66,7 +83,6 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
   useEffect(() => {
     const params = new URLSearchParams();
-
     if (searchText) {
       params.append('search', searchText);
     } else {
@@ -97,16 +113,19 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     <div id="home-view">
       <ContributorSideBar />
       <div className="home-view">
-        <SearchCreateBar
-          handleSearch={handleSearch}
-          handleFilterChange={handleFilterChange}
-          handlePlus={() => {
-            setAdding(history.location.pathname);
-            dispatch(updateAddStatus(true));
-          }}
-          actualSearchText={searchText}
-          selectedFilterStrings={filterStringArray}
-        />
+        {tags.length > 0 && (
+          <SearchCreateBar
+            initialTags={tags}
+            handleSearch={handleSearch}
+            handleFilterChange={handleFilterChange}
+            handlePlus={() => {
+              setAdding(history.location.pathname);
+              dispatch(updateAddStatus(true));
+            }}
+            actualSearchText={searchText}
+            selectedFilterStrings={filterStringArray}
+          />
+        )}
         <SwipeableViews onChangeIndex={handleChange} index={index}>
           <PostListView
             adding={adding}

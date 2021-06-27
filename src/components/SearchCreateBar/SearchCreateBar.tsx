@@ -24,18 +24,24 @@ import {
 
 /* Context */
 import { Context } from '../../store/Store';
-import TagService from '../../services/TagService/TagService';
 
+/* Services */
 import { ToastService } from '../../services/ToastService';
+
+/* Constants */
 import { ROLES } from '../../constants/constants';
+
+/* Models */
+import { Tag } from '../../models/Tag';
 
 export interface SearchCreateBarProp {
   handlePlus: () => void;
   handleSearch: (e) => void;
-  handleFilterChange?: (filters: any) => void;
+  handleFilterChange: (filters: any) => void;
   className?: string;
   actualSearchText?: string;
   selectedFilterStrings?: any;
+  initialTags: Array<Tag>;
 }
 
 export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
@@ -45,6 +51,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   className,
   actualSearchText,
   selectedFilterStrings,
+  initialTags,
 }) => {
   const [state] = useContext(Context);
   const { cookbook, user } = state;
@@ -52,34 +59,31 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<any>([]);
   const [searchText, setSearchText] = useState('');
-  const tagService = new TagService(cookbook._id);
+  const [filterCount, setFilterCount] = useState(selectedFilterStrings.length);
   const toast = new ToastService();
+
+  const getAppliedFilters = () => items.filter((item) => item.checked);
+
+  useEffect(() => {
+    if (filterCount != selectedFilterStrings.length) {
+      console.log(selectedFilterStrings);
+      handleFilterChange(getAppliedFilters());
+      setFilterCount(selectedFilterStrings.length);
+    }
+  }, [selectedFilterStrings]);
 
   useEffect(() => {
     async function init() {
       setLoading(true);
-      setItems([]);
       try {
-        let tags = await tagService.get();
-        tags = tags.map((tag) => {
+        const tags = initialTags.map((tag) => {
           if (selectedFilterStrings.includes(tag.label)) {
-            tag.checked = 'on';
+            tag.checked = true;
           }
           return tag;
         });
 
-        if (handleFilterChange) {
-          handleFilterChange(
-            tags
-              .filter((item) => item.checked && item.checked === 'on')
-              .map((i) => {
-                return {
-                  label: i.label,
-                  _id: i._id,
-                };
-              }),
-          );
-        }
+        handleFilterChange(getAppliedFilters());
 
         setItems([...tags]);
         setLoading(false);
@@ -107,27 +111,9 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   function updateItem(item) {
     const newItems = [...items];
 
-    switch (item.checked) {
-      case 'on':
-        item.checked = undefined;
-        break;
+    item.checked = item.checked ? false : true;
 
-      default:
-        item.checked = 'on';
-    }
-
-    if (handleFilterChange) {
-      handleFilterChange(
-        newItems
-          .filter((item) => item.checked && item.checked === 'on')
-          .map((i) => {
-            return {
-              label: i.label,
-              _id: i._id,
-            };
-          }),
-      );
-    }
+    handleFilterChange(getAppliedFilters());
 
     setItems([...newItems]);
   }
@@ -138,8 +124,8 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
       onClick={onButtonClick}
       isSelected={isPopoverOpen}
       numFilters={items.length}
-      hasActiveFilters={!!items.find((item) => item.checked === 'on')}
-      numActiveFilters={items.filter((item) => item.checked === 'on').length}
+      hasActiveFilters={!!items.find((item) => item.checked)}
+      numActiveFilters={items.filter((item) => item.checked).length}
     >
       Tags
     </EuiFilterButton>
