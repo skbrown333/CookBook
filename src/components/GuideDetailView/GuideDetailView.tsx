@@ -43,6 +43,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const [collapsed, setCollapsed] = useState<Array<boolean>>(
       Array<boolean>(),
     );
+    const [allCollapsed, setAllCollapsed] = useState(false);
     const [guide, setGuide] = useState<Guide | null>(null);
     const [state] = useContext(Context);
     const { cookbook, user } = state;
@@ -56,10 +57,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
         slug: guideSlug.toLowerCase(),
       });
       setGuide(guide[0]);
+      return guide[0];
     };
 
     useEffect(() => {
-      getGuide();
+      const init = async () => {
+        const setterGuide = await getGuide();
+        setCollapsed(Array(setterGuide.sections.length).fill(false));
+      };
+      init();
     }, []);
 
     const updateSection = (key, value, index) => {
@@ -83,8 +89,18 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
 
     const handleCancel = async () => {
       await getGuide();
-      setCollapsed(Array(guide?.sections.length).fill(false));
+      handleExpandAll();
       setEditing(false);
+    };
+
+    const handleExpandAll = () => {
+      setCollapsed(Array(guide?.sections.length).fill(false));
+      setAllCollapsed(false);
+    };
+
+    const handleCollapseAll = () => {
+      setCollapsed(Array(guide?.sections.length).fill(true));
+      setAllCollapsed(true);
     };
 
     const handleDelete = (index) => {
@@ -113,7 +129,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
           },
         );
         toast.successToast('Guide saved!', 'Guide saved');
-        setCollapsed(Array(guide.sections.length).fill(false));
+        handleExpandAll();
         await getGuide();
         setEditing(false);
       } catch (error) {
@@ -173,6 +189,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
           </EuiDraggable>
         ) : (
           <GuideDetailSection
+            key={index}
             title={title}
             body={body}
             index={index}
@@ -198,10 +215,13 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
               >
                 <GuideDetailHeader
                   editing={editing}
+                  allCollapsed={allCollapsed}
                   handleCancel={handleCancel}
                   handleSave={handleSave}
                   handleAddSection={handleAddSection}
                   handleSetEditing={handleSetEditing}
+                  handleCollapseAll={handleCollapseAll}
+                  handleExpandAll={handleExpandAll}
                   sections={guide.sections}
                   title={guide.title}
                   character={guide.character}

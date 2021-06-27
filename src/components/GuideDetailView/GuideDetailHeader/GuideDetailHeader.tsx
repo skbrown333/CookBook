@@ -26,18 +26,24 @@ export interface GuideDetailHeaderProps {
   character: string | null;
   showControls: boolean;
   sections: Array<Post>;
+  allCollapsed: boolean;
   handleCancel: () => void;
   handleSave: () => void;
   handleAddSection: () => void;
   handleSetEditing: (isEditing: boolean) => void;
+  handleCollapseAll: () => void;
+  handleExpandAll: () => void;
 }
 
 export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   editing,
+  allCollapsed,
   handleCancel,
   handleAddSection,
   handleSave,
   handleSetEditing,
+  handleCollapseAll,
+  handleExpandAll,
   title,
   character,
   sections,
@@ -107,52 +113,75 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
           <p>{title}</p>
         </EuiTitle>
       </div>
-      {editing ? (
-        <div className="guide-header__controls">
+      <div className="guide-header__controls">
+        {allCollapsed ? (
           <EuiButtonIcon
-            aria-label="cancel"
+            aria-label="expand all"
             className="guide-header__controls__button"
             display="fill"
-            iconType="cross"
-            color="danger"
-            onClick={handleCancel}
+            iconType="arrowDown"
             size="m"
             iconSize="l"
+            onClick={handleExpandAll}
           />
+        ) : (
           <EuiButtonIcon
-            aria-label="save"
+            aria-label="collapse all"
             className="guide-header__controls__button"
             display="fill"
-            iconType="save"
-            color="success"
-            onClick={handleSave}
+            iconType="arrowUp"
             size="m"
             iconSize="l"
+            onClick={handleCollapseAll}
           />
-          <EuiButtonIcon
-            aria-label="add"
-            className="guide-header__controls__button"
-            display="fill"
-            iconType="plus"
-            color="success"
-            onClick={handleAddSection}
-            size="m"
-            iconSize="l"
-          />
-        </div>
-      ) : (
-        showControls && (
-          <EuiButtonIcon
-            aria-label="edit"
-            className="guide-header__controls__edit"
-            display="fill"
-            iconType="pencil"
-            size="m"
-            iconSize="l"
-            onClick={() => handleSetEditing(!editing)}
-          />
-        )
-      )}
+        )}
+        {editing ? (
+          <>
+            <EuiButtonIcon
+              aria-label="cancel"
+              className="guide-header__controls__button"
+              display="fill"
+              iconType="cross"
+              color="danger"
+              onClick={handleCancel}
+              size="m"
+              iconSize="l"
+            />
+            <EuiButtonIcon
+              aria-label="save"
+              className="guide-header__controls__button"
+              display="fill"
+              iconType="save"
+              color="success"
+              onClick={handleSave}
+              size="m"
+              iconSize="l"
+            />
+            <EuiButtonIcon
+              aria-label="add"
+              className="guide-header__controls__button"
+              display="fill"
+              iconType="plus"
+              color="success"
+              onClick={handleAddSection}
+              size="m"
+              iconSize="l"
+            />
+          </>
+        ) : (
+          showControls && (
+            <EuiButtonIcon
+              aria-label="edit"
+              className="guide-header__controls__edit"
+              display="fill"
+              iconType="pencil"
+              size="m"
+              iconSize="l"
+              onClick={() => handleSetEditing(!editing)}
+            />
+          )
+        )}
+      </div>
       {flyoutVis && flyout()}
     </div>
   );
