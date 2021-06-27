@@ -21,8 +21,7 @@ import { ToastService } from '../../services/ToastService';
 
 /* Context */
 import { Context } from '../../store/Store';
-import { Firebase, FirebaseContext } from '../../firebase';
-import { updateAddStatus, updateTwitch } from '../../store/actions';
+import { updateAddStatus } from '../../store/actions';
 
 /* Styles */
 import './_home-page-view.scss';
@@ -44,10 +43,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     filterString.length > 0
       ? filterString.split('+').map((filter) => decodeURI(filter))
       : [];
-  const [state, dispatch] = useContext(Context);
-  const toast = new ToastService();
-  const firebase = useContext<Firebase | null>(FirebaseContext);
-  const { cookbook } = state;
+  const [, dispatch] = useContext(Context);
   const history = useHistory();
   const [searchText, setSearchText] = useState(startQuery);
   const [filters, setFilters] = useState<any>([]);
@@ -70,21 +66,6 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     debounce((search) => setDbSearch(search), 500),
     [], // will be created only once initially
   );
-
-  useEffect(() => {
-    async function init() {
-      if (firebase) {
-        try {
-          dispatch(
-            updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
-          );
-        } catch (err) {
-          toast.errorToast('Error Getting Streams', err.message);
-        }
-      }
-    }
-    init();
-  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams();

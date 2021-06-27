@@ -36,7 +36,7 @@ import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
 /* Context */
 import { Firebase, FirebaseContext } from '../../firebase';
 import { Context } from '../../store/Store';
-import { updateAddStatus, updateTwitch } from '../../store/actions';
+import { updateAddStatus } from '../../store/actions';
 
 /* Constants */
 import { CHARACTERS } from '../../constants/constants';
@@ -95,16 +95,6 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
         setGuides(await getGuides());
       } catch (err) {
         toast.errorToast('Error getting guides', err.message);
-      }
-
-      if (firebase) {
-        try {
-          dispatch(
-            updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
-          );
-        } catch (err) {
-          toast.errorToast('Error Getting Streams', err.message);
-        }
       }
     }
     init();
