@@ -50,7 +50,9 @@ export const PostView: FunctionComponent<PostProps> = ({
             name={title}
             color={null}
             iconType={
-              character ? CHARACTERS[character.name] : CHARACTERS.sandbag
+              character
+                ? CHARACTERS[cookbook.game.name][character.name]
+                : CHARACTERS.melee.sandbag
             }
             iconSize="xl"
             size="l"

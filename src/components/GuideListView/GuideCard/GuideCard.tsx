@@ -32,7 +32,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
   const { title, character, tags, description, slug } = guide;
   const { cookbook, user } = state;
   const redirectToGuide = () => {
-    history.push(`/recipes/${slug}`);
+    history.push(`/${cookbook.name}/recipes/${slug}`);
   };
 
   return (
@@ -48,7 +48,9 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
             name={title}
             color={null}
             iconType={
-              character ? CHARACTERS[character.name] : CHARACTERS.sandbag
+              character
+                ? CHARACTERS[cookbook.game.name][character.name]
+                : CHARACTERS.melee.sandbag
             }
             iconSize="xl"
             size="l"
