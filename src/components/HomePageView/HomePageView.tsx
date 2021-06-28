@@ -116,7 +116,8 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
   return (
     <div id="home-view">
-      {cookbook && (<>
+      {cookbook && (
+        <>
           <ContributorSideBar />
           <div className="home-view">
             <SearchCreateBar
@@ -142,7 +143,8 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
               />
             </SwipeableViews>
           </div>
-          <TwitchSidebar className="home-view__twitch" /></>
+          <TwitchSidebar className="home-view__twitch" />
+        </>
       )}
     </div>
   );
