@@ -126,7 +126,8 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
     const protocol = window.location.host.includes('localhost')
       ? 'http'
       : 'https';
-    window.location.href = `${protocol}://${selectedGame.subdomain}.${domain}/${_cookbook.name}`;
+    const suffix = window.location.host.includes('localhost') ? '' : '.gg';
+    window.location.href = `${protocol}://${selectedGame.subdomain}.${domain}${suffix}/${_cookbook.name}`;
   };
 
   return (
