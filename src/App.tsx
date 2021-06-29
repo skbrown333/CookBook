@@ -59,7 +59,10 @@ export const App: FunctionComponent = () => {
       try {
         const domains = window.location.host.split('.');
         const subdomain =
-          domains.length >= 2 && domains[0] !== 'dev' ? domains[0] : 'melee';
+          (domains.length >= 3 && domains[0] !== 'dev') ||
+          window.location.host.includes('localhost')
+            ? domains[0]
+            : 'melee';
         const games = await gameService.get({ subdomain: subdomain });
         setCookbooks(await cookbookService.get({ game: games[0]._id }));
 
