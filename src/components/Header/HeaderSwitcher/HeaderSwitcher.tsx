@@ -121,12 +121,11 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
   };
   const handleCharacterChange = (_cookbook) => {
     setIsOpen(false);
+    const isLocal = window.location.host.includes('localhost');
     const domains = window.location.host.split('.');
-    const domain = domains.length >= 2 ? domains[1] : domains[0];
-    const protocol = window.location.host.includes('localhost')
-      ? 'http'
-      : 'https';
-    const suffix = window.location.host.includes('localhost') ? '' : '.gg';
+    const domain = domains.length >= 3 || isLocal ? domains[1] : domains[0];
+    const protocol = isLocal ? 'http' : 'https';
+    const suffix = isLocal ? '' : '.gg';
     window.location.href = `${protocol}://${selectedGame.subdomain}.${domain}${suffix}/${_cookbook.name}`;
   };
 
