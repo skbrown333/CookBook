@@ -1,0 +1,104 @@
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+
+.switcher {
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+
+  span {
+    margin-right: 12px;
+  }
+
+  img {
+    margin-left: 12px;
+    margin-right: 12px;
+    width: 24px;
+    height: 24px;
+  }
+}
+.header-switcher {
+  &__content {
+    display: flex;
+    height: 400px;
+
+    .header-switcher__game {
+      flex: 1;
+      max-width: 400px;
+    }
+    .header-switcher__character {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .header-switcher__games {
+      overflow: auto;
+
+      .game {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        padding: 8px 8px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &.selected {
+          background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+        }
+
+        &:hover {
+          background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+        }
+
+        img {
+          height: 24px;
+          width: 24px;
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .header-switcher__characters {
+      overflow: auto;
+
+      .character {
+        display: flex;
+        align-items: center;
+        padding: 8px 8px;
+        cursor: pointer;
+
+        &.selected {
+          background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+        }
+
+        &:hover {
+          background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+        }
+
+        span {
+          font-weight: 600;
+        }
+
+        img {
+          height: 24px;
+          width: 24px;
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+.header-switcher__popover {
+  left: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  box-shadow: none !important;
+  max-height: 400px !important;
+  overflow: hidden !important;
+
+  .euiPopover__panelArrow,
+  .euiPopover__panelArrow--bottom {
+    display: none !important;
+  }
+}

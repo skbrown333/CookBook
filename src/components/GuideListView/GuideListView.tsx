@@ -101,7 +101,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
   }, []);
 
   useEffect(() => {
-    if (add && adding === '/recipes') {
+    if (add && adding.includes('/recipes')) {
       setGuide(emptyGuide);
       setShowAdd(true);
       setShowErrors(false);
@@ -235,7 +235,7 @@ export const GuideListView: FunctionComponent<GuideListViewProps> = ({
       toast.successToast(
         guide.title,
         'Guide succesfully created',
-        character ? CHARACTERS[character] : null,
+        character ? CHARACTERS[cookbook.game.name][character] : null,
       );
     } catch (err) {
       toast.errorToast('Failed to create guide', err.message);

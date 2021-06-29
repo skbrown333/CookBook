@@ -59,7 +59,7 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
         value: _id,
         inputDisplay: (
           <span className="character-select__character">
-            <img src={CHARACTERS[name]} /> {display_name}
+            <img src={CHARACTERS[cookbook.game.name][name]} /> {display_name}
           </span>
         ),
       };
