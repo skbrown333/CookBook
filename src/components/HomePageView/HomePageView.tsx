@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 /* Components */
 import { PostListView } from '../PostListView/PostListView';
@@ -21,10 +21,11 @@ import { ToastService } from '../../services/ToastService';
 
 /* Context */
 import { Context } from '../../store/Store';
-import { updateAddStatus } from '../../store/actions';
+import { updateAddStatus, updateCookbook } from '../../store/actions';
 
 /* Styles */
 import './_home-page-view.scss';
+import CookbookService from '../../services/CookbookService/CookbookService';
 
 export interface HomePageViewProps {
   index?: number;
@@ -43,12 +44,16 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     filterString.length > 0
       ? filterString.split('+').map((filter) => decodeURI(filter))
       : [];
-  const [, dispatch] = useContext(Context);
+  const [state, dispatch] = useContext(Context);
+  const { cookbook, game } = state;
   const history = useHistory();
   const [searchText, setSearchText] = useState(startQuery);
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(history.location.pathname);
   const [dbSearch, setDbSearch] = useState(startQuery);
+  const cookbookService = new CookbookService();
+  const toast = new ToastService();
+  const cookbookSlug = useParams().cookbook;
 
   const handleChange = (index) => {
     switch (index) {
@@ -66,6 +71,19 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     debounce((search) => setDbSearch(search), 500),
     [], // will be created only once initially
   );
+
+  useEffect(() => {
+    async function init() {
+      try {
+        const cookbooks = await cookbookService.get({ name: cookbookSlug });
+        dispatch(updateCookbook(cookbooks[0]));
+      } catch (err) {
+        toast.errorToast('Error', err);
+      }
+    }
+
+    init();
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -98,32 +116,36 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
   return (
     <div id="home-view">
-      <ContributorSideBar />
-      <div className="home-view">
-        <SearchCreateBar
-          handleSearch={handleSearch}
-          handleFilterChange={handleFilterChange}
-          handlePlus={() => {
-            setAdding(history.location.pathname);
-            dispatch(updateAddStatus(true));
-          }}
-          actualSearchText={searchText}
-          selectedFilterStrings={filterStringArray}
-        />
-        <SwipeableViews onChangeIndex={handleChange} index={index}>
-          <PostListView
-            adding={adding}
-            filters={filters}
-            searchText={dbSearch}
-          />
-          <GuideListView
-            adding={adding}
-            filters={filters}
-            searchText={searchText}
-          />
-        </SwipeableViews>
-      </div>
-      <TwitchSidebar className="home-view__twitch" />
+      {cookbook && (
+        <>
+          <ContributorSideBar />
+          <div className="home-view">
+            <SearchCreateBar
+              handleSearch={handleSearch}
+              handleFilterChange={handleFilterChange}
+              handlePlus={() => {
+                setAdding(history.location.pathname);
+                dispatch(updateAddStatus(true));
+              }}
+              actualSearchText={searchText}
+              selectedFilterStrings={filterStringArray}
+            />
+            <SwipeableViews onChangeIndex={handleChange} index={index}>
+              <PostListView
+                adding={adding}
+                filters={filters}
+                searchText={dbSearch}
+              />
+              <GuideListView
+                adding={adding}
+                filters={filters}
+                searchText={searchText}
+              />
+            </SwipeableViews>
+          </div>
+          <TwitchSidebar className="home-view__twitch" />
+        </>
+      )}
     </div>
   );
 };

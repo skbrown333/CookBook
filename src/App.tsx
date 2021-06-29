@@ -4,7 +4,12 @@ import React, {
   FunctionComponent,
   useState,
 } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 
 /* Components */
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
@@ -23,37 +28,42 @@ import { DISCORD, ENV } from './constants/constants';
 /* Store */
 import { Firebase, FirebaseContext } from './firebase';
 import { Context } from './store/Store';
-import { updateUser, updateToasts, updateCookbook } from './store/actions';
+import {
+  updateUser,
+  updateToasts,
+  updateCookbook,
+  updateGame,
+} from './store/actions';
 
 /* Styles */
 import '@elastic/eui/dist/eui_theme_amsterdam_dark.css';
 import './App.scss';
 import CookbookService from './services/CookbookService/CookbookService';
 import axios from './services/axios.instance';
+import GameService from './services/GameService/GameService';
 
 const firebaseInstance = new Firebase();
 
 export const App: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
   const [loading, setLoading] = useState(true);
+  const [cookbooks, setCookbooks] = useState<any>([]);
   const { toasts } = state;
   const toast = new ToastService();
-  const { cookbook } = state;
+  const { game } = state;
   const cookbookService = new CookbookService();
+  const gameService = new GameService();
 
   useEffect(() => {
     async function init() {
       try {
         const domains = window.location.host.split('.');
         const subdomain =
-          domains.length === 3 && domains[0] !== 'dev' ? domains[0] : 'falcon';
-        let cookbooks = await cookbookService.get({ subdomain: subdomain });
-        // needed until domain gets switched over to vercel
-        if (cookbooks.length === 0) {
-          cookbooks = await cookbookService.get({ subdomain: 'falcon' });
-        }
+          domains.length >= 2 && domains[0] !== 'dev' ? domains[0] : 'melee';
+        const games = await gameService.get({ subdomain: subdomain });
+        setCookbooks(await cookbookService.get({ game: games[0]._id }));
 
-        dispatch(updateCookbook(cookbooks[0]));
+        dispatch(updateGame(games[0]));
       } catch (err) {
         toast.errorToast('Error', err);
         setLoading(false);
@@ -85,7 +95,7 @@ export const App: FunctionComponent = () => {
     <FirebaseContext.Provider value={firebaseInstance}>
       <Router>
         <div id="cb-app">
-          {cookbook && (
+          {game && cookbooks.length && (
             <>
               <Route path="/" component={HeaderBar} />
               <Switch>
@@ -102,14 +112,17 @@ export const App: FunctionComponent = () => {
                 <Route path="/about">
                   <AboutView />
                 </Route>
-                <Route path="/recipes/:recipe">
-                  <GuideDetailView />
+                <Route path="/:cookbook/recipes/:recipe">
+                  <GuideDetailWrapper />
                 </Route>
-                <Route path="/recipes">
+                <Route path="/:cookbook/recipes">
                   <HomePageView index={1} />
                 </Route>
-                <Route path="/">
+                <Route path="/:cookbook">
                   <HomePageView />
+                </Route>
+                <Route path="/">
+                  <Redirect to={`/${cookbooks[0].name}`} />
                 </Route>
               </Switch>
             </>
@@ -124,6 +137,28 @@ export const App: FunctionComponent = () => {
       </Router>
     </FirebaseContext.Provider>
   );
+};
+
+const GuideDetailWrapper: FunctionComponent = () => {
+  const [state, dispatch] = useContext(Context);
+  const { cookbook, game } = state;
+  const cookbookService = new CookbookService();
+  const toast = new ToastService();
+  useEffect(() => {
+    async function init() {
+      if (!cookbook) {
+        try {
+          const cookbooks = await cookbookService.get({ game: game._id });
+          dispatch(updateCookbook(cookbooks[0]));
+        } catch (err) {
+          toast.errorToast('Error Getting Cookbook', err.message);
+        }
+      }
+    }
+    init();
+  }, []);
+
+  return <>{cookbook && game && <GuideDetailView />}</>;
 };
 
 export const Login: FunctionComponent = () => {

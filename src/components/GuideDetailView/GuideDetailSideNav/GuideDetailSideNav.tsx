@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 
 /* Components */
 import {
@@ -18,6 +18,9 @@ import './_guide-detail-side-nav.scss';
 /* Constants */
 import { CHARACTERS } from '../../../constants/constants';
 
+/* Store */
+import { Context } from '../../../store/Store';
+
 export interface GuideDetailSideNavProps {
   editing: boolean;
   title: string;
@@ -33,6 +36,8 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
   character,
   handleDragEnd,
 }) => {
+  const [state] = useContext(Context);
+  const { cookbook } = state;
   const buildDraggable = () => {
     if (!sections) return [];
     return sections.map((section, index) => {
@@ -104,7 +109,11 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
           className="side-nav__header__avatar"
           name={title}
           color={null}
-          iconType={character ? CHARACTERS[character.name] : CHARACTERS.sandbag}
+          iconType={
+            character
+              ? CHARACTERS[cookbook.game.name][character.name]
+              : CHARACTERS.melee.sandbag
+          }
         ></EuiAvatar>
         {title}
       </div>

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useContext } from 'react';
 
 /* Components */
 import {
@@ -19,6 +19,7 @@ import { Post } from '../../../models/Post';
 
 /* Styles */
 import './_guide-detail-header.scss';
+import { Context } from '../../../store/Store';
 
 export interface GuideDetailHeaderProps {
   editing: boolean;
@@ -49,7 +50,9 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   sections,
   showControls,
 }) => {
+  const [state] = useContext(Context);
   const [flyoutVis, setFlyoutVis] = useState(false);
+  const { cookbook } = state;
 
   const toggleFlyout = () => {
     setFlyoutVis(!flyoutVis);
@@ -107,7 +110,11 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
           className="guide-header__avatar"
           name={title}
           color={null}
-          iconType={character ? CHARACTERS[character] : CHARACTERS.sandbag}
+          iconType={
+            character
+              ? CHARACTERS[cookbook.game.name][character]
+              : CHARACTERS.melee.sandbag
+          }
         />
         <EuiTitle>
           <p>{title}</p>

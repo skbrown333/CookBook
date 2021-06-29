@@ -10,6 +10,8 @@ export const Reducer = (state, action) => {
       return { ...state, ...{ toasts: action.payload } };
     case Actions.UPDATE_COOKBOOK:
       return { ...state, ...{ cookbook: action.payload } };
+    case Actions.UPDATE_GAME:
+      return { ...state, ...{ game: action.payload } };
     case Actions.UPDATE_ADD:
       return { ...state, ...{ add: action.payload } };
     default:

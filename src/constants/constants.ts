@@ -43,6 +43,13 @@ export const CHARACTER = {
 };
 
 /**
+ * Game
+ */
+export const GAME = {
+  route: '/games',
+};
+
+/**
  * Roles
  */
 

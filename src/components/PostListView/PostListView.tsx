@@ -98,7 +98,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
   }, [page, filters]);
 
   useEffect(() => {
-    if (add && adding === '/') {
+    if (add && !adding.includes('/recipes')) {
       setPost(emptyPost);
       setShowAdd(true);
     }
@@ -307,18 +307,22 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
   });
 
   return (
-    <div id="post-list">
-      <div className="post-list">
-        <div className="post-list__content">
-          {buildPosts()}
-          <div ref={sentryRef} />
-          {loading && <EuiLoadingSpinner size="xl" />}
-        </div>
-      </div>
+    <>
+      {cookbook && (
+        <div id="post-list">
+          <div className="post-list">
+            <div className="post-list__content">
+              {buildPosts()}
+              <div ref={sentryRef} />
+              {loading && <EuiLoadingSpinner size="xl" />}
+            </div>
+          </div>
 
-      {showAdd && Modal('New Post', handleNewPost)}
-      {showEdit && Modal('Edit Post', handleEditPost)}
-      {showDelete && destroyModal}
-    </div>
+          {showAdd && Modal('New Post', handleNewPost)}
+          {showEdit && Modal('Edit Post', handleEditPost)}
+          {showDelete && destroyModal}
+        </div>
+      )}
+    </>
   );
 };
