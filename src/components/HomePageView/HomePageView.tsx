@@ -58,10 +58,10 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const handleChange = (index) => {
     switch (index) {
       case 0:
-        history.push('/');
+        history.push(`/${cookbook.name}`);
         break;
       case 1:
-        history.push('/recipes');
+        history.push(`/${cookbook.name}/recipes`);
         break;
     }
     setAdding(history.location.pathname);
