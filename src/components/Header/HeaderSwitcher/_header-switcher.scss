@@ -9,11 +9,33 @@
     margin-right: 12px;
   }
 
-  img {
-    margin-left: 12px;
-    margin-right: 12px;
-    width: 24px;
-    height: 24px;
+  svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+
+    &.logo {
+      margin-left: 16px;
+      margin-right: 16px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__character {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      margin-right: 8px;
+      margin-left: 0;
+      padding: 2px;
+      background-color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+    }
   }
 }
 .header-switcher {

@@ -12,6 +12,7 @@ import {
   EuiPopover,
   EuiPopoverTitle,
 } from '@elastic/eui';
+import { ReactComponent as Logo } from '../../../images/logo.svg';
 
 /* Styles */
 import './_header-switcher.scss';
@@ -47,8 +48,11 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
 
   const button = (
     <button onClick={() => setIsOpen(!isOpen)} className="switcher">
-      <img src={CHARACTERS[game.name][cookbook.character.name]} />
+      <Logo className="logo" />
       <span>{game.display_name}</span>
+      <div className="switcher__character">
+        <img src={CHARACTERS[game.name][cookbook.character.name]} />
+      </div>
       <EuiIcon type={isOpen ? 'arrowUp' : 'arrowDown'} />
     </button>
   );
@@ -137,6 +141,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
       closePopover={() => setIsOpen(false)}
       panelPaddingSize="none"
       panelClassName="header-switcher__popover"
+      style={{ display: 'flex' }}
     >
       <div className="header-switcher__content">
         <div className="header-switcher__game">

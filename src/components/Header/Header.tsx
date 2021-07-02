@@ -102,7 +102,7 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                     popoverBreakpoints="none"
                   >
                     <Link to={`/${cookbook.name}`}>
-                      <EuiHeaderLink color="success" iconType="home">
+                      <EuiHeaderLink color="success">
                         <span className="link-text">Home</span>
                       </EuiHeaderLink>
                     </Link>
