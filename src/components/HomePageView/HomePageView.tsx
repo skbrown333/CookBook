@@ -75,7 +75,10 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   useEffect(() => {
     async function init() {
       try {
-        const cookbooks = await cookbookService.get({ name: cookbookSlug });
+        const cookbooks = await cookbookService.get({
+          game: game._id,
+          name: cookbookSlug,
+        });
         dispatch(updateCookbook(cookbooks[0]));
       } catch (err) {
         toast.errorToast('Error', err);
