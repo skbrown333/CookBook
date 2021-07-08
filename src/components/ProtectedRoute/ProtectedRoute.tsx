@@ -55,7 +55,9 @@ export const ProtectedRoute: FunctionComponent<any> = ({
         }}
       />
     );
-    return user && cookbook && ROLES.admin.includes(cookbook.roles[user.uid])
+    return user &&
+      cookbook &&
+      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin)
       ? component
       : error;
   }

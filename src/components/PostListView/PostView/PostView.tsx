@@ -65,24 +65,26 @@ export const PostView: FunctionComponent<PostProps> = ({
                 `@${cre_account.username}`}
             </div>
           </div>
-          {user && ROLES.admin.includes(cookbook.roles[user.uid]) && (
-            <div className="post__controls">
-              <EuiButtonIcon
-                aria-label="edit"
-                className="post__header__edit"
-                iconType="documentEdit"
-                color="primary"
-                onClick={handleEdit}
-              />
-              <EuiButtonIcon
-                aria-label="delete"
-                className="post__header__delete"
-                iconType="trash"
-                color="danger"
-                onClick={handleDelete}
-              />
-            </div>
-          )}
+          {user &&
+            (ROLES.admin.includes(cookbook.roles[user.uid]) ||
+              user.super_admin) && (
+              <div className="post__controls">
+                <EuiButtonIcon
+                  aria-label="edit"
+                  className="post__header__edit"
+                  iconType="documentEdit"
+                  color="primary"
+                  onClick={handleEdit}
+                />
+                <EuiButtonIcon
+                  aria-label="delete"
+                  className="post__header__delete"
+                  iconType="trash"
+                  color="danger"
+                  onClick={handleDelete}
+                />
+              </div>
+            )}
         </div>
 
         <div className={`post__body`}>

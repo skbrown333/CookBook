@@ -226,19 +226,21 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
           style={{ borderTopRightRadius: 6, borderBottomRightRadius: 6 }}
         />
       )}
-      {user && ROLES.admin.includes(cookbook.roles[user.uid]) && (
-        <EuiButtonIcon
-          aria-label="add"
-          className="search-controls__button"
-          display="fill"
-          iconType="plus"
-          color="success"
-          size="m"
-          onClick={handlePlus}
-        >
-          Create
-        </EuiButtonIcon>
-      )}
+      {user &&
+        (ROLES.admin.includes(cookbook.roles[user.uid]) ||
+          user.super_admin) && (
+          <EuiButtonIcon
+            aria-label="add"
+            className="search-controls__button"
+            display="fill"
+            iconType="plus"
+            color="success"
+            size="m"
+            onClick={handlePlus}
+          >
+            Create
+          </EuiButtonIcon>
+        )}
     </div>
   );
 };
