@@ -17,6 +17,7 @@ import { HeaderBar } from './components/Header/Header';
 import { GuideDetailView } from './components/GuideDetailView/GuideDetailView';
 import { HomePageView } from './components/HomePageView/HomePageView';
 import { AboutView } from './components/AboutView/AboutView';
+import { SettingsView } from './components/SettingsView/SettingsView';
 import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 
 /* Services */
@@ -64,12 +65,13 @@ export const App: FunctionComponent = () => {
             ? domains[0]
             : 'melee';
         const games = await gameService.get({ subdomain: subdomain });
-        setCookbooks(await cookbookService.get({ game: games[0]._id }));
+        setCookbooks(
+          await cookbookService.get({ game: games[0]._id, preview: false }),
+        );
 
         dispatch(updateGame(games[0]));
       } catch (err) {
         toast.errorToast('Error', err);
-        setLoading(false);
       }
 
       try {
@@ -83,6 +85,7 @@ export const App: FunctionComponent = () => {
         await firebaseInstance.signInWithCustomToken(res.data);
         const user: any = await firebaseInstance.getCurrentUser();
         dispatch(updateUser(user));
+        setLoading(false);
       }
     }
     init();
@@ -98,7 +101,7 @@ export const App: FunctionComponent = () => {
     <FirebaseContext.Provider value={firebaseInstance}>
       <Router>
         <div id="cb-app">
-          {game && cookbooks.length && (
+          {game && cookbooks.length > 0 && !loading && (
             <>
               <Route path="/" component={HeaderBar} />
               <Switch>
@@ -115,6 +118,10 @@ export const App: FunctionComponent = () => {
                 <Route path="/about">
                   <AboutView />
                 </Route>
+                <ProtectedRoute
+                  path="/:cookbook/settings"
+                  component={SettingsView}
+                />
                 <Route path="/:cookbook/recipes/:recipe">
                   <GuideDetailWrapper />
                 </Route>

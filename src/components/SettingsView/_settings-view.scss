@@ -1,0 +1,21 @@
+.settings-view {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+
+  &__content {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+    margin-top: 64px;
+
+    .euiPanel {
+      align-self: flex-start;
+      &--paddingMedium {
+        padding: 0;
+      }
+    }
+  }
+}
