@@ -1,0 +1,14 @@
+.settings-nav {
+  flex: 1;
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 64px;
+  margin-left: 12px;
+
+  &__header {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+}

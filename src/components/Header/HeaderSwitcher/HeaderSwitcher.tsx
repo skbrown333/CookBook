@@ -40,7 +40,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
   const [cookbooks, setCookbooks] = useState<any[]>([]);
   const [loadingGames, setLoadingGames] = useState<boolean>(false);
   const [loadingCharacters, setLoadingCharacters] = useState<boolean>(false);
-  const { game, cookbook } = state;
+  const { game, cookbook, user } = state;
   const [selectedGame, setSelectedGame] = useState<Game>(game);
   const gameService = new GameService();
   const cookbookService = new CookbookService();
@@ -78,6 +78,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
       try {
         const characters = await cookbookService.get({
           game: selectedGame,
+          ...(user ? {} : { preview: false }),
         });
         setCookbooks(characters);
       } catch (err) {
