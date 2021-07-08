@@ -79,13 +79,18 @@ export const App: FunctionComponent = () => {
         dispatch(updateUser(user));
         setLoading(false);
       } catch (err) {
-        const res = await axios.get(`${ENV.base_url}/loginWithCookie`, {
-          withCredentials: true,
-        });
-        await firebaseInstance.signInWithCustomToken(res.data);
-        const user: any = await firebaseInstance.getCurrentUser();
-        dispatch(updateUser(user));
-        setLoading(false);
+        try {
+          const res = await axios.get(`${ENV.base_url}/loginWithCookie`, {
+            withCredentials: true,
+          });
+          await firebaseInstance.signInWithCustomToken(res.data);
+          const user: any = await firebaseInstance.getCurrentUser();
+          dispatch(updateUser(user));
+        } catch (err) {
+          // Dont handle
+        } finally {
+          setLoading(false);
+        }
       }
     }
     init();
