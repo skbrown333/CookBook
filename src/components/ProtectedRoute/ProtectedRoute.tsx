@@ -16,7 +16,7 @@ import { updateCookbook } from '../../store/actions';
  * Route wrapper to protect authenticated routes
  *
  * @example
- * <ProtectedRoute path="/" component={Component} />
+ * <ProtectedRoute path="/:cookbook/" component={Component} />
  */
 export const ProtectedRoute: FunctionComponent<any> = ({
   component: Component,
@@ -24,7 +24,7 @@ export const ProtectedRoute: FunctionComponent<any> = ({
 }) => {
   const [state, dispatch] = useContext(Context);
   const { cookbook, user, game } = state;
-  const cookbookSlug = useParams().cookbook;
+  const cookbookSlug = rest.computedMatch.params.cookbook;
   const cookbookService = new CookbookService();
   const toast = new ToastService();
 
