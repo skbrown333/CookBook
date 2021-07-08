@@ -148,19 +148,11 @@ export const AboutView: FunctionComponent<AboutViewProps> = () => {
                 Cookbook Discord <RiDiscordLine />
               </a>
               , but it has become a much broader application available to any
-              character and eventually any game.
+              character/game.
             </div>
             <div>
               We are currently still building the site and looking for more
-              people to contribute content for other Super Smash Bros. Melee
-              characters.
-            </div>
-            <div>
-              We currently have people working on other cookbooks for characters
-              including:
-              <ul>
-                <li>Marth</li>
-              </ul>
+              people to contribute content.
             </div>
           </div>
           <div className="about-view__contribute">

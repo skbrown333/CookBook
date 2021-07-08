@@ -58,10 +58,10 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const handleChange = (index) => {
     switch (index) {
       case 0:
-        history.push('/');
+        history.push(`/${cookbook.name}`);
         break;
       case 1:
-        history.push('/recipes');
+        history.push(`/${cookbook.name}/recipes`);
         break;
     }
     setAdding(history.location.pathname);
@@ -75,7 +75,10 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   useEffect(() => {
     async function init() {
       try {
-        const cookbooks = await cookbookService.get({ name: cookbookSlug });
+        const cookbooks = await cookbookService.get({
+          game: game._id,
+          name: cookbookSlug,
+        });
         dispatch(updateCookbook(cookbooks[0]));
       } catch (err) {
         toast.errorToast('Error', err);

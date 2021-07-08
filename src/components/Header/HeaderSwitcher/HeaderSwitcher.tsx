@@ -12,6 +12,7 @@ import {
   EuiPopover,
   EuiPopoverTitle,
 } from '@elastic/eui';
+import { ReactComponent as Logo } from '../../../images/logo.svg';
 
 /* Styles */
 import './_header-switcher.scss';
@@ -39,7 +40,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
   const [cookbooks, setCookbooks] = useState<any[]>([]);
   const [loadingGames, setLoadingGames] = useState<boolean>(false);
   const [loadingCharacters, setLoadingCharacters] = useState<boolean>(false);
-  const { game, cookbook } = state;
+  const { game, cookbook, user } = state;
   const [selectedGame, setSelectedGame] = useState<Game>(game);
   const gameService = new GameService();
   const cookbookService = new CookbookService();
@@ -47,8 +48,11 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
 
   const button = (
     <button onClick={() => setIsOpen(!isOpen)} className="switcher">
-      <img src={CHARACTERS[game.name][cookbook.character.name]} />
+      <Logo className="logo" />
       <span>{game.display_name}</span>
+      <div className="switcher__character">
+        <img src={CHARACTERS[game.name][cookbook.character.name]} />
+      </div>
       <EuiIcon type={isOpen ? 'arrowUp' : 'arrowDown'} />
     </button>
   );
@@ -74,6 +78,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
       try {
         const characters = await cookbookService.get({
           game: selectedGame,
+          ...(user ? {} : { preview: false }),
         });
         setCookbooks(characters);
       } catch (err) {
@@ -137,6 +142,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
       closePopover={() => setIsOpen(false)}
       panelPaddingSize="none"
       panelClassName="header-switcher__popover"
+      style={{ display: 'flex' }}
     >
       <div className="header-switcher__content">
         <div className="header-switcher__game">

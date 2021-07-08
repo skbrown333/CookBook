@@ -57,24 +57,26 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
           ></EuiAvatar>
           {title}
         </div>
-        {user && ROLES.admin.includes(cookbook.roles[user.uid]) && (
-          <div className="guide-card__header__controls">
-            <EuiButtonIcon
-              aria-label="edit"
-              className="guide-card__header__edit"
-              iconType="documentEdit"
-              color="primary"
-              onClick={(event) => handleEdit(event, guide)}
-            />
-            <EuiButtonIcon
-              aria-label="delete"
-              className="guide-card__header__delete"
-              iconType="trash"
-              color="danger"
-              onClick={(event) => handleDelete(event, guide)}
-            />
-          </div>
-        )}
+        {user &&
+          (ROLES.admin.includes(cookbook.roles[user.uid]) ||
+            user.super_admin) && (
+            <div className="guide-card__header__controls">
+              <EuiButtonIcon
+                aria-label="edit"
+                className="guide-card__header__edit"
+                iconType="documentEdit"
+                color="primary"
+                onClick={(event) => handleEdit(event, guide)}
+              />
+              <EuiButtonIcon
+                aria-label="delete"
+                className="guide-card__header__delete"
+                iconType="trash"
+                color="danger"
+                onClick={(event) => handleDelete(event, guide)}
+              />
+            </div>
+          )}
       </div>
       <div className="guide-card__content">
         <div className="guide-card__content__description">{description}</div>
@@ -82,7 +84,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
           {tags &&
             tags.map((tag, index) => {
               return (
-                <EuiBadge key={`tag-${index}`} color="hollow">
+                <EuiBadge key={`tag-${index}`} color={tag.color || 'hollow'}>
                   {tag.label}
                 </EuiBadge>
               );

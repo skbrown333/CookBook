@@ -62,7 +62,10 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   };
 
   const isAdmin = () => {
-    return user && ROLES.admin.includes(cookbook.roles[user.uid]);
+    return (
+      user &&
+      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin)
+    );
   };
 
   const updateStreams = async (streams) => {

@@ -36,6 +36,7 @@ export interface SearchCreateBarProp {
   className?: string;
   actualSearchText?: string;
   selectedFilterStrings?: any;
+  disableTags?: boolean;
 }
 
 export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
@@ -45,6 +46,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   className,
   actualSearchText,
   selectedFilterStrings,
+  disableTags,
 }) => {
   const [state] = useContext(Context);
   const { cookbook, user } = state;
@@ -60,6 +62,8 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
       setLoading(true);
       setItems([]);
       try {
+        if (disableTags) return;
+
         let tags = await tagService.get();
         tags = tags.map((tag) => {
           if (selectedFilterStrings.includes(tag.label)) {
@@ -147,83 +151,96 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
 
   return (
     <div className={`${className} search-controls`}>
-      <EuiFilterGroup className="search-controls__filters">
+      {!disableTags && (
+        <EuiFilterGroup className="search-controls__filters">
+          <EuiFieldSearch
+            onChange={handleSearch}
+            value={actualSearchText as string}
+            fullWidth
+          />
+
+          <EuiPopover
+            id="popoverExampleMultiSelect"
+            button={button}
+            isOpen={isPopoverOpen}
+            closePopover={closePopover}
+            panelPaddingSize="none"
+          >
+            <EuiPopoverTitle paddingSize="s">
+              <EuiFieldSearch
+                compressed
+                onChange={handleSearchFilter}
+                isClearable={false}
+              />
+            </EuiPopoverTitle>
+
+            <div className="euiFilterSelect__items">
+              {!loading &&
+                items.length > 0 &&
+                items
+                  .filter((item) => {
+                    return item.label.toUpperCase().indexOf(searchText) > -1;
+                  })
+                  .map((item, index) => (
+                    <EuiFilterSelectItem
+                      checked={item.checked}
+                      key={index}
+                      onClick={() => {
+                        updateItem(item);
+                      }}
+                    >
+                      {item.label}
+                    </EuiFilterSelectItem>
+                  ))}
+              {/*
+              Use when loading items initially
+            */}
+              {loading && (
+                <div className="euiFilterSelect__note">
+                  <div className="euiFilterSelect__noteContent">
+                    <EuiLoadingChart size="m" />
+                  </div>
+                </div>
+              )}
+              {/*
+              Use when no results are returned
+            */}
+              {!loading && items.length < 1 && (
+                <div className="euiFilterSelect__note">
+                  <div className="euiFilterSelect__noteContent">
+                    <EuiIcon type="minusInCircle" />
+                    <EuiSpacer size="xs" />
+                    <p>No filters found</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </EuiPopover>
+        </EuiFilterGroup>
+      )}
+      {disableTags && (
         <EuiFieldSearch
           onChange={handleSearch}
           value={actualSearchText as string}
           fullWidth
+          style={{ borderTopRightRadius: 6, borderBottomRightRadius: 6 }}
         />
-        <EuiPopover
-          id="popoverExampleMultiSelect"
-          button={button}
-          isOpen={isPopoverOpen}
-          closePopover={closePopover}
-          panelPaddingSize="none"
-        >
-          <EuiPopoverTitle paddingSize="s">
-            <EuiFieldSearch
-              compressed
-              onChange={handleSearchFilter}
-              isClearable={false}
-            />
-          </EuiPopoverTitle>
-
-          <div className="euiFilterSelect__items">
-            {!loading &&
-              items.length > 0 &&
-              items
-                .filter((item) => {
-                  return item.label.toUpperCase().indexOf(searchText) > -1;
-                })
-                .map((item, index) => (
-                  <EuiFilterSelectItem
-                    checked={item.checked}
-                    key={index}
-                    onClick={() => {
-                      updateItem(item);
-                    }}
-                  >
-                    {item.label}
-                  </EuiFilterSelectItem>
-                ))}
-            {/*
-              Use when loading items initially
-            */}
-            {loading && (
-              <div className="euiFilterSelect__note">
-                <div className="euiFilterSelect__noteContent">
-                  <EuiLoadingChart size="m" />
-                </div>
-              </div>
-            )}
-            {/*
-              Use when no results are returned
-            */}
-            {!loading && items.length < 1 && (
-              <div className="euiFilterSelect__note">
-                <div className="euiFilterSelect__noteContent">
-                  <EuiIcon type="minusInCircle" />
-                  <EuiSpacer size="xs" />
-                  <p>No filters found</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </EuiPopover>
-      </EuiFilterGroup>
-      {user && ROLES.admin.includes(cookbook.roles[user.uid]) && (
-        <EuiButtonIcon
-          aria-label="add"
-          className="search-controls__button"
-          display="fill"
-          iconType="plus"
-          color="success"
-          size="m"
-          onClick={handlePlus}
-        >
-          Create
-        </EuiButtonIcon>
       )}
+      {user &&
+        (ROLES.admin.includes(cookbook.roles[user.uid]) ||
+          user.super_admin) && (
+          <EuiButtonIcon
+            aria-label="add"
+            className="search-controls__button"
+            display="fill"
+            iconType="plus"
+            color="success"
+            size="m"
+            onClick={handlePlus}
+          >
+            Create
+          </EuiButtonIcon>
+        )}
     </div>
   );
 };
