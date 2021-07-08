@@ -84,7 +84,7 @@ export const GuideCard: FunctionComponent<GuideCardProps> = ({
           {tags &&
             tags.map((tag, index) => {
               return (
-                <EuiBadge key={`tag-${index}`} color="hollow">
+                <EuiBadge key={`tag-${index}`} color={tag.color || 'hollow'}>
                   {tag.label}
                 </EuiBadge>
               );

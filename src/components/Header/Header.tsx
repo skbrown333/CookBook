@@ -142,11 +142,11 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                 (ROLES.admin.includes(cookbook.roles[user.uid]) ||
                   user.super_admin)
                   ? [
-                      <EuiHeaderSectionItemButton aria-label="Account menu">
-                        <Link to={`/${cookbook.name}/settings`}>
+                      <Link to={`/${cookbook.name}/settings`}>
+                        <EuiHeaderSectionItemButton aria-label="Account menu">
                           <EuiIcon type="gear" size="m" color="ghost" />
-                        </Link>
-                      </EuiHeaderSectionItemButton>,
+                        </EuiHeaderSectionItemButton>
+                      </Link>,
                     ]
                   : [<></>]),
               ],

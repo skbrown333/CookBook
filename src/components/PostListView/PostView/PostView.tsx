@@ -97,7 +97,7 @@ export const PostView: FunctionComponent<PostProps> = ({
         </div>
         <div className="post__footer">
           {tags.map((tag, index) => (
-            <EuiBadge key={index} className="tag" color="hollow">
+            <EuiBadge key={index} className="tag" color={tag.color || 'hollow'}>
               #{tag.label}
             </EuiBadge>
           ))}

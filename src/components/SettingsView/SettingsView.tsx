@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import { SettingsNav } from './SettingsNav/SettingsNav';
 import { GeneralView } from './GeneralView/GeneralView';
 import { AccessView } from './AccessView/AccessView';
+import { TagView } from './TagView/TagView';
 
 /* Services */
 import CookbookService from '../../services/CookbookService/CookbookService';
@@ -41,7 +42,7 @@ export const SettingsView: FunctionComponent<SettingsViewProps> = () => {
   const VIEWS = {
     [GENERAL_INDEX]: <GeneralView />,
     [ACCESS_INDEX]: <AccessView />,
-    [TAGS_INDEX]: null,
+    [TAGS_INDEX]: <TagView />,
   };
 
   useEffect(() => {
