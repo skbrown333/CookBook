@@ -90,7 +90,6 @@ export const TagView: FunctionComponent<TagViewProps> = () => {
         };
       });
       setTagItems(newTags);
-      toast.successToast(`Tag Updated`);
     } catch (error) {
       toast.errorToast(`Failed updating tag`, error.message);
     }
