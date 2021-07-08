@@ -106,7 +106,7 @@ export const App: FunctionComponent = () => {
     <FirebaseContext.Provider value={firebaseInstance}>
       <Router>
         <div id="cb-app">
-          {game && cookbooks.length > 0 && !loading && (
+          {game && !loading && (
             <>
               <Route path="/" component={HeaderBar} />
               <Switch>
@@ -137,7 +137,9 @@ export const App: FunctionComponent = () => {
                   <HomePageView />
                 </Route>
                 <Route path="/">
-                  <Redirect to={`/${cookbooks[0].name}`} />
+                  {cookbooks && cookbooks.length > 0 && (
+                    <Redirect to={`/${cookbooks[0].name}`} />
+                  )}
                 </Route>
               </Switch>
             </>
