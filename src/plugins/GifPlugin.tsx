@@ -101,7 +101,7 @@ const GifMarkdownRenderer = ({ gif }) => {
           muted
           disableRemotePlayback
         >
-          <source src={url.giant} type="video/mp4"></source>
+          {/* <source src={url.giant} type="video/mp4"></source> */}
           <source src={url.thumbnail} type="video/mp4"></source>
         </video>
       </EuiHideFor>
