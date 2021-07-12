@@ -13,6 +13,7 @@ import {
   EuiHeaderLinks,
   EuiHeaderSectionItemButton,
   EuiHideFor,
+  EuiIcon,
 } from '@elastic/eui';
 import { EuiAvatar } from '@elastic/eui';
 
@@ -20,7 +21,7 @@ import { EuiAvatar } from '@elastic/eui';
 import { Context } from '../../store/Store';
 
 /* Constants */
-import { DISCORD } from '../../constants/constants';
+import { DISCORD, ROLES } from '../../constants/constants';
 
 /* Styles */
 import './_header.scss';
@@ -135,6 +136,17 @@ export const HeaderBar: FunctionComponent<HeaderBarProps> = () => {
                           size="m"
                         />
                       </EuiHeaderSectionItemButton>,
+                    ]
+                  : [<></>]),
+                ...(user &&
+                (ROLES.admin.includes(cookbook.roles[user.uid]) ||
+                  user.super_admin)
+                  ? [
+                      <Link to={`/${cookbook.name}/settings`}>
+                        <EuiHeaderSectionItemButton aria-label="Account menu">
+                          <EuiIcon type="gear" size="m" color="ghost" />
+                        </EuiHeaderSectionItemButton>
+                      </Link>,
                     ]
                   : [<></>]),
               ],

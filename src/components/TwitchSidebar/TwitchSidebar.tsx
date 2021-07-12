@@ -44,7 +44,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
 
   useEffect(() => {
     async function init() {
-      if (firebase) {
+      if (firebase && cookbook.streams.length) {
         try {
           dispatch(
             updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
@@ -62,7 +62,10 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   };
 
   const isAdmin = () => {
-    return user && ROLES.admin.includes(cookbook.roles[user.uid]);
+    return (
+      user &&
+      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin)
+    );
   };
 
   const updateStreams = async (streams) => {
@@ -80,10 +83,17 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   };
 
   const currentStreams = () => {
-    const { streams, users } = twitch;
-    const cookStreams = streams.data
+    let streams, users;
+    if (twitch) {
+      streams = twitch.streams.data;
+      users = twitch.users.data;
+    } else {
+      streams = users = [];
+    }
+
+    const cookStreams = streams
       .map((entry) => entry.user_login)
-      .concat(users.data.map((entry) => entry.login));
+      .concat(users.map((entry) => entry.login));
     return cookStreams;
   };
 
