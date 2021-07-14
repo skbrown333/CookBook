@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 
 /* Component */
-import { EuiSwitch } from '@elastic/eui';
+import { EuiSwitch, EuiTitle, EuiFieldText } from '@elastic/eui';
 
 /* Services */
 import { ToastService } from '../../../services/ToastService';
@@ -20,17 +20,16 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
   const [saving, setSaving] = useState<boolean>(false);
   const [state, dispatch] = useContext(Context);
   const { user, cookbook } = state;
+  const [donate, setDonate] = useState(
+    cookbook.donation_link ? cookbook.donation_link : '',
+  );
   const cookbookService = new CookbookService();
   const toast = new ToastService();
 
-  const handleChange = async (checked, option) => {
+  const updateHelper = async (params) => {
     try {
-      setSaving(true);
-      const params = {
-        ...(option === 'preview' ? { preview: checked } : {}),
-        ...(option === 'show_authors' ? { show_authors: checked } : {}),
-      };
       const token = await user.user.getIdToken();
+      console.log(params);
       const updatedCookbook = await cookbookService.update(
         cookbook._id,
         params,
@@ -39,16 +38,33 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
         },
       );
       dispatch(updateCookbook(updatedCookbook));
+      toast.successToast('Successfully Updated Cookbook');
+    } catch (err) {
+      toast.errorToast('Error Updating Cookbook', err.message);
+    }
+  };
+
+  const handleChange = async (checked, option) => {
+    try {
+      setSaving(true);
+      const params = {
+        ...(option === 'preview' ? { preview: checked } : {}),
+        ...(option === 'show_authors' ? { show_authors: checked } : {}),
+      };
+      await updateHelper(params);
     } catch (err) {
       toast.errorToast('Error Updating Cookbook', err.message);
     } finally {
       setSaving(false);
     }
   };
-  return (
-    <div className="general-view">
-      <div className="general-view__header">Feature Options</div>
-      <div className="general-view__content">
+
+  const featureSection = () => {
+    return (
+      <>
+        <EuiTitle size="m">
+          <h1>Features</h1>
+        </EuiTitle>
         <EuiSwitch
           label="Preview Mode"
           checked={!!cookbook.preview}
@@ -65,6 +81,50 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
             handleChange(e.target.checked, 'show_authors');
           }}
         />
+      </>
+    );
+  };
+
+  const donateUpdate = async (e) => {
+    if (e.keyCode === 13) {
+      await updateHelper({ donation_url: donate });
+      setDonate('');
+    }
+  };
+
+  const donationSection = () => {
+    return (
+      <>
+        <EuiTitle size="m">
+          <h1>Donation Link</h1>
+        </EuiTitle>
+        {donate ? (
+          <EuiTitle size="xs">
+            <h1>{cookbook.donation_link}</h1>
+          </EuiTitle>
+        ) : (
+          <>
+            <EuiTitle size="xs">
+              <h1>No Donation Link Set</h1>
+            </EuiTitle>
+          </>
+        )}
+        <EuiFieldText
+          placeholder="donation link"
+          value={donate}
+          onChange={(e) => setDonate(e.target.value)}
+          onKeyDown={donateUpdate}
+        />
+      </>
+    );
+  };
+
+  return (
+    <div className="general-view">
+      <div className="general-view__header">General Options</div>
+      <div className="general-view__content">
+        {featureSection()}
+        {donationSection()}
       </div>
     </div>
   );

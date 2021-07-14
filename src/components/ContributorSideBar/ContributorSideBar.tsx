@@ -53,7 +53,10 @@ export const ContributorSideBar: FunctionComponent<ContributorSideBar> = () => {
   }, []);
 
   const hanldeDonateClick = () => {
-    window.open(cookbook.donation_link, '_blank');
+    const https = 'https://www.';
+    let donate = cookbook.donation_url;
+    donate = cookbook.donation_url.includes(https) ? donate : https + donate;
+    window.open(donate);
   };
 
   const buildLinks = (user) => {
@@ -149,7 +152,7 @@ export const ContributorSideBar: FunctionComponent<ContributorSideBar> = () => {
       <div className="contributor-sidebar">
         <div className="contributor-sidebar__header">
           Chefs
-          {cookbook.donation_link && (
+          {cookbook.donation_url && (
             <EuiButton
               color="secondary"
               fill
