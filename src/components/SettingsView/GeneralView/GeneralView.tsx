@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 
 /* Component */
-import { EuiSwitch, EuiTitle, EuiFieldText } from '@elastic/eui';
+import { EuiSwitch, EuiTitle, EuiFieldText, EuiButtonIcon } from '@elastic/eui';
 
 /* Services */
 import { ToastService } from '../../../services/ToastService';
@@ -20,16 +20,13 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
   const [saving, setSaving] = useState<boolean>(false);
   const [state, dispatch] = useContext(Context);
   const { user, cookbook } = state;
-  const [donate, setDonate] = useState(
-    cookbook.donation_link ? cookbook.donation_link : '',
-  );
+  const [donate_temp, setDonateTemp] = useState('');
   const cookbookService = new CookbookService();
   const toast = new ToastService();
 
   const updateHelper = async (params) => {
     try {
       const token = await user.user.getIdToken();
-      console.log(params);
       const updatedCookbook = await cookbookService.update(
         cookbook._id,
         params,
@@ -85,37 +82,69 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
     );
   };
 
+  const checkDonateUrl = (test) => {
+    return donate_temp.includes(test);
+  };
+
+  const transformUrl = (url) => {
+    const https = 'https://';
+    const www = 'www.';
+    let new_url = url;
+    if (!checkDonateUrl('.com')) {
+      throw new Error("URL must include '.com'");
+    }
+    if (!checkDonateUrl(https) && !checkDonateUrl(www)) {
+      new_url = https + www + donate_temp;
+    } else if (!checkDonateUrl(https)) {
+      new_url = https + donate_temp;
+    }
+    return new_url;
+  };
+
   const donateUpdate = async (e) => {
     if (e.keyCode === 13) {
-      await updateHelper({ donation_url: donate });
-      setDonate('');
+      try {
+        const donate_url = transformUrl(donate_temp);
+        await updateHelper({ donation_url: donate_url });
+        setDonateTemp('');
+      } catch (e) {
+        toast.errorToast('Invalid URL', e.message);
+      }
     }
   };
 
   const donationSection = () => {
     return (
-      <>
-        <EuiTitle size="m">
-          <h1>Donation Link</h1>
-        </EuiTitle>
-        {donate ? (
-          <EuiTitle size="xs">
-            <h1>{cookbook.donation_link}</h1>
+      <div className="donation">
+        <div className="donation__title">
+          <EuiTitle size="m" className="donation__title__text">
+            <h1>
+              {cookbook.donation_url ? (
+                <h1>Donation URL: {cookbook.donation_url}</h1>
+              ) : (
+                <h1>No Donation URL Set</h1>
+              )}
+            </h1>
           </EuiTitle>
-        ) : (
-          <>
-            <EuiTitle size="xs">
-              <h1>No Donation Link Set</h1>
-            </EuiTitle>
-          </>
-        )}
+          {cookbook.donation_url && (
+            <EuiButtonIcon
+              className="donation__title__button"
+              display="fill"
+              color="danger"
+              iconType="cross"
+              aria-label="remove donation URL"
+              onClick={() => updateHelper({ donation_url: '' })}
+            />
+          )}
+        </div>
         <EuiFieldText
-          placeholder="donation link"
-          value={donate}
-          onChange={(e) => setDonate(e.target.value)}
+          className="donation__input"
+          placeholder="Set Donation URL"
+          value={donate_temp}
+          onChange={(e) => setDonateTemp(e.target.value)}
           onKeyDown={donateUpdate}
         />
-      </>
+      </div>
     );
   };
 
