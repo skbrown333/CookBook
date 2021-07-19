@@ -52,10 +52,6 @@ export const ContributorSideBar: FunctionComponent<ContributorSideBar> = () => {
     init();
   }, []);
 
-  const hanldeDonateClick = () => {
-    window.open(cookbook.donation_link, '_blank');
-  };
-
   const buildLinks = (user) => {
     const { links } = user;
     const linkElements: any = [];
@@ -149,12 +145,12 @@ export const ContributorSideBar: FunctionComponent<ContributorSideBar> = () => {
       <div className="contributor-sidebar">
         <div className="contributor-sidebar__header">
           Chefs
-          {cookbook.donation_link && (
+          {cookbook.donation_url && (
             <EuiButton
               color="secondary"
               fill
               className="donate"
-              onClick={hanldeDonateClick}
+              onClick={() => window.open(cookbook.donation_url)}
             >
               $ Donate
             </EuiButton>
