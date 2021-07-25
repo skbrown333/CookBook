@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { EuiAspectRatio, EuiHideFor } from '@elastic/eui';
+import { _isFlagToQuery } from '@elastic/eui/src/components/search_bar/query/ast_to_es_query_dsl';
 
 // const GifPlugin = {
 //   name: "GifPlugin",
@@ -15,6 +16,10 @@ import { EuiAspectRatio, EuiHideFor } from '@elastic/eui';
 //     return null;
 //   },
 // };
+
+const isGfy = (url) => {
+  return url.includes('gfy');
+};
 
 function GifMarkdownParser() {
   // @ts-ignore
@@ -69,7 +74,7 @@ function GifMarkdownParser() {
     };
 
     urls = urls.map((url) => {
-      return url.includes('gfy') ? gfyTransform(url) : url;
+      return isGfy(url) ? gfyTransform(url) : url;
     });
 
     if (silent) {
@@ -91,23 +96,39 @@ function GifMarkdownParser() {
 }
 
 const GifMarkdownRenderer = ({ gif }) => {
+  const getGifElem = (url) => {
+    if (url.giant) {
+      return (
+        <>
+          <EuiHideFor sizes={['xs', 's']}>
+            <video
+              className="guide-section__markdown__gifs__gif"
+              autoPlay
+              loop
+              muted
+              disableRemotePlayback
+            >
+              <source src={url.giant} type="video/mp4"></source>
+              <source src={url.thumbnail} type="video/mp4"></source>
+            </video>
+          </EuiHideFor>
+          <EuiHideFor sizes={['m', 'l', 'xl']}>
+            <img
+              className="guide-section__markdown__gifs__gif"
+              src={url.gif}
+            ></img>
+          </EuiHideFor>
+        </>
+      );
+    } else {
+      return (
+        <img className="guide-section__markdown__gifs__gif" src={url}></img>
+      );
+    }
+  };
   const gifs = gif.urls.map((url) => (
     <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      <EuiHideFor sizes={['xs', 's']}>
-        <video
-          className="guide-section__markdown__gifs__gif"
-          autoPlay
-          loop
-          muted
-          disableRemotePlayback
-        >
-          <source src={url.giant} type="video/mp4"></source>
-          <source src={url.thumbnail} type="video/mp4"></source>
-        </video>
-      </EuiHideFor>
-      <EuiHideFor sizes={['m', 'l', 'xl']}>
-        <img className="guide-section__markdown__gifs__gif" src={url.gif}></img>
-      </EuiHideFor>
+      {getGifElem(url)}
     </EuiAspectRatio>
   ));
   return <div className="guide-section__markdown_gifs">{gifs}</div>;
