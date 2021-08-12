@@ -109,7 +109,7 @@ function GifMarkdownParser() {
 const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => (
     <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      {url.giant ? (
+      {url.thumbnail ? (
         <>
           <EuiHideFor sizes={['xs', 's']}>
             <video
@@ -119,10 +119,7 @@ const GifMarkdownRenderer = ({ gif }) => {
               muted
               disableRemotePlayback
             >
-              <source src={url.giant} type="video/mp4"></source>
-              {url.thumbnail && (
-                <source src={url.thumbnail} type="video/mp4"></source>
-              )}
+              <source src={url.thumbnail} type="video/mp4"></source>
             </video>
           </EuiHideFor>
           <EuiHideFor sizes={['m', 'l', 'xl']}>
