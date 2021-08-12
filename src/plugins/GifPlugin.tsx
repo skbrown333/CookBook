@@ -68,8 +68,24 @@ function GifMarkdownParser() {
       return urlObject;
     };
 
+    const imgurTransform = (url) => {
+      const urlObject = { giant: url, gif: url };
+      const [mp4, gif] = ['.mp4', '.gif'];
+      if (url.includes(mp4)) {
+        urlObject.gif = url.replace(mp4, gif);
+      } else if (url.includes(gif)) {
+        urlObject.giant = url.replace(gif, mp4);
+      } else {
+        urlObject.giant = url + mp4;
+        urlObject.gif = url + gif;
+      }
+      return urlObject;
+    };
+
     urls = urls.map((url) => {
-      return url.includes('gfy') ? gfyTransform(url) : url;
+      if (url.includes('gfy')) return gfyTransform(url);
+      if (url.includes('imgur')) return imgurTransform(url);
+      return url;
     });
 
     if (silent) {
@@ -93,21 +109,32 @@ function GifMarkdownParser() {
 const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => (
     <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      <EuiHideFor sizes={['xs', 's']}>
-        <video
-          className="guide-section__markdown__gifs__gif"
-          autoPlay
-          loop
-          muted
-          disableRemotePlayback
-        >
-          <source src={url.giant} type="video/mp4"></source>
-          <source src={url.thumbnail} type="video/mp4"></source>
-        </video>
-      </EuiHideFor>
-      <EuiHideFor sizes={['m', 'l', 'xl']}>
-        <img className="guide-section__markdown__gifs__gif" src={url.gif}></img>
-      </EuiHideFor>
+      {url.giant ? (
+        <>
+          <EuiHideFor sizes={['xs', 's']}>
+            <video
+              className="guide-section__markdown__gifs__gif"
+              autoPlay
+              loop
+              muted
+              disableRemotePlayback
+            >
+              <source src={url.giant} type="video/mp4"></source>
+              {url.thumbnail && (
+                <source src={url.thumbnail} type="video/mp4"></source>
+              )}
+            </video>
+          </EuiHideFor>
+          <EuiHideFor sizes={['m', 'l', 'xl']}>
+            <img
+              className="guide-section__markdown__gifs__gif"
+              src={url.gif}
+            ></img>
+          </EuiHideFor>
+        </>
+      ) : (
+        <img className="guide-section__markdown__gifs__gif" src={url}></img>
+      )}
     </EuiAspectRatio>
   ));
   return <div className="guide-section__markdown_gifs">{gifs}</div>;
