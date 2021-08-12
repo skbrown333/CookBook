@@ -69,14 +69,14 @@ function GifMarkdownParser() {
     };
 
     const imgurTransform = (url) => {
-      const urlObject = { giant: url, gif: url };
+      const urlObject = { thumbnail: url, gif: url };
       const [mp4, gif] = ['.mp4', '.gif'];
       if (url.includes(mp4)) {
         urlObject.gif = url.replace(mp4, gif);
       } else if (url.includes(gif)) {
-        urlObject.giant = url.replace(gif, mp4);
+        urlObject.thumbnail = url.replace(gif, mp4);
       } else {
-        urlObject.giant = url + mp4;
+        urlObject.thumbnail = url + mp4;
         urlObject.gif = url + gif;
       }
       return urlObject;
