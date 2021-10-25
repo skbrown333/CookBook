@@ -131,7 +131,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
     const domain = domains.length >= 3 || isLocal ? domains[1] : domains[0];
     const protocol = isLocal ? 'http' : 'https';
     const suffix = isLocal ? '' : domains[2];
-    window.location.href = `${protocol}://${selectedGame.subdomain}.${domain}${suffix}/${_cookbook.name}`;
+    window.location.href = `${protocol}://${selectedGame.subdomain}.${domain}.${suffix}/${_cookbook.name}`;
   };
 
   return (
