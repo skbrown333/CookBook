@@ -6,6 +6,8 @@
   width: 248px;
   margin-right: 24px;
   display: none;
+  position: fixed;
+  left: calc(50vw - 700px);
 
   &.euiPanel {
     flex-grow: 0;
