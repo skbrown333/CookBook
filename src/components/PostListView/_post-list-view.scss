@@ -11,6 +11,7 @@
   display: flex;
   justify-content: center;
   overflow: hidden;
+  max-width: 800px;
   padding: 0 !important;
   padding-top: 8px;
 
@@ -40,6 +41,10 @@
 
     @include respond-to(gt-sm) {
       padding: 16px 16px;
+    }
+
+    @include respond-to(gt-md) {
+      overflow: visible;
     }
 
     .euiPanel {

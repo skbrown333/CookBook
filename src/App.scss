@@ -14,6 +14,13 @@
     position: relative;
   }
 
+  @include respond-to(gt-md) {
+    overflow: visible;
+    height: auto;
+    max-height: unset;
+    position: relative;
+  }
+
   .login {
     display: flex;
     justify-content: center;
