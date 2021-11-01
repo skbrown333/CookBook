@@ -63,11 +63,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
                 id="index"
                 onClick={() => {
                   const div = document.getElementById(`section-${index}`);
-                  if (div && document) {
-                    const topPos = div.offsetTop - 200;
-                    const sectionsDiv = document.getElementById('sections');
-                    if (sectionsDiv) sectionsDiv.scrollTop = topPos;
-                  }
+                  div?.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 }}
               >
                 {title}
@@ -88,11 +84,7 @@ export const GuideDetailSideNav: FunctionComponent<GuideDetailSideNavProps> = ({
         id: index,
         onClick: () => {
           const div = document.getElementById(`section-${index}`);
-          if (div && document) {
-            const topPos = div.offsetTop - 200;
-            const sectionsDiv = document.getElementById('sections');
-            if (sectionsDiv) sectionsDiv.scrollTop = topPos;
-          }
+          div?.scrollIntoView({ block: 'center', behavior: 'smooth' });
         },
       };
     });
