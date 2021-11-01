@@ -5,13 +5,12 @@
   display: none;
   @include respond-to(gt-md) {
     display: block;
-    margin-top: 62px;
-    margin-right: 12px;
-    margin-left: 12px;
     flex: 1;
-    height: calc(100% - 70px);
     display: flex;
     justify-content: flex-end;
+    position: fixed;
+    top: 62px;
+    left: calc(50vw - 700px);
   }
 
   .contributor-sidebar {

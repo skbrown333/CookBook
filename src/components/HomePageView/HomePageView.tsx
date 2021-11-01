@@ -27,6 +27,31 @@ import { updateAddStatus, updateCookbook } from '../../store/actions';
 import './_home-page-view.scss';
 import CookbookService from '../../services/CookbookService/CookbookService';
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+export default function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions(),
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
 export interface HomePageViewProps {
   index?: number;
 }
@@ -54,6 +79,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const cookbookService = new CookbookService();
   const toast = new ToastService();
   const cookbookSlug = useParams().cookbook;
+  const { height, width } = useWindowDimensions();
 
   const handleChange = (index) => {
     switch (index) {
@@ -132,19 +158,40 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
               }}
               actualSearchText={searchText}
               selectedFilterStrings={filterStringArray}
+              className="home-search"
             />
-            <SwipeableViews onChangeIndex={handleChange} index={index}>
-              <PostListView
-                adding={adding}
-                filters={filters}
-                searchText={dbSearch}
-              />
-              <GuideListView
-                adding={adding}
-                filters={filters}
-                searchText={searchText}
-              />
-            </SwipeableViews>
+            {width < 1280 && (
+              <SwipeableViews onChangeIndex={handleChange} index={index}>
+                <PostListView
+                  adding={adding}
+                  filters={filters}
+                  searchText={dbSearch}
+                />
+                <GuideListView
+                  adding={adding}
+                  filters={filters}
+                  searchText={searchText}
+                />
+              </SwipeableViews>
+            )}
+            {width >= 1280 && index === 0 && (
+              <div style={{ marginTop: 48 }}>
+                <PostListView
+                  adding={adding}
+                  filters={filters}
+                  searchText={dbSearch}
+                />
+              </div>
+            )}
+            {width >= 1280 && index === 1 && (
+              <div style={{ marginTop: 48 }}>
+                <GuideListView
+                  adding={adding}
+                  filters={filters}
+                  searchText={searchText}
+                />
+              </div>
+            )}
           </div>
           <TwitchSidebar className="home-view__twitch" />
         </>

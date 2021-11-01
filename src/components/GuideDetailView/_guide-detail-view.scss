@@ -47,6 +47,12 @@
         height: 100%;
         overflow: auto;
         max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+
+        @include respond-to(gt-md) {
+          margin-top: 48px;
+        }
 
         .euiPanel {
           flex-grow: 0;
@@ -58,9 +64,7 @@
       }
 
       &__right {
-        margin-left: 12px;
         display: none;
-        width: 248px;
 
         &.editing {
           margin-top: 8px;

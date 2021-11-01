@@ -2,12 +2,13 @@
 @import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
 .twitch-sidebar {
-  height: calc(100% - 54px);
   overflow: hidden;
   width: 254px;
-  padding-left: 24px;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 62px;
+  right: calc(50vw - 700px);
 
   &__header {
     display: flex;
