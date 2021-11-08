@@ -14,6 +14,57 @@ env.twitch_parent = isLocal ? 'localhost' : window.location.host;
 
 export const ENV = env;
 
+// cookbook.gg
+// melee.cookbook.gg
+// localhost:3001
+// cook-book-cookbook-gg.vercel.app
+
+class UrlUtils {
+  domains: string[];
+  isLocal: boolean;
+  isVercel: boolean;
+
+  constructor() {
+    this.domains = window.location.host.split('.');
+    this.isLocal = window.location.host.includes('localhost');
+    this.isVercel = window.location.host.includes('.vercel.app');
+  }
+
+  get protocol() {
+    return this.isLocal ? 'http' : 'https';
+  }
+
+  get subdomain() {
+    if (this.isVercel) {
+      return this.domains.length > 3 ? this.domains[0] : 'melee';
+    }
+
+    if (this.isLocal) {
+      return this.domains.length > 1 ? this.domains[0] : 'melee';
+    }
+
+    return this.domains.length > 2 ? this.domains[0] : 'melee';
+  }
+
+  get domain() {
+    if (this.isVercel) {
+      return this.domains.length > 3
+        ? `${this.domains[1]}.${this.domains[2]}.${this.domains[3]}`
+        : `${this.domains[0]}.${this.domains[1]}.${this.domains[2]}`;
+    }
+
+    if (this.isLocal) {
+      return this.domains.length > 1 ? this.domains[1] : this.domains[0];
+    }
+
+    return this.domains.length > 2
+      ? `${this.domains[1]}.${this.domains[2]}`
+      : `${this.domains[0]}.${this.domains[1]}`;
+  }
+}
+
+export const URL_UTILS = new UrlUtils();
+
 /**
  * FUNCTIONS
  */
