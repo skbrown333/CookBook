@@ -24,7 +24,7 @@ import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 import { ToastService } from './services/ToastService';
 
 /* Constants */
-import { DISCORD, ENV } from './constants/constants';
+import { DISCORD, ENV, URL_UTILS } from './constants/constants';
 
 /* Store */
 import { Firebase, FirebaseContext } from './firebase';
@@ -58,13 +58,7 @@ export const App: FunctionComponent = () => {
   useEffect(() => {
     async function init() {
       try {
-        const domains = window.location.host.split('.');
-        const subdomain =
-          (domains.length >= 3 && domains[0] !== 'dev') ||
-          window.location.host.includes('localhost')
-            ? domains[0]
-            : 'melee';
-        const games = await gameService.get({ subdomain: subdomain });
+        const games = await gameService.get({ subdomain: URL_UTILS.subdomain });
         setCookbooks(
           await cookbookService.get({ game: games[0]._id, preview: false }),
         );
