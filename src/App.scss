@@ -9,9 +9,9 @@
   padding-top: 58px;
 
   @include respond-to(gt-md) {
-    overflow: visible;
+    overflow: auto;
     height: auto;
-    max-height: unset;
+    max-height: 100%;
     position: relative;
   }
 
