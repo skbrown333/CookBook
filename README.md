@@ -17,5 +17,6 @@ REACT_APP_DISCORD_ID = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
 REACT_APP_API_URL = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
 ```
 
-Run `yarn` to install dependencies
-Run `yarn start` to start the application
+### `yarn` to install dependencies
+### `yarn start` to start the application
+### `yarn sass` to watch sass changes
