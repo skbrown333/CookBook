@@ -16,7 +16,6 @@
     "firebase": "^8.4.3",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "node-sass": "^5.0.0",
     "prop-types": "^15.7.2",
     "qs": "^6.10.1",
     "react": "^17.0.2",
@@ -37,7 +36,8 @@
     "eject": "react-scripts eject",
     "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|yml|yaml|css|scss)\"",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "sass": "sass src/Sass:src/Css --watch --no-source-map"
   },
   "browserslist": {
     "production": [
@@ -56,6 +56,7 @@
     "@typescript-eslint/parser": "^4.24.0",
     "eslint": "^7.26.0",
     "eslint-plugin-react": "^7.23.2",
-    "prettier": "^2.3.0"
+    "prettier": "^2.3.0",
+    "sass": "^1.49.0"
   }
 }
