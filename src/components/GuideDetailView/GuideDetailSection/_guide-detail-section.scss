@@ -4,7 +4,8 @@
 
 .guide-section {
   width: 100%;
-  margin-bottom: 14px;
+  height: 100%;
+  overflow: auto;
 
   @include twitter-holder;
 
@@ -18,9 +19,10 @@
   .euiMarkdownFormat {
     display: flex;
     justify-content: center;
+    padding-bottom: 80px !important;
 
     div {
-      max-width: 800px;
+      max-width: 1200px;
       width: 100%;
     }
 
@@ -71,7 +73,8 @@
     }
 
     &.editing {
-      padding: 0;
+      height: 100%;
+      padding: 0 !important;
 
       .euiMarkdownEditorToolbar {
         border-radius: 0;
@@ -95,6 +98,7 @@
       p {
         display: flex;
         flex-direction: column;
+        font-size: 18px;
 
         @include respond-to(gt-sm) {
           flex-direction: row;
@@ -106,7 +110,7 @@
         margin-left: auto;
         margin-right: auto;
         width: 100%;
-        max-width: 800px;
+        max-width: 1200px;
       }
 
       img {

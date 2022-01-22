@@ -1,12 +1,16 @@
 @import '../../styles/responsive';
 @import '../../styles/general';
 
+#post-list {
+  height: 100%;
+  overflow: auto;
+}
+
 .post-list {
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  max-width: 800px;
   padding: 0 !important;
   padding-top: 8px;
 
@@ -22,6 +26,7 @@
 
   &__content {
     width: 100%;
+    max-width: 1200px;
     height: 100%;
     overflow: auto;
     display: flex;

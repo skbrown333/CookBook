@@ -70,10 +70,10 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       init();
     }, []);
 
-    const updateSection = (key, value, index) => {
+    const updateSection = (key, valuex) => {
       if (!guide) return;
-      guide.sections[index][key] = value;
-      setGuide({ ...guide });
+      // guide.sections[index][key] = value;
+      // setGuide({ ...guide });
     };
 
     const handleSetEditing = (isEditing) => {
@@ -180,12 +180,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
             <GuideDetailSection
               title={title}
               body={body}
-              index={index}
               editing={editing}
-              tags={tags}
-              isCollapsed={isCollapsed}
-              handleCollapse={handleCollapse}
-              handleDelete={handleDelete}
               updateSection={updateSection}
             />
           </EuiDraggable>
@@ -194,12 +189,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
             key={index}
             title={title}
             body={body}
-            index={index}
             editing={editing}
-            tags={tags}
-            isCollapsed={isCollapsed}
-            handleCollapse={handleCollapse}
-            handleDelete={handleDelete}
             updateSection={updateSection}
           />
         );
@@ -217,14 +207,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
               >
                 <GuideDetailHeader
                   editing={editing}
-                  allCollapsed={allCollapsed}
                   handleCancel={handleCancel}
                   handleSave={handleSave}
-                  handleAddSection={handleAddSection}
                   handleSetEditing={handleSetEditing}
-                  handleCollapseAll={handleCollapseAll}
-                  handleExpandAll={handleExpandAll}
-                  sections={guide.sections}
                   title={guide.title}
                   character={guide.character}
                   showControls={showControls}

@@ -108,7 +108,7 @@ function GifMarkdownParser() {
 
 const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => (
-    <EuiAspectRatio width={16} height={9} maxWidth={800}>
+    <EuiAspectRatio width={16} height={9} maxWidth={1200}>
       {url.thumbnail ? (
         <>
           <EuiHideFor sizes={['xs', 's']}>

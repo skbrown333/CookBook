@@ -26,85 +26,26 @@ export interface GuideDetailHeaderProps {
   title: string;
   character: string | null;
   showControls: boolean;
-  sections: Array<Post>;
-  allCollapsed: boolean;
   handleCancel: () => void;
   handleSave: () => void;
-  handleAddSection: () => void;
   handleSetEditing: (isEditing: boolean) => void;
-  handleCollapseAll: () => void;
-  handleExpandAll: () => void;
 }
 
 export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   editing,
-  allCollapsed,
   handleCancel,
-  handleAddSection,
   handleSave,
   handleSetEditing,
-  handleCollapseAll,
-  handleExpandAll,
   title,
   character,
-  sections,
   showControls,
 }) => {
   const [state] = useContext(Context);
-  const [flyoutVis, setFlyoutVis] = useState(false);
   const { cookbook } = state;
-
-  const toggleFlyout = () => {
-    setFlyoutVis(!flyoutVis);
-  };
-
-  const navItems = () => {
-    return sections.map((section, index) => {
-      const { title } = section;
-      return (
-        <div className="nav-item">
-          <EuiText
-            id={`nav-${index}`}
-            size="m"
-            onClick={() => {
-              toggleFlyout();
-              const div = document.getElementById(`section-${index}`);
-              if (div && document) {
-                const topPos = div.offsetTop - 200;
-                const sectionsDiv = document.getElementById('sections');
-                if (sectionsDiv) sectionsDiv.scrollTop = topPos;
-              }
-            }}
-          >
-            {title}
-          </EuiText>
-        </div>
-      );
-    });
-  };
-
-  const flyout = () => {
-    return (
-      <EuiFlyout ownFocus side="left" onClose={toggleFlyout}>
-        <EuiFlyoutHeader>
-          <EuiTitle>
-            <h2>Sections</h2>
-          </EuiTitle>
-        </EuiFlyoutHeader>
-        <EuiFlyoutBody>{navItems()}</EuiFlyoutBody>
-      </EuiFlyout>
-    );
-  };
 
   return (
     <div className="guide-header">
       <div className="guide-header__title">
-        <EuiButtonIcon
-          onClick={toggleFlyout}
-          aria-label="menu-flyout"
-          iconType="menu"
-          iconSize="l"
-        />
         <EuiAvatar
           size="xl"
           className="guide-header__avatar"
@@ -121,27 +62,6 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
         </EuiTitle>
       </div>
       <div className="guide-header__controls">
-        {allCollapsed ? (
-          <EuiButtonIcon
-            aria-label="expand all"
-            className="guide-header__controls__button"
-            display="fill"
-            iconType="arrowDown"
-            size="m"
-            iconSize="l"
-            onClick={handleExpandAll}
-          />
-        ) : (
-          <EuiButtonIcon
-            aria-label="collapse all"
-            className="guide-header__controls__button"
-            display="fill"
-            iconType="arrowUp"
-            size="m"
-            iconSize="l"
-            onClick={handleCollapseAll}
-          />
-        )}
         {editing ? (
           <>
             <EuiButtonIcon
@@ -164,16 +84,6 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
               size="m"
               iconSize="l"
             />
-            <EuiButtonIcon
-              aria-label="add"
-              className="guide-header__controls__button"
-              display="fill"
-              iconType="plus"
-              color="success"
-              onClick={handleAddSection}
-              size="m"
-              iconSize="l"
-            />
           </>
         ) : (
           showControls && (
@@ -189,7 +99,6 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
           )
         )}
       </div>
-      {flyoutVis && flyout()}
     </div>
   );
 };

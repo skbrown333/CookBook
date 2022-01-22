@@ -2,7 +2,6 @@
 @import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
 .react-swipeable-view-container {
-  max-width: 800px;
   height: 100%;
 }
 
@@ -10,9 +9,10 @@
   height: 100%;
   display: flex;
   justify-content: center;
+  flex: 1;
 
   .search-controls {
-    max-width: 800px;
+    max-width: 1200px !important;
   }
 
   @include respond-to(xs) {
@@ -39,7 +39,6 @@
     overflow: hidden;
     height: 100%;
     width: 100%;
-    max-width: 800px;
 
     @include respond-to(gt-md) {
       overflow: visible;
@@ -47,6 +46,7 @@
       margin-right: auto;
     }
     & > div {
+      overflow: hidden;
       max-width: 100%;
       width: 100%;
     }

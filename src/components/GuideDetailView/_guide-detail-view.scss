@@ -1,16 +1,11 @@
 @import '../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 
 #guide-detail {
-  padding: 8px 8px;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow: visible;
-
-  @include respond-to(gt-sm) {
-    padding: 8px 24px 0 24px;
-  }
 
   @include respond-to(gt-xs) {
     .guide-section__markdown_gifs {
@@ -24,15 +19,14 @@
   .guide-detail__header {
     display: flex;
     justify-content: center;
+    height: 60px;
+    border-bottom: 2px solid lighten($color: $euiColorEmptyShade, $amount: 4%);
   }
 
   .guide-detail__content {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
+    flex-direction: column;
     height: 100%;
-    padding-bottom: 64px;
-    justify-content: center;
 
     .guide-content {
       &__droppable {
@@ -44,15 +38,7 @@
         flex-direction: column;
         align-items: center;
         flex: 1;
-        height: 100%;
-        overflow: auto;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-
-        @include respond-to(gt-md) {
-          margin-top: 48px;
-        }
+        overflow: hidden;
 
         .euiPanel {
           flex-grow: 0;

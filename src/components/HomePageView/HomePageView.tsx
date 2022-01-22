@@ -147,7 +147,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     <div id="home-view">
       {cookbook && (
         <>
-          <ContributorSideBar />
+          {/* <ContributorSideBar /> */}
           <div className="home-view">
             <SearchCreateBar
               handleSearch={handleSearch}
@@ -175,7 +175,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
               </SwipeableViews>
             )}
             {width >= 1280 && index === 0 && (
-              <div style={{ marginTop: 48 }}>
+              <div style={{ marginTop: 48, overflow: 'hidden' }}>
                 <PostListView
                   adding={adding}
                   filters={filters}
@@ -184,7 +184,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
               </div>
             )}
             {width >= 1280 && index === 1 && (
-              <div style={{ marginTop: 48 }}>
+              <div style={{ marginTop: 48, overflow: 'hidden' }}>
                 <GuideListView
                   adding={adding}
                   filters={filters}
@@ -193,7 +193,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
               </div>
             )}
           </div>
-          <TwitchSidebar className="home-view__twitch" />
+          {/* <TwitchSidebar className="home-view__twitch" /> */}
         </>
       )}
     </div>

@@ -1,0 +1,42 @@
+@import '../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+@import '../../styles/general';
+
+.sidebar {
+  height: 100vh;
+  width: 300px;
+  min-width: 300px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid $euiColorEmptyShade;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-bottom: 2px solid $euiColorEmptyShade;
+  }
+
+  &__content {
+    padding: 16px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    margin-top: auto;
+    border-top: 2px solid $euiColorEmptyShade;
+    padding: 8px;
+
+    .username {
+      margin-left: 8px;
+      font-weight: bold;
+    }
+
+    .settings {
+      margin-left: auto;
+    }
+  }
+}

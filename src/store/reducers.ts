@@ -14,6 +14,8 @@ export const Reducer = (state, action) => {
       return { ...state, ...{ game: action.payload } };
     case Actions.UPDATE_ADD:
       return { ...state, ...{ add: action.payload } };
+    case Actions.UPDATE_GUIDES:
+      return { ...state, ...{ guides: [...action.payload] } };
     default:
       return state;
   }
