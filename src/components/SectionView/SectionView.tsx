@@ -25,6 +25,7 @@ import GuideService from '../../services/GuideService/GuideService';
 import { GuideDetailSection } from '../GuideDetailView/GuideDetailSection/GuideDetailSection';
 import { GuideDetailHeader } from '../GuideDetailView/GuideDetailHeader/GuideDetailHeader';
 import { updateGuides } from '../../store/actions';
+import { useSwipeable } from 'react-swipeable';
 
 export interface GuideDetailViewProps {}
 
@@ -42,6 +43,12 @@ export const SectionView: FunctionComponent<GuideDetailViewProps> =
     const showControls =
       user &&
       (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin);
+
+    const handlers = useSwipeable({
+      onSwipedLeft: () => setIsOpen(false),
+      onSwipedRight: () => setIsOpen(true),
+      delta: 1,
+    });
 
     const getGuide = async () => {
       setGuide({
@@ -123,6 +130,7 @@ export const SectionView: FunctionComponent<GuideDetailViewProps> =
         id="guide-detail"
         className="guide-detail"
         style={{ marginLeft: isOpen ? 300 : 0 }}
+        {...handlers}
       >
         {guide && (
           <>
@@ -142,7 +150,6 @@ export const SectionView: FunctionComponent<GuideDetailViewProps> =
                   }
                   character={guide.character}
                   showControls={showControls}
-                  onExpand={() => setIsOpen(!isOpen)}
                 />
               </div>
             }

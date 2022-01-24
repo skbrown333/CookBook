@@ -32,7 +32,6 @@ export interface GuideDetailHeaderProps {
   handleCancel: () => void;
   handleSave: () => void;
   handleSetEditing: (isEditing: boolean) => void;
-  onExpand?: () => void;
 }
 
 export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
@@ -44,7 +43,6 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   sectionTitle,
   character,
   showControls,
-  onExpand,
 }) => {
   const [state] = useContext(Context);
   const { cookbook } = state;
@@ -52,15 +50,6 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   return (
     <div className="guide-header">
       <div className="guide-header__title">
-        <EuiHideFor sizes={['l', 'xl']}>
-          <EuiButtonIcon
-            onClick={onExpand}
-            aria-label="menu-flyout"
-            iconType="menuRight"
-            iconSize="l"
-            color="success"
-          />
-        </EuiHideFor>
         <EuiAvatar
           size="xl"
           className="guide-header__avatar"

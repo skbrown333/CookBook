@@ -5,6 +5,7 @@
   margin-bottom: 8px;
   width: 100%;
   display: flex;
+  overflow: hidden;
 
   @include respond-to(gt-xs) {
     margin-bottom: 14px;
