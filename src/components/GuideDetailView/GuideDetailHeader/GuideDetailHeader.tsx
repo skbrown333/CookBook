@@ -9,6 +9,8 @@ import {
   EuiFlyout,
   EuiFlyoutBody,
   EuiFlyoutHeader,
+  EuiBreadcrumbs,
+  EuiHideFor,
 } from '@elastic/eui';
 
 /* Constants */
@@ -24,11 +26,13 @@ import { Context } from '../../../store/Store';
 export interface GuideDetailHeaderProps {
   editing: boolean;
   title: string;
+  sectionTitle?: string;
   character: string | null;
   showControls: boolean;
   handleCancel: () => void;
   handleSave: () => void;
   handleSetEditing: (isEditing: boolean) => void;
+  onExpand?: () => void;
 }
 
 export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
@@ -37,8 +41,10 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   handleSave,
   handleSetEditing,
   title,
+  sectionTitle,
   character,
   showControls,
+  onExpand,
 }) => {
   const [state] = useContext(Context);
   const { cookbook } = state;
@@ -46,6 +52,15 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
   return (
     <div className="guide-header">
       <div className="guide-header__title">
+        <EuiHideFor sizes={['l', 'xl']}>
+          <EuiButtonIcon
+            onClick={onExpand}
+            aria-label="menu-flyout"
+            iconType="menuRight"
+            iconSize="l"
+            color="success"
+          />
+        </EuiHideFor>
         <EuiAvatar
           size="xl"
           className="guide-header__avatar"
@@ -57,9 +72,18 @@ export const GuideDetailHeader: FunctionComponent<GuideDetailHeaderProps> = ({
               : CHARACTERS.melee.sandbag
           }
         />
-        <EuiTitle>
-          <p>{title}</p>
-        </EuiTitle>
+        <EuiBreadcrumbs
+          breadcrumbs={[
+            {
+              text: title,
+            },
+            {
+              text: sectionTitle,
+            },
+          ]}
+          truncate={true}
+          aria-label="An example of EuiBreadcrumbs"
+        />
       </div>
       <div className="guide-header__controls">
         {editing ? (

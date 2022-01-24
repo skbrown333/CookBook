@@ -108,7 +108,11 @@ export const App: FunctionComponent = () => {
           {game && !loading && (
             <>
               {/* <Route path="/" component={HeaderBar} /> */}
-              <Route path="/" component={Sidebar} />
+              <Route path="/:cookbook">
+                <GuideDetailWrapper>
+                  <Sidebar />
+                </GuideDetailWrapper>
+              </Route>
               <Switch>
                 <ProtectedRoute
                   path="/admin/create"
@@ -166,6 +170,7 @@ const GuideDetailWrapper: FunctionComponent = ({ children }) => {
   const { cookbook, game } = state;
   const cookbookService = new CookbookService();
   const cookbookSlug = useParams().cookbook;
+  console.log('cookbookSlug: ', cookbookSlug);
   const toast = new ToastService();
   useEffect(() => {
     async function init() {

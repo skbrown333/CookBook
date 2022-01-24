@@ -6,7 +6,7 @@
   flex: 1;
   align-items: center;
   justify-content: space-between;
-  background-color: $euiColorEmptyShade;
+  background-color: lighten($euiColorEmptyShade, 2%);
 
   @include respond-to(gt-sm) {
     justify-content: flex-end;

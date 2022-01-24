@@ -33,6 +33,7 @@ export const SectionView: FunctionComponent<GuideDetailViewProps> =
     const [editing, setEditing] = useState<boolean>(false);
     const [guide, setGuide] = useState<Guide | null>(null);
     const [state, dispatch] = useContext(Context);
+    const [isOpen, setIsOpen] = useState(false);
     const { cookbook, user, guides } = state;
     const guideSlug = useParams().recipe;
     const sectionSlug = useParams().section;
@@ -118,7 +119,11 @@ export const SectionView: FunctionComponent<GuideDetailViewProps> =
     };
 
     return (
-      <div id="guide-detail" className="guide-detail">
+      <div
+        id="guide-detail"
+        className="guide-detail"
+        style={{ marginLeft: isOpen ? 300 : 0 }}
+      >
         {guide && (
           <>
             {
@@ -129,8 +134,15 @@ export const SectionView: FunctionComponent<GuideDetailViewProps> =
                   handleSave={handleSave}
                   handleSetEditing={handleSetEditing}
                   title={`${guide.title}`}
+                  sectionTitle={
+                    guide.sections.find(
+                      (section) =>
+                        `:${section.title}` === decodeURI(sectionSlug),
+                    )?.title
+                  }
                   character={guide.character}
                   showControls={showControls}
+                  onExpand={() => setIsOpen(!isOpen)}
                 />
               </div>
             }

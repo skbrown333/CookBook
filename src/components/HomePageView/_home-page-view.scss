@@ -6,13 +6,15 @@
 }
 
 #home-view {
+  max-width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   flex: 1;
+  background-color: $euiPageBackgroundColor;
 
   .search-controls {
-    max-width: 1200px !important;
+    max-width: 900px !important;
   }
 
   @include respond-to(xs) {

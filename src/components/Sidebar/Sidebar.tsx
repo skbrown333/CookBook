@@ -1,4 +1,12 @@
-import { EuiAvatar, EuiIcon, EuiTreeView } from '@elastic/eui';
+import {
+  EuiAvatar,
+  EuiButtonIcon,
+  EuiContextMenuItem,
+  EuiContextMenuPanel,
+  EuiIcon,
+  EuiPopover,
+  EuiTreeView,
+} from '@elastic/eui';
 import { Link } from 'react-router-dom';
 import React, {
   FunctionComponent,
@@ -20,34 +28,15 @@ interface SidebarProps {}
 
 export const Sidebar: FunctionComponent<SidebarProps> = () => {
   const [state, dispatch] = useContext(Context);
-  const [guides, setGuides] = useState<Guide[]>([]);
   const history = useHistory();
-  const { cookbook, user } = state;
-  const toast = new ToastService();
-
-  const getGuides = async () => {
-    if (!cookbook) return [];
-    const guideService = new GuideService(cookbook._id);
-    const guides = await guideService.get();
-    return guides.sort((a, b) => b.sections.length - a.sections.length);
-  };
-
-  useEffect(() => {
-    async function init() {
-      try {
-        setGuides(await getGuides());
-      } catch (err) {
-        toast.errorToast('Error getting guides', err.message);
-      }
-    }
-    init();
-  }, [cookbook]);
+  const { cookbook, user, guides } = state;
+  const [_guides, setGuides] = useState<Guide[]>([...guides]);
 
   const GuideTree: FunctionComponent = () => {
     const guideItems: any = guides.map((guide) => {
       const { title, sections, _id } = guide;
       return {
-        label: title,
+        label: <div>{title}</div>,
         id: _id,
         icon: <EuiIcon type="folderClosed" />,
         iconWhenExpanded: <EuiIcon type="folderOpen" />,
