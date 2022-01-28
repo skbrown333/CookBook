@@ -45,6 +45,21 @@
     background-color: $euiPageBackgroundColor;
     transition: margin 200ms;
 
+    &__header {
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background-color: lighten($euiColorEmptyShade, 2%);
+      position: relative;
+      padding: 8px;
+      justify-content: center;
+
+      .search-controls {
+        background-color: unset;
+      }
+    }
+
     @include respond-to(gt-md) {
       overflow: visible;
       margin-left: auto;

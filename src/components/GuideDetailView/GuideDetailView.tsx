@@ -8,28 +8,28 @@ import React, {
 import { useParams } from 'react-router-dom';
 
 /* Components */
+import { useSwipeable } from 'react-swipeable';
 import {
-  EuiDragDropContext,
-  EuiDroppable,
-  EuiDraggable,
-  euiDragDropReorder,
+  EuiAvatar,
+  EuiBreadcrumbs,
+  EuiButtonIcon,
+  EuiMarkdownEditor,
+  EuiMarkdownFormat,
 } from '@elastic/eui';
-import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import { parsingList, processingList, uiList } from '../../plugins';
 
 /* Styles */
-import './_guide-detail-view.scss';
+import '../GuideDetailView/_guide-detail-view.scss';
 
 /* Types */
 import { Guide } from '../../models/Guide';
 
 /* Constants */
-import { newSection, ROLES } from '../../constants/constants';
-import { GuideDetailSideNav } from './GuideDetailSideNav/GuideDetailSideNav';
-import { GuideDetailSection } from './GuideDetailSection/GuideDetailSection';
-import { GuideDetailHeader } from './GuideDetailHeader/GuideDetailHeader';
+import { CHARACTERS, ROLES } from '../../constants/constants';
 
-/* Firebase */
+/* Store */
 import { Context } from '../../store/Store';
+import { updateGuides } from '../../store/actions';
 
 /* Services */
 import { ToastService } from '../../services/ToastService';
@@ -40,83 +40,55 @@ export interface GuideDetailViewProps {}
 export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
   (): ReactElement => {
     const [editing, setEditing] = useState<boolean>(false);
-    const [collapsed, setCollapsed] = useState<Array<boolean>>(
-      Array<boolean>(),
-    );
-    const [allCollapsed, setAllCollapsed] = useState(false);
     const [guide, setGuide] = useState<Guide | null>(null);
-    const [state] = useContext(Context);
-    const { cookbook, user } = state;
+    const [state, dispatch] = useContext(Context);
+    const [isOpen, setIsOpen] = useState(false);
+    const { cookbook, user, guides } = state;
     const guideSlug = useParams().recipe;
+    const sectionSlug = useParams().section;
     const toast = new ToastService();
+    const guideService = new GuideService(cookbook._id);
     const showControls =
       user &&
       (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin);
-    const guideService = new GuideService(cookbook._id);
+
+    const handlers = useSwipeable({
+      onSwipedLeft: () => setIsOpen(false),
+      onSwipedRight: () => setIsOpen(true),
+      delta: 1,
+    });
 
     const getGuide = async () => {
-      const guide: any = await guideService.get({
-        slug: guideSlug.toLowerCase(),
+      setGuide({
+        ...JSON.parse(
+          JSON.stringify(guides.find((guide) => guide._id === guideSlug)),
+        ),
       });
-      setGuide(guide[0]);
-      return guide[0];
     };
 
     useEffect(() => {
       const init = async () => {
-        const setterGuide = await getGuide();
-        setCollapsed(Array(setterGuide.sections.length).fill(false));
+        getGuide();
       };
       init();
-    }, []);
+    }, [guides, guideSlug]);
 
-    const updateSection = (key, valuex) => {
+    const updateSection = (key, value) => {
       if (!guide) return;
-      // guide.sections[index][key] = value;
-      // setGuide({ ...guide });
+      const sectionIndex = guide.sections.findIndex(
+        (section) => `:${section.title}` === decodeURI(sectionSlug),
+      );
+      guide.sections[sectionIndex][key] = value;
+      setGuide({ ...guide });
     };
 
     const handleSetEditing = (isEditing) => {
       setEditing(isEditing);
     };
 
-    const handleAddSection = () => {
-      if (!guide) return;
-      const { sections } = guide;
-      sections.unshift({ ...newSection });
-      collapsed.unshift(false);
-      setCollapsed([...collapsed]);
-      setGuide({ ...guide });
-    };
-
     const handleCancel = async () => {
       await getGuide();
-      handleExpandAll();
       setEditing(false);
-    };
-
-    const handleExpandAll = () => {
-      setCollapsed(Array(guide?.sections.length).fill(false));
-      setAllCollapsed(false);
-    };
-
-    const handleCollapseAll = () => {
-      setCollapsed(Array(guide?.sections.length).fill(true));
-      setAllCollapsed(true);
-    };
-
-    const handleDelete = (index) => {
-      if (!guide) return;
-      const { sections } = guide;
-      setCollapsed(
-        collapsed
-          .slice(0, index)
-          .concat(collapsed.slice(index + 1, collapsed.length)),
-      );
-      guide.sections = sections
-        .slice(0, index)
-        .concat(sections.slice(index + 1, sections.length));
-      setGuide({ ...guide });
     };
 
     const handleSave = async () => {
@@ -131,118 +103,133 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
           },
         );
         toast.successToast('Guide saved!', 'Guide saved');
-        handleExpandAll();
-        await getGuide();
+        const guides = await guideService.get({ cookbook: cookbook._id });
+        dispatch(updateGuides([...guides]));
         setEditing(false);
       } catch (error) {
         toast.errorToast('Something went wrong', 'Guide was not saved');
       }
     };
 
-    const handleCollapse = (index) => {
-      collapsed[index] = collapsed[index] ? !collapsed[index] : true;
-      setCollapsed([...collapsed]);
-    };
+    if (!guide || !guide.sections) return <></>;
 
-    const handleDragEnd = (result) => {
-      const { source, destination } = result;
-      if (!guide) return;
-      const { sections } = guide;
-      if (source && destination) {
-        const items = euiDragDropReorder(
-          sections,
-          source.index,
-          destination.index,
-        );
-        setCollapsed([
-          ...euiDragDropReorder(collapsed, source.index, destination.index),
-        ]);
-        guide.sections = [...items];
-        setGuide({ ...guide });
-      }
-    };
+    const section: any = guide.sections.find(
+      (section) => `:${section.title}` === decodeURI(sectionSlug),
+    );
 
-    const buildSections = () => {
-      if (!guide) return [<></>];
+    if (!section) return <></>;
 
-      return guide.sections.map((section, index) => {
-        const { title, body, tags } = section;
-        const isCollapsed = collapsed[index] && collapsed[index] === true;
-
-        return editing ? (
-          <EuiDraggable
-            spacing="m"
-            key={index}
-            index={index}
-            draggableId={index.toString()}
-            isDragDisabled={!editing}
-          >
-            <GuideDetailSection
-              title={title}
-              body={body}
-              editing={editing}
-              updateSection={updateSection}
-            />
-          </EuiDraggable>
-        ) : (
-          <GuideDetailSection
-            key={index}
-            title={title}
-            body={body}
-            editing={editing}
-            updateSection={updateSection}
-          />
-        );
-      });
-    };
+    const { body, title } = section;
 
     return (
-      <div id="guide-detail" className="guide-detail">
-        {guide && guide.sections && (
+      <div
+        id="guide-detail"
+        className="guide-detail"
+        style={{ marginLeft: isOpen ? 300 : 0 }}
+        {...handlers}
+      >
+        {guide && (
           <>
             {
-              <div
-                className="guide-detail__header"
-                style={editing ? { paddingRight: 8 } : {}}
-              >
-                <GuideDetailHeader
-                  editing={editing}
-                  handleCancel={handleCancel}
-                  handleSave={handleSave}
-                  handleSetEditing={handleSetEditing}
-                  title={guide.title}
-                  character={guide.character}
-                  showControls={showControls}
-                />
+              <div className="guide-detail__header">
+                <div className="title">
+                  <EuiAvatar
+                    size="xl"
+                    className="guide-header__avatar"
+                    name={guide.title}
+                    color={null}
+                    iconType={
+                      guide.character
+                        ? CHARACTERS[cookbook.game.name][guide.character]
+                        : CHARACTERS.melee.sandbag
+                    }
+                  />
+                  <EuiBreadcrumbs
+                    breadcrumbs={[
+                      {
+                        text: guide.title,
+                      },
+                      {
+                        text: guide.sections.find(
+                          (section) =>
+                            `:${section.title}` === decodeURI(sectionSlug),
+                        )?.title,
+                      },
+                    ]}
+                    truncate={true}
+                    aria-label="An example of EuiBreadcrumbs"
+                  />
+                </div>
+                <div className="controls">
+                  {editing ? (
+                    <>
+                      <EuiButtonIcon
+                        aria-label="cancel"
+                        className="controls__button"
+                        display="fill"
+                        iconType="cross"
+                        color="danger"
+                        onClick={handleCancel}
+                        size="m"
+                        iconSize="l"
+                      />
+                      <EuiButtonIcon
+                        aria-label="save"
+                        className="controls__button"
+                        display="fill"
+                        iconType="save"
+                        color="success"
+                        onClick={handleSave}
+                        size="m"
+                        iconSize="l"
+                      />
+                    </>
+                  ) : (
+                    showControls && (
+                      <EuiButtonIcon
+                        aria-label="edit"
+                        className="controls__edit"
+                        display="fill"
+                        iconType="pencil"
+                        size="m"
+                        iconSize="l"
+                        onClick={() => handleSetEditing(!editing)}
+                      />
+                    )
+                  )}
+                </div>
               </div>
             }
 
             <div className="guide-detail__content">
-              <GuideDetailSideNav
-                editing={editing}
-                title={guide.title}
-                sections={guide.sections}
-                character={guide.character}
-                handleDragEnd={handleDragEnd}
-              />
-              <div id="sections" className="guide-content__sections">
+              <div
+                id={`section-${title}`}
+                key={title}
+                className={`body${editing ? ' editing' : ''}`}
+              >
                 {editing ? (
-                  <EuiDragDropContext onDragEnd={handleDragEnd}>
-                    <EuiDroppable
-                      droppableId="DROPPABLE_AREA"
-                      spacing="m"
-                      className="guide-content__droppable"
-                    >
-                      {buildSections()}
-                    </EuiDroppable>
-                  </EuiDragDropContext>
+                  <>
+                    <EuiMarkdownEditor
+                      aria-label="Body markdown editor"
+                      value={body}
+                      onChange={(value) => updateSection('body', value)}
+                      height={'full'}
+                      parsingPluginList={parsingList}
+                      processingPluginList={processingList}
+                      uiPlugins={uiList}
+                    />
+                  </>
                 ) : (
-                  buildSections()
+                  <>
+                    <EuiMarkdownFormat
+                      parsingPluginList={parsingList}
+                      processingPluginList={processingList}
+                    >
+                      {body}
+                    </EuiMarkdownFormat>
+                  </>
                 )}
               </div>
-              <TwitchSidebar
-                className={editing ? 'guide-content__right editing' : ''}
-              />
             </div>
           </>
         )}

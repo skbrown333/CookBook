@@ -134,12 +134,12 @@ const GifMarkdownRenderer = ({ gif }) => {
   const gifs = gif.urls.map((url) => (
     <div ref={ref}>
       {isVisible ? (
-        <EuiAspectRatio width={16} height={9} maxWidth={900}>
+        <EuiAspectRatio width={16} height={9} className="gif-container">
           {url.thumbnail ? (
             <>
               <EuiHideFor sizes={['xs', 's']}>
                 <video
-                  className="guide-section__markdown__gifs__gif"
+                  className="markdown__gifs__gif"
                   autoPlay
                   loop
                   muted
@@ -149,22 +149,19 @@ const GifMarkdownRenderer = ({ gif }) => {
                 </video>
               </EuiHideFor>
               <EuiHideFor sizes={['m', 'l', 'xl']}>
-                <img
-                  className="guide-section__markdown__gifs__gif"
-                  src={url.gif}
-                ></img>
+                <img className="markdown__gifs__gif" src={url.gif}></img>
               </EuiHideFor>
             </>
           ) : (
-            <img className="guide-section__markdown__gifs__gif" src={url}></img>
+            <img className="markdown__gifs__gif" src={url}></img>
           )}
         </EuiAspectRatio>
       ) : (
-        <div></div>
+        <EuiAspectRatio width={16} height={9} />
       )}
     </div>
   ));
-  return <div className="guide-section__markdown_gifs">{gifs}</div>;
+  return <div className="markdown__gifs">{gifs}</div>;
 };
 
 export const gifPlug = {

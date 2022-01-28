@@ -5,12 +5,10 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import SwipeableViews from 'react-swipeable-views';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 /* Components */
 import { PostListView } from '../PostListView/PostListView';
-import { GuideListView } from '../GuideListView/GuideListView';
 import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 import { ContributorSideBar } from '../ContributorSideBar/ContributorSideBar';
@@ -27,31 +25,6 @@ import { updateAddStatus, updateCookbook } from '../../store/actions';
 import './_home-page-view.scss';
 import CookbookService from '../../services/CookbookService/CookbookService';
 import { useSwipeable } from 'react-swipeable';
-
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
-
-export default function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions(),
-  );
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowDimensions;
-}
 
 export interface HomePageViewProps {
   index?: number;
@@ -81,24 +54,12 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const cookbookService = new CookbookService();
   const toast = new ToastService();
   const cookbookSlug = useParams().cookbook;
-  const { height, width } = useWindowDimensions();
+
   const handlers = useSwipeable({
     onSwipedLeft: () => setIsOpen(false),
     onSwipedRight: () => setIsOpen(true),
     delta: 1,
   });
-
-  const handleChange = (index) => {
-    switch (index) {
-      case 0:
-        history.push(`/${cookbook.name}`);
-        break;
-      case 1:
-        history.push(`/${cookbook.name}/recipes`);
-        break;
-    }
-    setAdding(history.location.pathname);
-  };
 
   const debouncedSearch = useCallback(
     debounce((search) => setDbSearch(search), 500),
@@ -160,17 +121,20 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
             style={{ marginLeft: isOpen ? 300 : 0 }}
             {...handlers}
           >
-            <SearchCreateBar
-              handleSearch={handleSearch}
-              handleFilterChange={handleFilterChange}
-              handlePlus={() => {
-                setAdding(history.location.pathname);
-                dispatch(updateAddStatus(true));
-              }}
-              actualSearchText={searchText}
-              selectedFilterStrings={filterStringArray}
-              className="home-search"
-            />
+            <div className="home-view__header">
+              <SearchCreateBar
+                handleSearch={handleSearch}
+                handleFilterChange={handleFilterChange}
+                handlePlus={() => {
+                  setAdding(history.location.pathname);
+                  dispatch(updateAddStatus(true));
+                }}
+                actualSearchText={searchText}
+                selectedFilterStrings={filterStringArray}
+                className="home-search"
+              />
+            </div>
+
             <div style={{ overflow: 'hidden' }}>
               <PostListView
                 adding={adding}

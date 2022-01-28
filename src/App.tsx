@@ -45,7 +45,6 @@ import CookbookService from './services/CookbookService/CookbookService';
 import axios from './services/axios.instance';
 import GameService from './services/GameService/GameService';
 import { Sidebar } from './components/Sidebar/Sidebar';
-import { SectionView } from './components/SectionView/SectionView';
 import GuideService from './services/GuideService/GuideService';
 
 const firebaseInstance = new Firebase();
@@ -107,7 +106,6 @@ export const App: FunctionComponent = () => {
         <div id="cb-app">
           {game && !loading && (
             <>
-              {/* <Route path="/" component={HeaderBar} /> */}
               <Route path="/:cookbook">
                 <GuideDetailWrapper>
                   <Sidebar />
@@ -131,12 +129,9 @@ export const App: FunctionComponent = () => {
                   path="/:cookbook/settings"
                   component={SettingsView}
                 />
-                {/* <Route path="/:cookbook/recipes/:recipe">
-                  <GuideDetailWrapper />
-                </Route> */}
                 <Route path="/:cookbook/recipes/:recipe/section/:section">
                   <GuideDetailWrapper>
-                    <SectionView />
+                    <GuideDetailView />
                   </GuideDetailWrapper>
                 </Route>
                 <Route path="/:cookbook/recipes">

@@ -1,5 +1,6 @@
 @import '../../styles/responsive';
 @import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+@import '../../styles/general';
 
 #guide-detail {
   display: flex;
@@ -21,47 +22,135 @@
   }
 
   .guide-detail__header {
-    display: flex;
-    justify-content: center;
     height: 60px;
     border-bottom: 2px solid lighten($color: $euiColorEmptyShade, $amount: 4%);
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    background-color: lighten($euiColorEmptyShade, 2%);
+
+    .title {
+      display: flex;
+    }
+
+    .controls__button {
+      margin: 0 4px 0 4px;
+    }
+
+    .controls {
+      margin-right: 16px;
+    }
+
+    &__title {
+      display: inherit;
+      align-items: inherit;
+      font-size: 24px;
+      font-weight: 600;
+      text-transform: capitalize;
+      margin-left: 12px;
+      margin-right: auto;
+    }
   }
 
   .guide-detail__content {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: 18px;
+    overflow: auto;
+    background-color: $euiColorEmptyShade;
 
-    .guide-content {
-      &__droppable {
+    @include twitter-holder;
+
+    .euiAspectRatio {
+      width: 100%;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .euiMarkdownFormat {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 80px !important;
+
+      div {
         width: 100%;
       }
 
-      &__sections {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        overflow: hidden;
+      table {
+        display: table;
 
-        .euiPanel {
-          flex-grow: 0;
+        th {
+          background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
+        }
 
-          &--paddingMedium {
-            padding: 0;
-          }
+        td {
+          background-color: darken($color: $euiColorEmptyShade, $amount: 2%);
+        }
+      }
+    }
+
+    .body {
+      padding: 16px;
+
+      .euiComboBox .euiComboBox__inputWrap {
+        border-radius: 0;
+      }
+
+      &.editing {
+        height: 100%;
+        padding: 0 !important;
+
+        .euiMarkdownEditorToolbar {
+          border-radius: 0;
+        }
+
+        .euiMarkdownEditorPreview,
+        .euiMarkdownEditorFooter {
+          border-radius: 0;
+        }
+
+        .euiMarkdownEditorFooter {
+          border-radius: 0;
         }
       }
 
-      &__right {
-        display: none;
+      @include respond-to(gt-xs) {
+        padding: 16px;
+      }
 
-        &.editing {
-          margin-top: 8px;
+      .euiMarkdownFormat {
+        p {
+          display: flex;
+          flex-direction: column;
+          font-size: 18px;
+
+          @include respond-to(gt-sm) {
+            flex-direction: row;
+            flex-wrap: wrap;
+          }
         }
 
-        @include respond-to(gt-sm) {
-          display: block;
+        img {
+          max-width: 1200px;
+          width: 100%;
+          margin: 4px auto;
+        }
+
+        .markdown__gifs {
+          display: flex;
+          justify-content: center;
+          max-width: 1200px;
+          margin: 0 auto;
+
+          &__gif {
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2px;
+            width: 100%;
+            max-width: 1200px;
+          }
         }
       }
     }
