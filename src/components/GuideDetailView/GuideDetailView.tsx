@@ -34,6 +34,7 @@ import { updateGuides } from '../../store/actions';
 /* Services */
 import { ToastService } from '../../services/ToastService';
 import GuideService from '../../services/GuideService/GuideService';
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 
 export interface GuideDetailViewProps {}
 
@@ -76,7 +77,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const updateSection = (key, value) => {
       if (!guide) return;
       const sectionIndex = guide.sections.findIndex(
-        (section) => `:${section.title}` === decodeURI(sectionSlug),
+        (section) => `${section.title}` === decodeURI(sectionSlug),
       );
       guide.sections[sectionIndex][key] = value;
       setGuide({ ...guide });
@@ -114,7 +115,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     if (!guide || !guide.sections) return <></>;
 
     const section: any = guide.sections.find(
-      (section) => `:${section.title}` === decodeURI(sectionSlug),
+      (section) => `${section.title}` === decodeURI(sectionSlug),
     );
 
     if (!section) return <></>;
@@ -152,7 +153,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                       {
                         text: guide.sections.find(
                           (section) =>
-                            `:${section.title}` === decodeURI(sectionSlug),
+                            `${section.title}` === decodeURI(sectionSlug),
                         )?.title,
                       },
                     ]}
@@ -230,6 +231,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                   </>
                 )}
               </div>
+              <TwitchSidebar className="guide-sidebar" />
             </div>
           </>
         )}

@@ -55,7 +55,6 @@
 
   .guide-detail__content {
     display: flex;
-    flex-direction: column;
     height: 100%;
     padding: 18px;
     overflow: auto;
@@ -91,8 +90,30 @@
       }
     }
 
+    .guide-sidebar {
+      padding-left: 8vw;
+
+      .twitch-sidebar {
+        overflow: hidden;
+        width: 254px;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: unset;
+        right: unset;
+        padding-bottom: 48px;
+      }
+    }
+
     .body {
+      max-width: 1200px;
       padding: 16px;
+
+      @include respond-to(gt-sm) {
+        position: relative;
+        min-width: 50vw;
+        width: 50vw;
+      }
 
       .euiComboBox .euiComboBox__inputWrap {
         border-radius: 0;

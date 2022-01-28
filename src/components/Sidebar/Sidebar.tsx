@@ -49,7 +49,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
             icon: <EuiIcon type="document" />,
             callback: () =>
               history.push(
-                `/${cookbook.name}/recipes/${guide._id}/section/:${section.title}`,
+                `/${cookbook.name}/recipes/${guide._id}/section/${section.title}`,
               ),
           };
         }),
