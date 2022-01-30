@@ -10,10 +10,12 @@ import {
   EuiDroppable,
   EuiIcon,
 } from '@elastic/eui';
-import { updateGuides } from '../../store/actions';
+import { updateCookbook, updateGuides } from '../../store/actions';
 
 import './_tree-nav.scss';
 import { ROLES } from '../../constants/constants';
+import CookbookService from '../../services/CookbookService/CookbookService';
+import GuideService from '../../services/GuideService/GuideService';
 
 interface TreeNavProps {}
 
@@ -21,20 +23,28 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
   const [state, dispatch] = useContext(Context);
   const history = useHistory();
   const { cookbook, user, guides } = state;
+  const cookbookService = new CookbookService();
+  const guideService = new GuideService(cookbook._id);
   const isDragDisabled =
     !user ||
     (!ROLES.admin.includes(cookbook.roles[user.uid]) && !user.super_admin);
 
-  let content = null;
-
-  const onDragEnd = ({ source, destination }: any) => {
+  const onDragEnd = async ({ source, destination }: any) => {
     if (source && destination) {
       const items = euiDragDropReorder(guides, source.index, destination.index);
       dispatch(updateGuides([...items]));
+      const token = await user.user.getIdToken();
+      await cookbookService.update(
+        cookbook._id,
+        { guides: items.map((item) => item._id) },
+        {
+          Authorization: `Bearer ${token}`,
+        },
+      );
     }
   };
 
-  const onSectionDragEnd = (
+  const onSectionDragEnd = async (
     { source, destination }: any,
     sections,
     guideIndex,
@@ -47,13 +57,17 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
       );
       guides[guideIndex].sections = items;
       dispatch(updateGuides([...guides]));
+
+      const token = await user.user.getIdToken();
+      await guideService.update(
+        guides[guideIndex]._id,
+        { sections: items },
+        {
+          Authorization: `Bearer ${token}`,
+        },
+      );
     }
   };
-
-  content = useMemo(() => {
-    if (!guides) return [];
-    return guides.map(buildGroups);
-  }, [guides]);
 
   function buildGroups(guide, index) {
     return (
@@ -131,6 +145,11 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
       </EuiDraggable>
     );
   }
+
+  const content = useMemo(() => {
+    if (!guides) return [];
+    return guides.map(buildGroups);
+  }, [guides, cookbook]);
 
   return (
     <div className="tree-nav">

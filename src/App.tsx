@@ -176,9 +176,14 @@ const GuideDetailWrapper: FunctionComponent = ({ children }) => {
             name: cookbookSlug,
           });
           dispatch(updateCookbook(cookbooks[0]));
+          const guideMap = {};
           const guideService = new GuideService(cookbooks[0]._id);
           const guides = await guideService.get({ cookbook: cookbooks[0] });
-          dispatch(updateGuides([...guides]));
+          cookbooks[0].guides.forEach(
+            (guide) =>
+              (guideMap[guide] = guides.find((_g) => _g._id === guide)),
+          );
+          dispatch(updateGuides([...Object.values(guideMap)]));
         } catch (err) {
           toast.errorToast('Error Getting Cookbook', err.message);
         }

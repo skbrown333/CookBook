@@ -117,11 +117,6 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const section: any = guide.sections.find(
       (section) => `${section.title}` === decodeURIComponent(sectionSlug),
     );
-    console.log(
-      'decodeURIComponent(sectionSlug): ',
-      decodeURIComponent(sectionSlug),
-    );
-    console.log('sections: ', guide.sections);
 
     if (!section) return <></>;
 

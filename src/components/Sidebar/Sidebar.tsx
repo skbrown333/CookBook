@@ -75,7 +75,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
       <div className="sidebar__header">{cookbook && <HeaderSwitcher />}</div>
       <div className="sidebar__content">
         {/* <GuideTree /> */}
-        <img src="https://media.giphy.com/media/l0ExmDyrbMv6djjmE/giphy.gif" />
+        {cookbook.banner_url && <img src={cookbook.banner_url} />}
         <TreeNav />
       </div>
       {cookbook && user && (
