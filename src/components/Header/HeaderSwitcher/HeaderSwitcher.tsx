@@ -50,11 +50,8 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
   const button = (
     <button onClick={() => setIsOpen(!isOpen)} className="switcher">
       <Logo className="logo" />
-      <span>{game.display_name}</span>
-      <div className="switcher__character">
-        <img src={CHARACTERS[game.name][cookbook.character.name]} />
-      </div>
-      <EuiIcon type={isOpen ? 'arrowUp' : 'arrowDown'} />
+      <div>{game.display_name}</div>
+      <EuiIcon type={isOpen ? 'arrowUp' : 'arrowDown'} className="icon" />
     </button>
   );
 

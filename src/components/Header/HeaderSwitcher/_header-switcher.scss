@@ -4,9 +4,14 @@
   display: flex;
   font-weight: 600;
   align-items: center;
+  width: 100%;
 
   span {
     margin-right: 12px;
+  }
+
+  .icon {
+    margin-left: auto;
   }
 
   svg {
@@ -19,22 +24,6 @@
       margin-right: 16px;
       width: 24px;
       height: 24px;
-    }
-  }
-
-  &__character {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      margin-right: 8px;
-      margin-left: 0;
-      padding: 2px;
-      background-color: white;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
     }
   }
 }
@@ -118,6 +107,7 @@
   box-shadow: none !important;
   max-height: 400px !important;
   overflow: hidden !important;
+  background-color: lighten($euiColorEmptyShade, 2%) !important;
 
   .euiPopover__panelArrow,
   .euiPopover__panelArrow--bottom {

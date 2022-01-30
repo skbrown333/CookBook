@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { EuiAspectRatio } from '@elastic/eui';
 
@@ -62,16 +62,44 @@ function loopedParser() {
 }
 
 const loopedPluginRenderer = ({ fixedUrl }) => {
+  function useOnScreen(ref) {
+    const [isIntersecting, setIntersecting] = useState(false);
+
+    const observer = useMemo(
+      () =>
+        new IntersectionObserver(([entry]) =>
+          setIntersecting(entry.isIntersecting),
+        ),
+      [ref],
+    );
+
+    useEffect(() => {
+      observer.observe(ref.current);
+      // Remove the observer as soon as the component is unmounted
+      return () => {
+        observer.disconnect();
+      };
+    }, []);
+
+    return isIntersecting;
+  }
+  const ref: any = useRef();
+  const isVisible = useOnScreen(ref);
+
   return (
-    <EuiAspectRatio width={16} height={9}>
-      <iframe
-        className="markdown__video"
-        frameBorder="0"
-        allowFullScreen={true}
-        scrolling="no"
-        src={fixedUrl}
-      />
-    </EuiAspectRatio>
+    <div ref={ref}>
+      <EuiAspectRatio width={16} height={9}>
+        {isVisible && (
+          <iframe
+            className="markdown__video"
+            frameBorder="0"
+            allowFullScreen={true}
+            scrolling="no"
+            src={fixedUrl}
+          />
+        )}
+      </EuiAspectRatio>
+    </div>
   );
 };
 
