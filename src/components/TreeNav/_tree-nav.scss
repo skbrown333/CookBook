@@ -3,6 +3,11 @@
 .tree-nav {
   padding: 16px;
   padding-top: 8px;
+
+  .euiDraggable .euiDraggable__item.euiDraggable__item--isDisabled {
+    cursor: pointer !important;
+  }
+
   .nav {
     cursor: pointer;
 
@@ -22,7 +27,6 @@
   }
   .guide {
     width: 100%;
-
     .item {
       cursor: pointer;
 

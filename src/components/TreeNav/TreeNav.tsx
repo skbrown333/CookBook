@@ -21,6 +21,9 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
   const [state, dispatch] = useContext(Context);
   const history = useHistory();
   const { cookbook, user, guides } = state;
+  const isDragDisabled =
+    !user ||
+    (!ROLES.admin.includes(cookbook.roles[user.uid]) && !user.super_admin);
 
   let content = null;
 
@@ -61,9 +64,7 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
         draggableId={`id-${guide._id}`}
         disableInteractiveElementBlocking
         customDragHandle
-        isDragDisabled={
-          !ROLES.admin.includes(cookbook.roles[user.uid]) && !user.super_admin
-        }
+        isDragDisabled={isDragDisabled}
       >
         {(provided) => {
           return (
@@ -95,10 +96,7 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
                           draggableId={`id-${section.title}`}
                           disableInteractiveElementBlocking
                           customDragHandle
-                          isDragDisabled={
-                            !ROLES.admin.includes(cookbook.roles[user.uid]) &&
-                            !user.super_admin
-                          }
+                          isDragDisabled={isDragDisabled}
                         >
                           {(provided) => {
                             return (
