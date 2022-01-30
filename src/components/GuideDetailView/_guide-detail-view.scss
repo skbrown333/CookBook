@@ -92,6 +92,14 @@
 
     .guide-sidebar {
       padding-left: 8vw;
+      width: 300px;
+      min-width: 300px;
+      display: none;
+
+      @include respond-to(gt-sm) {
+        display: flex;
+        justify-content: flex-end;
+      }
 
       .twitch-sidebar {
         overflow: hidden;
@@ -107,12 +115,11 @@
 
     .body {
       max-width: 1200px;
+      flex: 1;
       padding: 16px;
 
       @include respond-to(gt-sm) {
         position: relative;
-        min-width: 50vw;
-        width: 50vw;
       }
 
       .euiComboBox .euiComboBox__inputWrap {

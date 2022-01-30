@@ -23,6 +23,7 @@ import { useHistory } from 'react-router-dom';
 import './_sidebar.scss';
 import { HeaderSwitcher } from '../Header/HeaderSwitcher/HeaderSwitcher';
 import { DISCORD, ROLES } from '../../constants/constants';
+import { TreeNav } from '../TreeNav/TreeNav';
 
 interface SidebarProps {}
 
@@ -73,7 +74,9 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
     <div className="sidebar">
       <div className="sidebar__header">{cookbook && <HeaderSwitcher />}</div>
       <div className="sidebar__content">
-        <GuideTree />
+        {/* <GuideTree /> */}
+        <img src="https://media.giphy.com/media/l0ExmDyrbMv6djjmE/giphy.gif" />
+        <TreeNav />
       </div>
       {cookbook && user && (
         <div className="sidebar__footer">

@@ -24,10 +24,20 @@
     height: 60px;
     min-height: 60px;
     border-bottom: 2px solid lighten($euiColorEmptyShade, 4%);
+
+    .euiPopover {
+      flex: 1;
+    }
+
+    .euiPopover__anchor {
+      flex: 1;
+    }
   }
 
   &__content {
-    padding: 16px;
+    img {
+      width: 100%;
+    }
     border-right: 2px solid lighten($euiColorEmptyShade, 4%);
     overflow: auto;
   }
