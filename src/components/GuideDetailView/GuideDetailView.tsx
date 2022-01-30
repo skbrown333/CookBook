@@ -112,11 +112,13 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       }
     };
 
-    if (!guide || !guide.sections) return <></>;
+    if (!guide || guide.sections == null) return <></>;
 
     const section: any = guide.sections.find(
       (section) => `${section.title}` === decodeURI(sectionSlug),
     );
+    console.log('decodeURI(sectionSlug): ', decodeURI(sectionSlug));
+    console.log('sections: ', guide.sections);
 
     if (!section) return <></>;
 
@@ -141,7 +143,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                     color={null}
                     iconType={
                       guide.character
-                        ? CHARACTERS[cookbook.game.name][guide.character]
+                        ? CHARACTERS[cookbook.game.name][guide.character.name]
                         : CHARACTERS.melee.sandbag
                     }
                   />
