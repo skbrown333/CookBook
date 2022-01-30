@@ -15,8 +15,7 @@
   }
 
   @include respond-to(gt-md) {
-    overflow: auto;
-    height: auto;
+    overflow: hidden;
     max-height: 100%;
     position: relative;
   }
