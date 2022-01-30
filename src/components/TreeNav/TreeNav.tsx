@@ -104,7 +104,11 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
                                 className="item inner"
                                 onClick={() => {
                                   history.push(
-                                    `/${cookbook.name}/recipes/${guide._id}/section/${section.title}`,
+                                    `/${cookbook.name}/recipes/${
+                                      guide._id
+                                    }/section/${encodeURIComponent(
+                                      section.title,
+                                    )}`,
                                   );
                                 }}
                               >

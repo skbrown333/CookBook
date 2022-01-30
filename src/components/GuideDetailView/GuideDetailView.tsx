@@ -77,7 +77,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const updateSection = (key, value) => {
       if (!guide) return;
       const sectionIndex = guide.sections.findIndex(
-        (section) => `${section.title}` === decodeURI(sectionSlug),
+        (section) => `${section.title}` === decodeURIComponent(sectionSlug),
       );
       guide.sections[sectionIndex][key] = value;
       setGuide({ ...guide });
@@ -115,9 +115,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     if (!guide || guide.sections == null) return <></>;
 
     const section: any = guide.sections.find(
-      (section) => `${section.title}` === decodeURI(sectionSlug),
+      (section) => `${section.title}` === decodeURIComponent(sectionSlug),
     );
-    console.log('decodeURI(sectionSlug): ', decodeURI(sectionSlug));
+    console.log(
+      'decodeURIComponent(sectionSlug): ',
+      decodeURIComponent(sectionSlug),
+    );
     console.log('sections: ', guide.sections);
 
     if (!section) return <></>;
@@ -155,7 +158,8 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                       {
                         text: guide.sections.find(
                           (section) =>
-                            `${section.title}` === decodeURI(sectionSlug),
+                            `${section.title}` ===
+                            decodeURIComponent(sectionSlug),
                         )?.title,
                       },
                     ]}
