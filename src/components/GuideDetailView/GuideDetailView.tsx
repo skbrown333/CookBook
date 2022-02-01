@@ -92,6 +92,33 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       setEditing(false);
     };
 
+    const handleDelete = async (section) => {
+      if (!guide) return;
+
+      const newSections = guide.sections.filter(
+        (_section) => JSON.stringify(section) !== JSON.stringify(_section),
+      );
+      try {
+        const token = await user.user.getIdToken();
+        await guideService.update(
+          guide._id,
+          { sections: newSections },
+          {
+            Authorization: `Bearer ${token}`,
+          },
+        );
+        const guideMap = {};
+        const guides = await guideService.get({ cookbook: cookbook });
+        cookbook.guides.forEach(
+          (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
+        );
+        dispatch(updateGuides([...Object.values(guideMap)]));
+        setEditing(false);
+      } catch (error) {
+        toast.errorToast('Something went wrong', 'Guide was not saved');
+      }
+    };
+
     const handleSave = async () => {
       if (!guide) return;
       try {
@@ -104,8 +131,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
           },
         );
         toast.successToast('Guide saved!', 'Guide saved');
-        const guides = await guideService.get({ cookbook: cookbook._id });
-        dispatch(updateGuides([...guides]));
+        const guideMap = {};
+        const guides = await guideService.get({ cookbook: cookbook });
+        cookbook.guides.forEach(
+          (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
+        );
+        dispatch(updateGuides([...Object.values(guideMap)]));
         setEditing(false);
       } catch (error) {
         toast.errorToast('Something went wrong', 'Guide was not saved');
@@ -182,6 +213,16 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                         iconType="save"
                         color="success"
                         onClick={handleSave}
+                        size="m"
+                        iconSize="l"
+                      />
+                      <EuiButtonIcon
+                        aria-label="cancel"
+                        className="controls__button"
+                        display="fill"
+                        iconType="trash"
+                        color="danger"
+                        onClick={() => handleDelete(section)}
                         size="m"
                         iconSize="l"
                       />

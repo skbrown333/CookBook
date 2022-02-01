@@ -28,7 +28,6 @@ import { HeaderSwitcher } from '../Header/HeaderSwitcher/HeaderSwitcher';
 import { CHARACTERS, DISCORD, ROLES } from '../../constants/constants';
 import { TreeNav } from '../TreeNav/TreeNav';
 import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
-import { TagInput } from '../TagInput/TagInput';
 import { updateCookbook, updateGuides } from '../../store/actions';
 
 const emptyGuide = {
@@ -194,7 +193,8 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
       <div className="sidebar__header">{cookbook && <HeaderSwitcher />}</div>
       <div className="sidebar__content">
         {cookbook.banner_url && <img src={cookbook.banner_url} />}
-        {ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin ? (
+        {user &&
+        (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin) ? (
           <EuiButton
             iconType="plus"
             color="ghost"

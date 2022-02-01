@@ -165,7 +165,6 @@ const GuideDetailWrapper: FunctionComponent = ({ children }) => {
   const { cookbook, game } = state;
   const cookbookService = new CookbookService();
   const cookbookSlug = useParams().cookbook;
-  console.log('cookbookSlug: ', cookbookSlug);
   const toast = new ToastService();
   useEffect(() => {
     async function init() {
