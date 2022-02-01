@@ -1,19 +1,22 @@
 import {
   EuiAvatar,
-  EuiButtonIcon,
-  EuiContextMenuItem,
-  EuiContextMenuPanel,
+  EuiButton,
+  EuiButtonEmpty,
+  EuiFieldText,
+  EuiForm,
+  EuiFormRow,
   EuiIcon,
+  EuiModal,
+  EuiModalBody,
+  EuiModalFooter,
+  EuiModalHeader,
+  EuiModalHeaderTitle,
   EuiPopover,
+  EuiTextArea,
   EuiTreeView,
 } from '@elastic/eui';
 import { Link } from 'react-router-dom';
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { Guide } from '../../models/Guide';
 import GuideService from '../../services/GuideService/GuideService';
 import { ToastService } from '../../services/ToastService';
@@ -22,8 +25,17 @@ import { useHistory } from 'react-router-dom';
 
 import './_sidebar.scss';
 import { HeaderSwitcher } from '../Header/HeaderSwitcher/HeaderSwitcher';
-import { DISCORD, ROLES } from '../../constants/constants';
+import { CHARACTERS, DISCORD, ROLES } from '../../constants/constants';
 import { TreeNav } from '../TreeNav/TreeNav';
+import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
+import { TagInput } from '../TagInput/TagInput';
+import { updateCookbook, updateGuides } from '../../store/actions';
+
+const emptyGuide = {
+  title: '',
+  sections: [],
+  tags: [],
+};
 
 interface SidebarProps {}
 
@@ -32,51 +44,168 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
   const history = useHistory();
   const { cookbook, user, guides } = state;
   const [_guides, setGuides] = useState<Guide[]>([...guides]);
+  const [guide, setGuide] = useState<Guide>(emptyGuide);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showErrors, setShowErrors] = useState<boolean>(false);
+  const [creating, setCreating] = useState<boolean>(false);
+  const guideService = new GuideService(cookbook._id);
 
-  const GuideTree: FunctionComponent = () => {
-    const guideItems: any = guides.map((guide) => {
-      const { title, sections, _id } = guide;
-      return {
-        label: <div>{title}</div>,
-        id: _id,
-        icon: <EuiIcon type="folderClosed" />,
-        iconWhenExpanded: <EuiIcon type="folderOpen" />,
-        isExpanded: true,
-        children: sections.map((section) => {
-          const { title } = section;
-          return {
-            label: title,
-            id: title,
-            icon: <EuiIcon type="document" />,
-            callback: () =>
-              history.push(
-                `/${cookbook.name}/recipes/${guide._id}/section/${section.title}`,
-              ),
-          };
+  const toast = new ToastService();
+  const slugErrors = ['An invalid URL slug was specified'];
+
+  const handleSlugChange = async (e) => {
+    if (
+      e.target.value.length === 0 ||
+      /^[a-zA-Z0-9_-]{3,45}$/g.test(e.target.value)
+    ) {
+      setShowErrors(false);
+    } else {
+      setShowErrors(true);
+    }
+    setGuide({ ...guide, ...{ slug: e.target.value } });
+  };
+
+  const GuideForm = (
+    <EuiForm id="guideForm" component="form">
+      <EuiFormRow label="Title">
+        <EuiFieldText
+          value={guide.title}
+          required
+          onChange={(e) => setGuide({ ...guide, ...{ title: e.target.value } })}
+        />
+      </EuiFormRow>
+      <EuiFormRow label="Description (optional)">
+        <EuiTextArea
+          resize="none"
+          value={guide.description || ''}
+          onChange={(e) =>
+            setGuide({ ...guide, ...{ description: e.target.value } })
+          }
+        />
+      </EuiFormRow>
+      <EuiFormRow label="Select Character (optional)">
+        <CharacterSelect
+          onChange={(value) => setGuide({ ...guide, ...{ character: value } })}
+          value={guide.character ? guide.character._id : null}
+        />
+      </EuiFormRow>
+      <EuiFormRow
+        label="Custom URL Slug (optional)"
+        isInvalid={showErrors}
+        error={slugErrors}
+      >
+        <EuiFieldText
+          value={guide.slug !== guide._id ? guide.slug : ''}
+          onChange={handleSlugChange}
+          isInvalid={showErrors}
+        />
+      </EuiFormRow>
+    </EuiForm>
+  );
+
+  const createGuide = async (newGuide) => {
+    const { character, description, tags, title } = newGuide;
+    const slug =
+      newGuide.slug && newGuide.slug.length > 0
+        ? newGuide.slug.toLowerCase()
+        : undefined;
+    try {
+      const token = await user.user.getIdToken();
+      const guide = await guideService.create(
+        {
+          character,
+          description,
+          sections: [],
+          tags,
+          title,
+          slug,
+        },
+        {
+          Authorization: `Bearer ${token}`,
+        },
+      );
+      cookbook.guides.push(guide._id);
+      dispatch(
+        updateCookbook({
+          ...cookbook,
         }),
-      };
-    });
+      );
+      toast.successToast(
+        guide.title,
+        'Guide succesfully created',
+        character ? CHARACTERS[cookbook.game.name][character] : null,
+      );
+    } catch (err) {
+      toast.errorToast('Failed to create guide', err.message);
+    }
+  };
 
-    const treeItems = [
-      {
-        label: 'Posts',
-        id: 'posts',
-        icon: <EuiIcon type="document" />,
-        callback: () => history.push(`/${cookbook.name}`),
-      },
-      ...guideItems,
-    ];
+  const handleCancel = () => {
+    setShowModal(false);
+    setGuide(emptyGuide);
+  };
 
-    return <EuiTreeView items={treeItems} aria-label="Sample Folder Tree" />;
+  const handleSave = async (event) => {
+    event?.preventDefault();
+    try {
+      setCreating(true);
+      await createGuide(guide);
+      const guideMap = {};
+      const guides = await guideService.get({ cookbook: cookbook });
+      cookbook.guides.forEach(
+        (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
+      );
+      dispatch(updateGuides([...Object.values(guideMap)]));
+      setGuide(emptyGuide);
+      setShowModal(false);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const Modal = (title, save) => {
+    return (
+      <EuiModal onClose={handleCancel} initialFocus="[name=popswitch]">
+        <EuiModalHeader>
+          <EuiModalHeaderTitle>
+            <h1>{title}</h1>
+          </EuiModalHeaderTitle>
+        </EuiModalHeader>
+        <EuiModalBody>{GuideForm}</EuiModalBody>
+        <EuiModalFooter>
+          <EuiButtonEmpty onClick={handleCancel}>Cancel</EuiButtonEmpty>
+          <EuiButton
+            type="submit"
+            form="guideForm"
+            onClick={save}
+            fill
+            disabled={!guide.title || guide.title.length === 0 || showErrors}
+            isLoading={creating}
+          >
+            Save
+          </EuiButton>
+        </EuiModalFooter>
+      </EuiModal>
+    );
   };
 
   return (
     <div className="sidebar">
       <div className="sidebar__header">{cookbook && <HeaderSwitcher />}</div>
       <div className="sidebar__content">
-        {/* <GuideTree /> */}
         {cookbook.banner_url && <img src={cookbook.banner_url} />}
+        {ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin ? (
+          <EuiButton
+            iconType="plus"
+            color="ghost"
+            onClick={() => setShowModal(true)}
+            className="add-guide"
+          >
+            Add guide
+          </EuiButton>
+        ) : null}
         <TreeNav />
+        {showModal === true && Modal('Add Guide', handleSave)}
       </div>
       {cookbook && user && (
         <div className="sidebar__footer">

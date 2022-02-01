@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   background-color: lighten($euiColorEmptyShade, 2%);
+  user-select: none;
 
   @include respond-to(gt-sm) {
     position: relative;
@@ -35,11 +36,21 @@
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
+
     img {
       width: 100%;
     }
     border-right: 2px solid lighten($euiColorEmptyShade, 4%);
     overflow: auto;
+
+    .add-guide {
+      width: 80%;
+      margin-top: 16px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   &__footer {
