@@ -8,6 +8,5 @@ export interface Guide {
   tags: Array<Tag>;
   character?: any | null;
   description?: string;
-  doc_ref?: any;
   slug?: string;
 }

@@ -1,15 +1,30 @@
+@import '../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+
 .settings-view {
   flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   padding: 12px;
+  z-index: 2;
+  transition: margin 200ms;
+  background-color: $euiColorEmptyShade;
+
+  @include respond-to(gt-xs) {
+    justify-content: center;
+    flex-direction: row;
+  }
 
   &__content {
     width: 100%;
     max-width: 800px;
     display: flex;
     justify-content: center;
-    margin-top: 64px;
+    margin-top: 12px;
+
+    @include respond-to(gt-xs) {
+      margin-top: 64px;
+    }
 
     .euiPanel {
       align-self: flex-start;

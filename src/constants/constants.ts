@@ -160,8 +160,8 @@ const sampleBody = `
     tweet:link/tweet_id
  `;
 
-export const newSection: Post = {
-  title: '**replace with title',
+export const newSection = {
+  title: ``,
   body: sampleBody,
   tags: Array<Tag>(),
   cre_date: new Date(),

@@ -1,12 +1,16 @@
 @import '../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
 @import '../../styles/general';
+
+#post-list {
+  height: 100%;
+  overflow: auto;
+}
 
 .post-list {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  max-width: 800px;
   padding: 0 !important;
   padding-top: 8px;
 
@@ -21,17 +25,21 @@
   }
 
   &__content {
-    width: 100%;
     height: 100%;
     overflow: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding-bottom: 48px;
-    padding-top: 8px;
+    width: 100%;
+    max-width: 800px;
+    flex: 1;
 
     @include respond-to(gt-md) {
       overflow: visible;
+    }
+
+    @include respond-to(gt-sm) {
+      padding: 16px 16px;
     }
 
     .euiPanel {
@@ -52,8 +60,32 @@
     }
   }
 
+  .post-sidebar {
+    padding-left: 8vw;
+    display: none;
+    width: 300px;
+    min-width: 300px;
+
+    @include respond-to(gt-sm) {
+      // display: flex;
+      // justify-content: flex-end;
+    }
+
+    .twitch-sidebar {
+      overflow: hidden;
+      width: 254px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: unset;
+      right: unset;
+      padding-bottom: 48px;
+    }
+  }
+
   .post {
     flex-grow: 0;
+    width: 100%;
   }
 }
 

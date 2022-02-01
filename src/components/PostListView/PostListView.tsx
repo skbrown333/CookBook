@@ -44,6 +44,7 @@ import { ToastService } from '../../services/ToastService';
 import { updateAddStatus } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
 import PostService from '../../services/PostService/PostService';
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 
 export interface ListViewProps {
   filters: any;
@@ -316,6 +317,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
               <div ref={sentryRef} />
               {loading && <EuiLoadingSpinner size="xl" />}
             </div>
+            <TwitchSidebar className="post-sidebar" />
           </div>
 
           {showAdd && Modal('New Post', handleNewPost)}

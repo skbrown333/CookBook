@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { EuiAspectRatio, EuiHideFor } from '@elastic/eui';
 
@@ -107,34 +107,61 @@ function GifMarkdownParser() {
 }
 
 const GifMarkdownRenderer = ({ gif }) => {
+  function useOnScreen(ref) {
+    const [isIntersecting, setIntersecting] = useState(false);
+
+    const observer = useMemo(
+      () =>
+        new IntersectionObserver(([entry]) =>
+          setIntersecting(entry.isIntersecting),
+        ),
+      [ref],
+    );
+
+    useEffect(() => {
+      observer.observe(ref.current);
+      // Remove the observer as soon as the component is unmounted
+      return () => {
+        observer.disconnect();
+      };
+    }, []);
+
+    return isIntersecting;
+  }
+  const ref: any = useRef();
+  const isVisible = useOnScreen(ref);
+
   const gifs = gif.urls.map((url) => (
-    <EuiAspectRatio width={16} height={9} maxWidth={800}>
-      {url.thumbnail ? (
-        <>
-          <EuiHideFor sizes={['xs', 's']}>
-            <video
-              className="guide-section__markdown__gifs__gif"
-              autoPlay
-              loop
-              muted
-              disableRemotePlayback
-            >
-              <source src={url.thumbnail} type="video/mp4"></source>
-            </video>
-          </EuiHideFor>
-          <EuiHideFor sizes={['m', 'l', 'xl']}>
-            <img
-              className="guide-section__markdown__gifs__gif"
-              src={url.gif}
-            ></img>
-          </EuiHideFor>
-        </>
+    <div ref={ref}>
+      {isVisible ? (
+        <EuiAspectRatio width={16} height={9} className="gif-container">
+          {url.thumbnail ? (
+            <>
+              <EuiHideFor sizes={['xs', 's']}>
+                <video
+                  className="markdown__gifs__gif"
+                  autoPlay
+                  loop
+                  muted
+                  disableRemotePlayback
+                >
+                  <source src={url.thumbnail} type="video/mp4"></source>
+                </video>
+              </EuiHideFor>
+              <EuiHideFor sizes={['m', 'l', 'xl']}>
+                <img className="markdown__gifs__gif" src={url.gif}></img>
+              </EuiHideFor>
+            </>
+          ) : (
+            <img className="markdown__gifs__gif" src={url}></img>
+          )}
+        </EuiAspectRatio>
       ) : (
-        <img className="guide-section__markdown__gifs__gif" src={url}></img>
+        <EuiAspectRatio width={16} height={9} />
       )}
-    </EuiAspectRatio>
+    </div>
   ));
-  return <div className="guide-section__markdown_gifs">{gifs}</div>;
+  return <div className="markdown__gifs">{gifs}</div>;
 };
 
 export const gifPlug = {

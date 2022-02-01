@@ -1,0 +1,82 @@
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+
+.tree-nav {
+  padding: 16px;
+  padding-top: 8px;
+
+  .euiDraggable .euiDraggable__item.euiDraggable__item--isDisabled {
+    cursor: pointer !important;
+  }
+
+  .nav {
+    cursor: pointer;
+
+    &:hover {
+      background-color: lighten($euiColorEmptyShade, 20%);
+    }
+
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+
+    .icon {
+      margin-right: 8px;
+    }
+  }
+  .guide {
+    width: 100%;
+
+    .item {
+      cursor: pointer;
+
+      &.inner:hover {
+        background-color: lighten($euiColorEmptyShade, 20%);
+      }
+
+      padding: 0 8px;
+      height: 32px;
+      border-radius: 4px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      line-height: 1.5;
+
+      span {
+        display: flex;
+      }
+
+      .title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline;
+      }
+
+      &.inner {
+        margin-left: 24px;
+      }
+
+      .icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .add-section {
+    margin-left: auto;
+  }
+
+  .euiDroppable--l {
+    padding: 0;
+  }
+
+  .euiDraggable--m {
+    padding: 0;
+  }
+
+  .droppable {
+    background-color: transparent !important;
+  }
+}

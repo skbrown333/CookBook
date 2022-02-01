@@ -9,6 +9,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useParams,
 } from 'react-router-dom';
 
 /* Components */
@@ -34,6 +35,7 @@ import {
   updateToasts,
   updateCookbook,
   updateGame,
+  updateGuides,
 } from './store/actions';
 
 /* Styles */
@@ -42,6 +44,8 @@ import './App.scss';
 import CookbookService from './services/CookbookService/CookbookService';
 import axios from './services/axios.instance';
 import GameService from './services/GameService/GameService';
+import { Sidebar } from './components/Sidebar/Sidebar';
+import GuideService from './services/GuideService/GuideService';
 
 const firebaseInstance = new Firebase();
 
@@ -49,7 +53,7 @@ export const App: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
   const [loading, setLoading] = useState(true);
   const [cookbooks, setCookbooks] = useState<any>([]);
-  const { toasts } = state;
+  const { toasts, cookbook } = state;
   const toast = new ToastService();
   const { game } = state;
   const cookbookService = new CookbookService();
@@ -102,7 +106,11 @@ export const App: FunctionComponent = () => {
         <div id="cb-app">
           {game && !loading && (
             <>
-              <Route path="/" component={HeaderBar} />
+              <Route path="/:cookbook">
+                <GuideDetailWrapper>
+                  <Sidebar />
+                </GuideDetailWrapper>
+              </Route>
               <Switch>
                 <ProtectedRoute
                   path="/admin/create"
@@ -121,8 +129,10 @@ export const App: FunctionComponent = () => {
                   path="/:cookbook/settings"
                   component={SettingsView}
                 />
-                <Route path="/:cookbook/recipes/:recipe">
-                  <GuideDetailWrapper />
+                <Route path="/:cookbook/recipes/:recipe/section/:section">
+                  <GuideDetailWrapper>
+                    <GuideDetailView />
+                  </GuideDetailWrapper>
                 </Route>
                 <Route path="/:cookbook/recipes">
                   <HomePageView index={1} />
@@ -150,17 +160,29 @@ export const App: FunctionComponent = () => {
   );
 };
 
-const GuideDetailWrapper: FunctionComponent = () => {
+const GuideDetailWrapper: FunctionComponent = ({ children }) => {
   const [state, dispatch] = useContext(Context);
   const { cookbook, game } = state;
   const cookbookService = new CookbookService();
+  const cookbookSlug = useParams().cookbook;
   const toast = new ToastService();
   useEffect(() => {
     async function init() {
-      if (!cookbook) {
+      if (cookbookSlug) {
         try {
-          const cookbooks = await cookbookService.get({ game: game._id });
+          const cookbooks = await cookbookService.get({
+            game: game._id,
+            name: cookbookSlug,
+          });
           dispatch(updateCookbook(cookbooks[0]));
+          const guideMap = {};
+          const guideService = new GuideService(cookbooks[0]._id);
+          const guides = await guideService.get({ cookbook: cookbooks[0] });
+          cookbooks[0].guides.forEach(
+            (guide) =>
+              (guideMap[guide] = guides.find((_g) => _g._id === guide)),
+          );
+          dispatch(updateGuides([...Object.values(guideMap)]));
         } catch (err) {
           toast.errorToast('Error Getting Cookbook', err.message);
         }
@@ -169,7 +191,7 @@ const GuideDetailWrapper: FunctionComponent = () => {
     init();
   }, []);
 
-  return <>{cookbook && game && <GuideDetailView />}</>;
+  return <>{cookbook && game ? children : null}</>;
 };
 
 export const Login: FunctionComponent = () => {
