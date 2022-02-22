@@ -72,14 +72,7 @@ export const TagView: FunctionComponent<TagViewProps> = () => {
 
   const handleTagUpdate = async (color, tag) => {
     try {
-      const token = await user.user.getIdToken();
-      const newTag = await tagService.update(
-        tag._id,
-        { color },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
+      const newTag = await tagService.update(tag._id, user, { color });
       const newTags: any = [...tagItems].map((item: any) => {
         if (item._id !== newTag._id) return item;
         const { label, _id } = tag;
@@ -90,24 +83,21 @@ export const TagView: FunctionComponent<TagViewProps> = () => {
         };
       });
       setTagItems(newTags);
-    } catch (error) {
-      toast.errorToast(`Failed updating tag`, error.message);
+    } catch (err: any) {
+      toast.errorToast(`Failed updating tag`, err.message);
     }
   };
 
   const handleRemoveTag = async () => {
     try {
-      const token = await user.user.getIdToken();
-      await tagService.delete(tagToRemove._id, {
-        Authorization: `Bearer ${token}`,
-      });
+      await tagService.delete(tagToRemove._id, user);
       const newTags: any = [...tagItems].filter((item: any) => {
         if (item._id !== tagToRemove._id) return item;
       });
       setTagItems(newTags);
       toast.successToast(`Tag Updated`);
-    } catch (error) {
-      toast.errorToast(`Failed updating tag`, error.message);
+    } catch (err: any) {
+      toast.errorToast(`Failed updating tag`, err.message);
     }
     closeRemoveModal();
   };

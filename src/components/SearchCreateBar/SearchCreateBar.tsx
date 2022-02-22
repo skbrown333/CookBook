@@ -87,7 +87,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
 
         setItems([...tags]);
         setLoading(false);
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error Fetching Tags', err.message);
       }
     }

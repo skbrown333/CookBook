@@ -36,7 +36,7 @@ export const ProtectedRoute: FunctionComponent<any> = ({
           name: cookbookSlug,
         });
         dispatch(updateCookbook(cookbooks[0]));
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error', err);
       }
     }

@@ -56,14 +56,9 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
     if (source && destination) {
       const items = euiDragDropReorder(guides, source.index, destination.index);
       dispatch(updateGuides([...items]));
-      const token = await user.user.getIdToken();
-      await cookbookService.update(
-        cookbook._id,
-        { guides: items.map((item) => item._id) },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
+      await cookbookService.update(cookbook._id, user, {
+        guides: items.map((item) => item._id),
+      });
     }
   };
 
@@ -81,14 +76,9 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
       guides[guideIndex].sections = items;
       dispatch(updateGuides([...guides]));
 
-      const token = await user.user.getIdToken();
-      await guideService.update(
-        guides[guideIndex]._id,
-        { sections: items },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
+      await guideService.update(guides[guideIndex]._id, user, {
+        sections: items,
+      });
     }
   };
 
@@ -98,26 +88,15 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
 
     guides[guideIndex].sections.push(section);
     try {
-      const token = await user.user.getIdToken();
-      await guideService.update(
-        guides[guideIndex]._id,
-        {
-          sections: guides[guideIndex].sections,
-        },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
-      const guideMap = {};
+      await guideService.update(guides[guideIndex]._id, user, {
+        sections: guides[guideIndex].sections,
+      });
       const newGuides = await guideService.get({
         cookbook: cookbook,
       });
-      cookbook.guides.forEach(
-        (guide) => (guideMap[guide] = newGuides.find((_g) => _g._id === guide)),
-      );
-      dispatch(updateGuides([...Object.values(guideMap)]));
+      dispatch(updateGuides([...newGuides], cookbook));
       setShowModal(false);
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Failed to create guide', err.message);
     }
   };

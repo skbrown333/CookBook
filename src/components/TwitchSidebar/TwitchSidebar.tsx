@@ -49,7 +49,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
           dispatch(
             updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
           );
-        } catch (err) {
+        } catch (err: any) {
           toast.errorToast('Error Getting Streams', err.message);
         }
       }
@@ -69,14 +69,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
   };
 
   const updateStreams = async (streams) => {
-    const token = await user.user.getIdToken();
-    await cookbookService.update(
-      cookbook._id,
-      { streams: streams },
-      {
-        Authorization: `Bearer ${token}`,
-      },
-    );
+    await cookbookService.update(cookbook._id, user, { streams: streams });
     if (firebase) {
       dispatch(updateTwitch(await firebase.getTwitchStreams(streams)));
     }

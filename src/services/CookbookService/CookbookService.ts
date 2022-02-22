@@ -9,4 +9,15 @@ export default class CookbookService extends BaseService {
     super(route);
     this.route = route;
   }
+
+  async getByGame(gameId, preview?) {
+    const params = { game: gameId, preview };
+    return await super.get(params);
+  }
+
+  async getByName(gameId, name) {
+    const params = { game: gameId, name };
+    const cookbooks = await super.get(params);
+    return cookbooks[0];
+  }
 }

@@ -12,25 +12,25 @@ import {
   EuiPopover,
   EuiPopoverTitle,
 } from '@elastic/eui';
-import { ReactComponent as Logo } from '../../../images/logo.svg';
+import { ReactComponent as Logo } from '../../images/logo.svg';
 
 /* Styles */
 import './_header-switcher.scss';
 
 /* Models */
-import { Game } from '../../../models/Game';
+import { Game } from '../../models/Game';
 
 /* Store */
-import { Context } from '../../../store/Store';
+import { Context } from '../../store/Store';
 
 /* Services */
-import GameService from '../../../services/GameService/GameService';
-import { ToastService } from '../../../services/ToastService';
-import CookbookService from '../../../services/CookbookService/CookbookService';
+import GameService from '../../services/GameService/GameService';
+import { ToastService } from '../../services/ToastService';
+import CookbookService from '../../services/CookbookService/CookbookService';
 
 /* Constants */
-import { CHARACTERS } from '../../../constants/CharacterIcons';
-import { URL_UTILS } from '../../../constants/constants';
+import { CHARACTERS } from '../../constants/CharacterIcons';
+import { URL_UTILS } from '../../constants/constants';
 
 export interface HeaderSwitcherProps {}
 
@@ -61,7 +61,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
         setLoadingGames(true);
         const games = await gameService.get();
         setGames(games);
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error Fetching Games', err.message);
       } finally {
         setLoadingGames(false);
@@ -79,7 +79,7 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
           ...(user ? {} : { preview: false }),
         });
         setCookbooks(characters);
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error Getting Cookbooks', err.message);
       } finally {
         setLoadingCharacters(false);

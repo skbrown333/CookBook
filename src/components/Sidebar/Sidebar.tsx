@@ -24,7 +24,7 @@ import { Context } from '../../store/Store';
 import { useHistory } from 'react-router-dom';
 
 import './_sidebar.scss';
-import { HeaderSwitcher } from '../Header/HeaderSwitcher/HeaderSwitcher';
+import { HeaderSwitcher } from '../HeaderSwitcher/HeaderSwitcher';
 import { CHARACTERS, DISCORD, ROLES } from '../../constants/constants';
 import { TreeNav } from '../TreeNav/TreeNav';
 import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
@@ -40,9 +40,7 @@ interface SidebarProps {}
 
 export const Sidebar: FunctionComponent<SidebarProps> = () => {
   const [state, dispatch] = useContext(Context);
-  const history = useHistory();
-  const { cookbook, user, guides } = state;
-  const [_guides, setGuides] = useState<Guide[]>([...guides]);
+  const { cookbook, user } = state;
   const [guide, setGuide] = useState<Guide>(emptyGuide);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showErrors, setShowErrors] = useState<boolean>(false);
@@ -109,7 +107,6 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
         ? newGuide.slug.toLowerCase()
         : undefined;
     try {
-      const token = await user.user.getIdToken();
       const guide = await guideService.create(
         {
           character,
@@ -119,9 +116,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
           title,
           slug,
         },
-        {
-          Authorization: `Bearer ${token}`,
-        },
+        user,
       );
       cookbook.guides.push(guide._id);
       dispatch(
@@ -134,7 +129,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
         'Guide succesfully created',
         character ? CHARACTERS[cookbook.game.name][character] : null,
       );
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Failed to create guide', err.message);
     }
   };
@@ -149,12 +144,8 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
     try {
       setCreating(true);
       await createGuide(guide);
-      const guideMap = {};
-      const guides = await guideService.get({ cookbook: cookbook });
-      cookbook.guides.forEach(
-        (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
-      );
-      dispatch(updateGuides([...Object.values(guideMap)]));
+      const guides = await guideService.getByCookbook(cookbook._id);
+      dispatch(updateGuides([...guides], cookbook));
       setGuide(emptyGuide);
       setShowModal(false);
     } finally {
