@@ -14,7 +14,7 @@ import {
 } from '@elastic/eui';
 
 /* Constants */
-import { ROLES } from '../../constants/constants';
+import { canManage } from '../../constants/constants';
 
 /* Styles */
 import './_twitch-sidebar.scss';
@@ -59,13 +59,6 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
 
   const handleClick = (login) => {
     window.open('https://www.twitch.tv/' + login, '_blank');
-  };
-
-  const isAdmin = () => {
-    return (
-      user &&
-      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin)
-    );
   };
 
   const updateStreams = async (streams) => {
@@ -116,7 +109,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
     let offline = [];
 
     const deleteElem = (user_name) => {
-      return isAdmin() ? (
+      return canManage(user, cookbook) ? (
         <EuiButtonIcon
           className="stream__delete"
           aria-label={`Remove ${user_name}`}
@@ -196,7 +189,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
         <div className="twitch-sidebar__header">Twitch</div>
         <div className="twitch-sidebar__streams">
           <EuiListGroup gutterSize="none">{buildStreams()}</EuiListGroup>
-          {isAdmin() && (
+          {canManage(user, cookbook) && (
             <EuiFieldText
               className="twitch-sidebar__input"
               placeholder="new stream username"

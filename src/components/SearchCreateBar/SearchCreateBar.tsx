@@ -27,7 +27,7 @@ import { Context } from '../../store/Store';
 import TagService from '../../services/TagService/TagService';
 
 import { ToastService } from '../../services/ToastService';
-import { ROLES } from '../../constants/constants';
+import { canManage } from '../../constants/constants';
 
 export interface SearchCreateBarProp {
   handlePlus: () => void;
@@ -226,21 +226,19 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
           style={{ borderTopRightRadius: 6, borderBottomRightRadius: 6 }}
         />
       )}
-      {user &&
-        (ROLES.admin.includes(cookbook.roles[user.uid]) ||
-          user.super_admin) && (
-          <EuiButtonIcon
-            aria-label="add"
-            className="search-controls__button"
-            display="fill"
-            iconType="plus"
-            color="success"
-            size="m"
-            onClick={handlePlus}
-          >
-            Create
-          </EuiButtonIcon>
-        )}
+      {canManage(user, cookbook) && (
+        <EuiButtonIcon
+          aria-label="add"
+          className="search-controls__button"
+          display="fill"
+          iconType="plus"
+          color="success"
+          size="m"
+          onClick={handlePlus}
+        >
+          Create
+        </EuiButtonIcon>
+      )}
     </div>
   );
 };

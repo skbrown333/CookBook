@@ -44,11 +44,8 @@ export const useSignedInUser = () => {
 
   const fetchSignedInUser = useCallback(async () => {
     if (!firebase) return;
-    const user = await firebase.getCurrentUser();
-    console.log('user: ', user);
     try {
       // Get current user
-
       dispatch(updateUser(await firebase.getCurrentUser()));
     } catch (err: any) {
       // Try to sign in with cookie if no user found

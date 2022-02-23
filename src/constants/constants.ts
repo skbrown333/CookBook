@@ -167,3 +167,12 @@ export const newSection = {
   cre_date: new Date(),
   doc_ref: '',
 };
+
+export const canManage = (user, cookbook) =>
+  cookbook &&
+  user &&
+  (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin);
+
+export const shallowCopy = (params) => {
+  return JSON.parse(JSON.stringify(params));
+};

@@ -18,6 +18,7 @@ import {
 } from '@elastic/eui';
 import { parsingList, processingList, uiList } from '../../plugins';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import { ConfirmationModal } from '../ConfirmationModal/ConfirmationModal';
 
 /* Styles */
 import '../GuideDetailView/_guide-detail-view.scss';
@@ -26,20 +27,16 @@ import '../GuideDetailView/_guide-detail-view.scss';
 import { Guide } from '../../models/Guide';
 
 /* Constants */
-import { CHARACTERS, ROLES } from '../../constants/constants';
+import { canManage, CHARACTERS, shallowCopy } from '../../constants/constants';
 
 /* Store */
 import { Context } from '../../store/Store';
 
 /* Services */
 import {
-  useDeleteGuide,
+  useDeleteSection,
   useSaveGuide,
 } from '../../services/GuideService/GuideHooks';
-
-const shallowCopy = (params) => {
-  return JSON.parse(JSON.stringify(params));
-};
 
 export interface GuideDetailViewProps {}
 
@@ -49,13 +46,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const [guide, setGuide] = useState<Guide | null>(null);
     const [state] = useContext(Context);
     const [isOpen, setIsOpen] = useState(false);
+    const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const { cookbook, user, guides } = state;
     const guideSlug = useParams().recipe;
     const sectionSlug = useParams().section;
-    const showControls =
-      user &&
-      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin);
-    const deleteGuide = useDeleteGuide(setEditing);
+    const showControls = canManage(user, cookbook);
+    const deleteGuide = useDeleteSection(setEditing);
     const saveGuide = useSaveGuide(setEditing);
 
     const handlers = useSwipeable({
@@ -66,7 +62,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
 
     const getGuide = async () => {
       setGuide({
-        ...shallowCopy(guides.find((guide) => guide._id === guideSlug)),
+        ...shallowCopy(guides.find((guide) => guide?._id === guideSlug)),
       });
     };
 
@@ -148,15 +144,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                 <div className="controls">
                   {editing ? (
                     <>
-                      <EuiButtonIcon
-                        aria-label="cancel"
-                        className="controls__button"
-                        display="fill"
-                        iconType="cross"
-                        color="danger"
-                        onClick={handleCancel}
-                        size="m"
-                        iconSize="l"
+                      <ConfirmationModal
+                        open={deleteModal}
+                        title="Delete Section"
+                        body={`Are you sure you want to delete "${section.title}"?`}
+                        onCancel={() => setDeleteModal(false)}
+                        onConfirm={() => deleteGuide(guide, section)}
                       />
                       <EuiButtonIcon
                         aria-label="save"
@@ -172,9 +165,19 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                         aria-label="cancel"
                         className="controls__button"
                         display="fill"
+                        iconType="cross"
+                        color="danger"
+                        onClick={handleCancel}
+                        size="m"
+                        iconSize="l"
+                      />
+                      <EuiButtonIcon
+                        aria-label="cancel"
+                        className="controls__button"
+                        display="fill"
                         iconType="trash"
                         color="danger"
-                        onClick={() => deleteGuide(guide, section)}
+                        onClick={() => setDeleteModal(true)}
                         size="m"
                         iconSize="l"
                       />
