@@ -15,8 +15,6 @@
 
   @include respond-to(gt-sm) {
     position: relative;
-    min-width: 20vw;
-    width: 20vw;
   }
 
   &__header {

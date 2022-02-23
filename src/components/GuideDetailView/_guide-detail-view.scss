@@ -114,7 +114,6 @@
     }
 
     .body {
-      max-width: 1200px;
       flex: 1;
       padding: 16px;
 
@@ -149,6 +148,7 @@
       }
 
       .euiMarkdownFormat {
+        max-width: 1200px;
         p {
           display: flex;
           flex-direction: column;
@@ -161,23 +161,21 @@
         }
 
         img {
-          max-width: 1200px;
+          max-width: 600px;
           width: 100%;
-          margin: 4px auto;
+          margin: 4px 0;
         }
 
         .markdown__gifs {
           display: flex;
           justify-content: center;
-          max-width: 1200px;
-          margin: 0 auto;
+          max-width: 600px;
 
           &__gif {
             margin-left: auto;
             margin-right: auto;
             padding: 2px;
             width: 100%;
-            max-width: 1200px;
           }
         }
       }
