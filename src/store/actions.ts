@@ -48,7 +48,18 @@ export function updateAddStatus(status) {
   };
 }
 
-export function updateGuides(guides) {
+export function updateGuides(guides, cookbook?) {
+  if (cookbook != null) {
+    const guideMap = {};
+    cookbook.guides.forEach(
+      (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
+    );
+    return {
+      type: UPDATE_GUIDES,
+      payload: Object.values(guideMap),
+    };
+  }
+
   return {
     type: UPDATE_GUIDES,
     payload: guides,

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './index.scss';
 import { App } from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -7,12 +8,18 @@ import reportWebVitals from './reportWebVitals';
 
 /* Store */
 import { Store } from './store/Store';
+import { Firebase, FirebaseContext } from './firebase';
+const firebaseInstance = new Firebase();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Store>
-      <App />
-    </Store>
+    <FirebaseContext.Provider value={firebaseInstance}>
+      <Store>
+        <Router>
+          <App />
+        </Router>
+      </Store>
+    </FirebaseContext.Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 );

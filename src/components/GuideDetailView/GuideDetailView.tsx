@@ -17,6 +17,8 @@ import {
   EuiMarkdownFormat,
 } from '@elastic/eui';
 import { parsingList, processingList, uiList } from '../../plugins';
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import { ConfirmationModal } from '../ConfirmationModal/ConfirmationModal';
 
 /* Styles */
 import '../GuideDetailView/_guide-detail-view.scss';
@@ -25,16 +27,16 @@ import '../GuideDetailView/_guide-detail-view.scss';
 import { Guide } from '../../models/Guide';
 
 /* Constants */
-import { CHARACTERS, ROLES } from '../../constants/constants';
+import { canManage, CHARACTERS, shallowCopy } from '../../constants/constants';
 
 /* Store */
 import { Context } from '../../store/Store';
-import { updateGuides } from '../../store/actions';
 
 /* Services */
-import { ToastService } from '../../services/ToastService';
-import GuideService from '../../services/GuideService/GuideService';
-import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import {
+  useDeleteSection,
+  useSaveGuide,
+} from '../../services/GuideService/GuideHooks';
 
 export interface GuideDetailViewProps {}
 
@@ -42,16 +44,15 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
   (): ReactElement => {
     const [editing, setEditing] = useState<boolean>(false);
     const [guide, setGuide] = useState<Guide | null>(null);
-    const [state, dispatch] = useContext(Context);
+    const [state] = useContext(Context);
     const [isOpen, setIsOpen] = useState(false);
+    const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const { cookbook, user, guides } = state;
     const guideSlug = useParams().recipe;
     const sectionSlug = useParams().section;
-    const toast = new ToastService();
-    const guideService = new GuideService(cookbook._id);
-    const showControls =
-      user &&
-      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin);
+    const showControls = canManage(user, cookbook);
+    const deleteGuide = useDeleteSection(setEditing);
+    const saveGuide = useSaveGuide(setEditing);
 
     const handlers = useSwipeable({
       onSwipedLeft: () => setIsOpen(false),
@@ -61,9 +62,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
 
     const getGuide = async () => {
       setGuide({
-        ...JSON.parse(
-          JSON.stringify(guides.find((guide) => guide._id === guideSlug)),
-        ),
+        ...shallowCopy(guides.find((guide) => guide?._id === guideSlug)),
       });
     };
 
@@ -74,17 +73,23 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       init();
     }, [guides, guideSlug]);
 
-    const updateSection = (key, value) => {
-      if (!guide) return;
-      const sectionIndex = guide.sections.findIndex(
+    const findSectionIndex = (sections) => {
+      return sections.findIndex(
         (section) => `${section.title}` === decodeURIComponent(sectionSlug),
       );
-      guide.sections[sectionIndex][key] = value;
-      setGuide({ ...guide });
     };
 
-    const handleSetEditing = (isEditing) => {
-      setEditing(isEditing);
+    const findSection = (sections) => {
+      return sections.find(
+        (section) => `${section.title}` === decodeURIComponent(sectionSlug),
+      );
+    };
+
+    const updateSection = (key, value) => {
+      if (!guide) return;
+      const sectionIndex = findSectionIndex(guide.sections);
+      guide.sections[sectionIndex][key] = value;
+      setGuide({ ...guide });
     };
 
     const handleCancel = async () => {
@@ -92,62 +97,9 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       setEditing(false);
     };
 
-    const handleDelete = async (section) => {
-      if (!guide) return;
-
-      const newSections = guide.sections.filter(
-        (_section) => JSON.stringify(section) !== JSON.stringify(_section),
-      );
-      try {
-        const token = await user.user.getIdToken();
-        await guideService.update(
-          guide._id,
-          { sections: newSections },
-          {
-            Authorization: `Bearer ${token}`,
-          },
-        );
-        const guideMap = {};
-        const guides = await guideService.get({ cookbook: cookbook });
-        cookbook.guides.forEach(
-          (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
-        );
-        dispatch(updateGuides([...Object.values(guideMap)]));
-        setEditing(false);
-      } catch (error) {
-        toast.errorToast('Something went wrong', 'Guide was not saved');
-      }
-    };
-
-    const handleSave = async () => {
-      if (!guide) return;
-      try {
-        const token = await user.user.getIdToken();
-        await guideService.update(
-          guide._id,
-          { sections: guide.sections },
-          {
-            Authorization: `Bearer ${token}`,
-          },
-        );
-        toast.successToast('Guide saved!', 'Guide saved');
-        const guideMap = {};
-        const guides = await guideService.get({ cookbook: cookbook });
-        cookbook.guides.forEach(
-          (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
-        );
-        dispatch(updateGuides([...Object.values(guideMap)]));
-        setEditing(false);
-      } catch (error) {
-        toast.errorToast('Something went wrong', 'Guide was not saved');
-      }
-    };
-
     if (!guide || guide.sections == null) return <></>;
 
-    const section: any = guide.sections.find(
-      (section) => `${section.title}` === decodeURIComponent(sectionSlug),
-    );
+    const section: any = findSection(guide.sections);
 
     if (!section) return <></>;
 
@@ -182,11 +134,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                         text: guide.title,
                       },
                       {
-                        text: guide.sections.find(
-                          (section) =>
-                            `${section.title}` ===
-                            decodeURIComponent(sectionSlug),
-                        )?.title,
+                        text: findSection(guide.sections)?.title,
                       },
                     ]}
                     truncate={true}
@@ -196,6 +144,23 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                 <div className="controls">
                   {editing ? (
                     <>
+                      <ConfirmationModal
+                        open={deleteModal}
+                        title="Delete Section"
+                        body={`Are you sure you want to delete "${section.title}"?`}
+                        onCancel={() => setDeleteModal(false)}
+                        onConfirm={() => deleteGuide(guide, section)}
+                      />
+                      <EuiButtonIcon
+                        aria-label="save"
+                        className="controls__button"
+                        display="fill"
+                        iconType="save"
+                        color="success"
+                        onClick={() => saveGuide(guide)}
+                        size="m"
+                        iconSize="l"
+                      />
                       <EuiButtonIcon
                         aria-label="cancel"
                         className="controls__button"
@@ -207,22 +172,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                         iconSize="l"
                       />
                       <EuiButtonIcon
-                        aria-label="save"
-                        className="controls__button"
-                        display="fill"
-                        iconType="save"
-                        color="success"
-                        onClick={handleSave}
-                        size="m"
-                        iconSize="l"
-                      />
-                      <EuiButtonIcon
                         aria-label="cancel"
                         className="controls__button"
                         display="fill"
                         iconType="trash"
                         color="danger"
-                        onClick={() => handleDelete(section)}
+                        onClick={() => setDeleteModal(true)}
                         size="m"
                         iconSize="l"
                       />
@@ -236,7 +191,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                         iconType="pencil"
                         size="m"
                         iconSize="l"
-                        onClick={() => handleSetEditing(!editing)}
+                        onClick={() => setEditing(!editing)}
                       />
                     )
                   )}

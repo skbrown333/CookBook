@@ -61,7 +61,7 @@ export const SettingsView: FunctionComponent<SettingsViewProps> = () => {
           name: cookbookSlug,
         });
         dispatch(updateCookbook(cookbooks[0]));
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error', err);
       }
     }

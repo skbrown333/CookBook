@@ -18,7 +18,9 @@ export class BaseService {
     return res.data;
   }
 
-  async update(id, params?, headers?) {
+  async update(id, user, params?, headers?) {
+    const token = await user.user.getIdToken();
+    headers = { ...headers, ...{ Authorization: `Bearer ${token}` } };
     const res = await axios.patch(this.route + '/' + id, params, { headers });
     return res.data;
   }
@@ -28,11 +30,15 @@ export class BaseService {
     return res.data;
   }
 
-  async delete(id, headers?) {
+  async delete(id, user, headers?) {
+    const token = await user.user.getIdToken();
+    headers = { ...headers, ...{ Authorization: `Bearer ${token}` } };
     return await axios.delete(this.route + '/' + id, { headers });
   }
 
-  async create(params, headers?) {
+  async create(params, user, headers?) {
+    const token = await user.user.getIdToken();
+    headers = { ...headers, ...{ Authorization: `Bearer ${token}` } };
     const res = await axios.post(this.route, params, { headers });
     return res.data;
   }

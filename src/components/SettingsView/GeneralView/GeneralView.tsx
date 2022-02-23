@@ -27,17 +27,14 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
 
   const updateHelper = async (params) => {
     try {
-      const token = await user.user.getIdToken();
       const updatedCookbook = await cookbookService.update(
         cookbook._id,
+        user,
         params,
-        {
-          Authorization: `Bearer ${token}`,
-        },
       );
       dispatch(updateCookbook(updatedCookbook));
       toast.successToast('Successfully Updated Cookbook');
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Error Updating Cookbook', err.message);
     }
   };
@@ -50,7 +47,7 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
         ...(option === 'show_authors' ? { show_authors: checked } : {}),
       };
       await updateHelper(params);
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Error Updating Cookbook', err.message);
     } finally {
       setSaving(false);

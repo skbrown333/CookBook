@@ -55,7 +55,7 @@ export const getTwitchStreams = functions.https.onCall(async (data: any) => {
       users,
       streams,
     };
-  } catch (err) {
+  } catch (err: any) {
     return err;
   }
 });

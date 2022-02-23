@@ -9,4 +9,9 @@ export default class GuideService extends BaseService {
     super(route);
     this.route = route;
   }
+
+  async getByCookbook(cookbookId) {
+    const params = { cookbook: cookbookId };
+    return await super.get(params);
+  }
 }

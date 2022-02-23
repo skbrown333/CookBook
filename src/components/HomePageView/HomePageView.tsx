@@ -26,6 +26,31 @@ import './_home-page-view.scss';
 import CookbookService from '../../services/CookbookService/CookbookService';
 import { useSwipeable } from 'react-swipeable';
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+export default function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions(),
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
 export interface HomePageViewProps {
   index?: number;
 }
@@ -54,6 +79,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const cookbookService = new CookbookService();
   const toast = new ToastService();
   const cookbookSlug = useParams().cookbook;
+  const { height, width } = useWindowDimensions();
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setIsOpen(false),
@@ -74,7 +100,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
           name: cookbookSlug,
         });
         dispatch(updateCookbook(cookbooks[0]));
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error', err);
       }
     }
