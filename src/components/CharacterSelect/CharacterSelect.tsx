@@ -39,11 +39,9 @@ export const CharacterSelect: FunctionComponent<CharacterSelectProps> = ({
   useEffect(() => {
     async function init() {
       try {
-        const characters = await characterService.get({
-          game: cookbook.game._id,
-        });
+        const characters = await characterService.getByGame(cookbook.game._id);
         getOptions(characters);
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error Fetching Characters', err.message);
       } finally {
         setLoading(false);

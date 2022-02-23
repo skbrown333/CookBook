@@ -9,4 +9,9 @@ export default class CharacterService extends BaseService {
     super(route);
     this.route = route;
   }
+
+  async getByGame(gameId) {
+    const params = { game: gameId };
+    return await super.get(params);
+  }
 }

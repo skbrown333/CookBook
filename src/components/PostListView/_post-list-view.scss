@@ -42,6 +42,14 @@
       padding: 16px 16px;
     }
 
+    @include respond-to(gt-md) {
+      overflow: visible;
+    }
+
+    @include respond-to(gt-sm) {
+      padding: 16px 16px;
+    }
+
     .euiPanel {
       &.euiPanel--hasBorder {
         @include respond-to(xs) {

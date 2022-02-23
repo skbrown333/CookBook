@@ -2,7 +2,7 @@ import React, { useContext, FunctionComponent, useEffect } from 'react';
 import { Route, Redirect, useParams } from 'react-router-dom';
 
 /* Constants */
-import { ROLES } from '../../constants/constants';
+import { canManage } from '../../constants/constants';
 
 /* Services */
 import CookbookService from '../../services/CookbookService/CookbookService';
@@ -36,7 +36,7 @@ export const ProtectedRoute: FunctionComponent<any> = ({
           name: cookbookSlug,
         });
         dispatch(updateCookbook(cookbooks[0]));
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error', err);
       }
     }
@@ -55,11 +55,7 @@ export const ProtectedRoute: FunctionComponent<any> = ({
         }}
       />
     );
-    return user &&
-      cookbook &&
-      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin)
-      ? component
-      : error;
+    return canManage(user, cookbook) ? component : error;
   }
 
   return <>{cookbook && <Route {...rest} render={renderRoute} />}</>;

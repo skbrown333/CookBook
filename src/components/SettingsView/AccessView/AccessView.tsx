@@ -149,18 +149,13 @@ export const AccessView: FunctionComponent<AccessViewProps> = () => {
 
   const updateRoles = async (roles) => {
     try {
-      const token = await user.user.getIdToken();
-      const updatedCookbook = await cookbookService.update(
-        cookbook._id,
-        { roles },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
+      const updatedCookbook = await cookbookService.update(cookbook._id, user, {
+        roles,
+      });
       dispatch(updateCookbook(updatedCookbook));
       toast.successToast(`Roles Updated`);
-    } catch (error) {
-      toast.errorToast(`Failed updating roles`, error.message);
+    } catch (err: any) {
+      toast.errorToast(`Failed updating roles`, err.message);
     }
   };
 

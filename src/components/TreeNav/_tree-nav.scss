@@ -64,10 +64,6 @@
     }
   }
 
-  .add-section {
-    margin-left: auto;
-  }
-
   .euiDroppable--l {
     padding: 0;
   }
@@ -79,4 +75,8 @@
   .droppable {
     background-color: transparent !important;
   }
+}
+
+.add-section {
+  margin-left: auto;
 }
