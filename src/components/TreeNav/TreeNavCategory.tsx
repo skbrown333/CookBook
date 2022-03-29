@@ -146,7 +146,6 @@ export const TreeNavCategory = ({ guide, index }) => {
                   button={
                     <EuiButtonIcon
                       iconType="boxesVertical"
-                      color="ghost"
                       onClick={(event) => {
                         event.stopPropagation();
                         setPopover(!popover);

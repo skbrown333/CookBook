@@ -62,7 +62,7 @@
         border-radius: 0;
 
         @include respond-to(gt-xs) {
-          border-radius: 4px;
+          border-radius: 8px;
         }
       }
     }

@@ -28,7 +28,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
             onClick={() => setShowModal(true)}
             className="add-guide"
           >
-            Add guide
+            Add folder
           </EuiButton>
         ) : null}
         <TreeNav />

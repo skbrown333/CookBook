@@ -51,7 +51,7 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
             <EuiIcon type="home" className="icon" />
             <span className="title">Home</span>
           </div>
-          <div
+          {/* <div
             className="nav"
             onClick={() => {
               history.push(`/${cookbook.name}`);
@@ -59,7 +59,7 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
           >
             <EuiIcon type="document" className="icon" />
             <span className="title">Posts</span>
-          </div>
+          </div> */}
           <EuiDroppable
             droppableId="DROPPABLE_AREA"
             spacing="l"
