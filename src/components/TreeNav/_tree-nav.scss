@@ -12,6 +12,7 @@
     cursor: pointer;
 
     &:hover {
+      color: white;
       background-color: lighten($euiColorEmptyShade, 20%);
     }
 
@@ -32,6 +33,7 @@
       cursor: pointer;
 
       &.inner:hover {
+        color: white;
         background-color: lighten($euiColorEmptyShade, 20%);
       }
 
@@ -80,6 +82,6 @@
 .add-section {
   margin-left: auto;
   .euiButtonIcon--primary {
-    color: #d0d0d0;
+    color: #a6a9ba;
   }
 }

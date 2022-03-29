@@ -36,12 +36,11 @@
   &__content {
     display: flex;
     flex-direction: column;
-    color: #d0d0d0;
+    color: #a6a9ba;
 
     img {
       width: 100%;
     }
-    border-right: 2px solid lighten($euiColorEmptyShade, 4%);
     overflow: auto;
 
     .add-guide {
@@ -59,7 +58,6 @@
     height: 60px;
     margin-top: auto;
     border-top: 2px solid lighten($euiColorEmptyShade, 4%);
-    border-right: 2px solid lighten($euiColorEmptyShade, 4%);
     background-color: lighten($euiColorEmptyShade, 1%);
     padding: 8px;
 

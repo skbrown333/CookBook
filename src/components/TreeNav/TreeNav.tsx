@@ -34,7 +34,11 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
   const content = useMemo(() => {
     if (!guides) return [];
     return guides.map((guide, index) => (
-      <TreeNavCategory guide={guide} index={index} />
+      <TreeNavCategory
+        guide={guide}
+        index={index}
+        open={index === 0 || guides.length < 5}
+      />
     ));
   }, [guides, cookbook]);
 
