@@ -5,7 +5,7 @@ import React, {
   ReactElement,
   useContext,
 } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 /* Components */
 import { useSwipeable } from 'react-swipeable';
@@ -53,6 +53,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
     const showControls = canManage(user, cookbook);
     const deleteGuide = useDeleteSection(setEditing);
     const saveGuide = useSaveGuide(setEditing);
+    const { pathname } = useLocation();
 
     const handlers = useSwipeable({
       onSwipedLeft: () => setIsOpen(false),
@@ -65,6 +66,17 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
         ...shallowCopy(guides.find((guide) => guide?._id === guideSlug)),
       });
     };
+
+    useEffect(() => {
+      if (!guide || guide.sections == null) return;
+
+      const section: any = findSection(guide.sections);
+
+      if (!section) return;
+
+      setIsOpen(false);
+      document.getElementById(`section-${section.title}`)?.scrollIntoView();
+    }, [pathname]);
 
     useEffect(() => {
       const init = async () => {
