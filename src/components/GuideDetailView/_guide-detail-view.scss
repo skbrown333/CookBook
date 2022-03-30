@@ -60,6 +60,7 @@
     padding: 18px;
     padding-bottom: 0;
     overflow: auto;
+    overflow-x: hidden;
     background-color: #22242c;
 
     @include twitter-holder;
@@ -121,7 +122,6 @@
       padding-bottom: 0;
       max-width: 900px;
       width: 100%;
-      overflow-x: hidden;
 
       @include respond-to(gt-sm) {
         position: relative;
