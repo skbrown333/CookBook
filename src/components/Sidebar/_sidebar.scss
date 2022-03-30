@@ -1,0 +1,76 @@
+@import '../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+@import '../../styles/general';
+
+.sidebar {
+  position: fixed;
+  height: 100vh;
+  max-height: 100vh;
+  width: 300px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: lighten($euiColorEmptyShade, 2%);
+  user-select: none;
+
+  @include respond-to(gt-sm) {
+    position: relative;
+    min-width: 20vw;
+    width: 20vw;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    min-height: 60px;
+    border-bottom: 2px solid lighten($euiColorEmptyShade, 4%);
+
+    .euiPopover {
+      flex: 1;
+    }
+
+    .euiPopover__anchor {
+      flex: 1;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+
+    img {
+      width: 100%;
+    }
+    border-right: 2px solid lighten($euiColorEmptyShade, 4%);
+    overflow: auto;
+
+    .add-guide {
+      width: 80%;
+      min-height: 40px;
+      margin-top: 16px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    margin-top: auto;
+    border-top: 2px solid lighten($euiColorEmptyShade, 4%);
+    border-right: 2px solid lighten($euiColorEmptyShade, 4%);
+    background-color: lighten($euiColorEmptyShade, 1%);
+    padding: 8px;
+
+    .username {
+      margin-left: 8px;
+      font-weight: bold;
+    }
+
+    .settings {
+      margin-left: auto;
+    }
+  }
+}

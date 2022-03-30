@@ -12,6 +12,7 @@ import { SettingsNav } from './SettingsNav/SettingsNav';
 import { GeneralView } from './GeneralView/GeneralView';
 import { AccessView } from './AccessView/AccessView';
 import { TagView } from './TagView/TagView';
+import { useSwipeable } from 'react-swipeable';
 
 /* Services */
 import CookbookService from '../../services/CookbookService/CookbookService';
@@ -34,10 +35,17 @@ export interface SettingsViewProps {}
 export const SettingsView: FunctionComponent<SettingsViewProps> = () => {
   const [state, dispatch] = useContext(Context);
   const [index, setIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
   const { cookbook, game } = state;
   const cookbookSlug = useParams().cookbook;
   const cookbookService = new CookbookService();
   const toast = new ToastService();
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setIsOpen(false),
+    onSwipedRight: () => setIsOpen(true),
+    delta: 1,
+  });
 
   const VIEWS = {
     [GENERAL_INDEX]: <GeneralView />,
@@ -53,7 +61,7 @@ export const SettingsView: FunctionComponent<SettingsViewProps> = () => {
           name: cookbookSlug,
         });
         dispatch(updateCookbook(cookbooks[0]));
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error', err);
       }
     }
@@ -67,7 +75,11 @@ export const SettingsView: FunctionComponent<SettingsViewProps> = () => {
   return (
     <>
       {cookbook && (
-        <div className="settings-view">
+        <div
+          className="settings-view"
+          style={{ marginLeft: isOpen ? 300 : 0 }}
+          {...handlers}
+        >
           <div className="settings-view__nav">
             <SettingsNav handleNavigate={handleNavigate} />
           </div>

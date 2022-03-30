@@ -27,6 +27,22 @@
   }
 
   .donation {
+    margin-bottom: 36px;
+    &__title {
+      display: flex;
+      align-items: baseline;
+
+      &__button {
+        margin-left: 8px;
+      }
+    }
+
+    &__input {
+      margin-top: 8px;
+    }
+  }
+
+  .banner {
     &__title {
       display: flex;
       align-items: baseline;

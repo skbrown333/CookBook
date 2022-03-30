@@ -160,10 +160,19 @@ const sampleBody = `
     tweet:link/tweet_id
  `;
 
-export const newSection: Post = {
-  title: '**replace with title',
+export const newSection = {
+  title: ``,
   body: sampleBody,
   tags: Array<Tag>(),
   cre_date: new Date(),
   doc_ref: '',
+};
+
+export const canManage = (user, cookbook) =>
+  cookbook &&
+  user &&
+  (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin);
+
+export const shallowCopy = (params) => {
+  return JSON.parse(JSON.stringify(params));
 };

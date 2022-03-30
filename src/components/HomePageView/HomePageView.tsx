@@ -5,12 +5,10 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import SwipeableViews from 'react-swipeable-views';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 /* Components */
 import { PostListView } from '../PostListView/PostListView';
-import { GuideListView } from '../GuideListView/GuideListView';
 import { SearchCreateBar } from '../SearchCreateBar/SearchCreateBar';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 import { ContributorSideBar } from '../ContributorSideBar/ContributorSideBar';
@@ -26,6 +24,7 @@ import { updateAddStatus, updateCookbook } from '../../store/actions';
 /* Styles */
 import './_home-page-view.scss';
 import CookbookService from '../../services/CookbookService/CookbookService';
+import { useSwipeable } from 'react-swipeable';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -73,6 +72,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const { cookbook, game } = state;
   const history = useHistory();
   const [searchText, setSearchText] = useState(startQuery);
+  const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState<any>([]);
   const [adding, setAdding] = useState(history.location.pathname);
   const [dbSearch, setDbSearch] = useState(startQuery);
@@ -81,17 +81,11 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
   const cookbookSlug = useParams().cookbook;
   const { height, width } = useWindowDimensions();
 
-  const handleChange = (index) => {
-    switch (index) {
-      case 0:
-        history.push(`/${cookbook.name}`);
-        break;
-      case 1:
-        history.push(`/${cookbook.name}/recipes`);
-        break;
-    }
-    setAdding(history.location.pathname);
-  };
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setIsOpen(false),
+    onSwipedRight: () => setIsOpen(true),
+    delta: 1,
+  });
 
   const debouncedSearch = useCallback(
     debounce((search) => setDbSearch(search), 500),
@@ -106,7 +100,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
           name: cookbookSlug,
         });
         dispatch(updateCookbook(cookbooks[0]));
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error', err);
       }
     }
@@ -147,53 +141,35 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
     <div id="home-view">
       {cookbook && (
         <>
-          <ContributorSideBar />
-          <div className="home-view">
-            <SearchCreateBar
-              handleSearch={handleSearch}
-              handleFilterChange={handleFilterChange}
-              handlePlus={() => {
-                setAdding(history.location.pathname);
-                dispatch(updateAddStatus(true));
-              }}
-              actualSearchText={searchText}
-              selectedFilterStrings={filterStringArray}
-              className="home-search"
-            />
-            {width < 1280 && (
-              <SwipeableViews onChangeIndex={handleChange} index={index}>
-                <PostListView
-                  adding={adding}
-                  filters={filters}
-                  searchText={dbSearch}
-                />
-                <GuideListView
-                  adding={adding}
-                  filters={filters}
-                  searchText={searchText}
-                />
-              </SwipeableViews>
-            )}
-            {width >= 1280 && index === 0 && (
-              <div style={{ marginTop: 48 }}>
-                <PostListView
-                  adding={adding}
-                  filters={filters}
-                  searchText={dbSearch}
-                />
-              </div>
-            )}
-            {width >= 1280 && index === 1 && (
-              <div style={{ marginTop: 48 }}>
-                <GuideListView
-                  adding={adding}
-                  filters={filters}
-                  searchText={searchText}
-                />
-              </div>
-            )}
+          {/* <ContributorSideBar /> */}
+          <div
+            className="home-view"
+            style={{ marginLeft: isOpen ? 300 : 0 }}
+            {...handlers}
+          >
+            <div className="home-view__header">
+              <SearchCreateBar
+                handleSearch={handleSearch}
+                handleFilterChange={handleFilterChange}
+                handlePlus={() => {
+                  setAdding(history.location.pathname);
+                  dispatch(updateAddStatus(true));
+                }}
+                actualSearchText={searchText}
+                selectedFilterStrings={filterStringArray}
+                className="home-search"
+              />
+            </div>
+
+            <div style={{ overflow: 'hidden' }}>
+              <PostListView
+                adding={adding}
+                filters={filters}
+                searchText={dbSearch}
+              />
+            </div>
           </div>
-          <TwitchSidebar className="home-view__twitch" />
+          {/* <TwitchSidebar className="home-view__twitch" /> */}
         </>
       )}
     </div>

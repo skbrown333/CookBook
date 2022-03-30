@@ -47,7 +47,7 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
     try {
       const tags = await tagService.get();
       setOptions(tags);
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Error fetching tags', err.message);
     } finally {
       setLoading(false);
@@ -56,14 +56,11 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
 
   const createTag = async (newOption) => {
     try {
-      const token = await user.user.getIdToken();
-      const tag = await tagService.create(newOption, {
-        Authorization: `Bearer ${token}`,
-      });
+      const tag = await tagService.create(newOption, user);
       setOptions([...options, tag]);
       setSelected([...selected, tag]);
       toast.successToast(`Added tag: ${tag.label}`);
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast(
         'Failed to add tag',
         err && err.message ? err.message : '',

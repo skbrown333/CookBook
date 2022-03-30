@@ -4,6 +4,7 @@ export const UPDATE_TOASTS = 'UpdateToasts';
 export const UPDATE_COOKBOOK = 'UpdateCookbook';
 export const UPDATE_GAME = 'UpdateGame';
 export const UPDATE_ADD = 'UpdateAdd';
+export const UPDATE_GUIDES = 'UpdateGuides';
 
 export function updateUser(user) {
   return {
@@ -44,5 +45,23 @@ export function updateAddStatus(status) {
   return {
     type: UPDATE_ADD,
     payload: status,
+  };
+}
+
+export function updateGuides(guides, cookbook?) {
+  if (cookbook != null) {
+    const guideMap = {};
+    cookbook.guides.forEach(
+      (guide) => (guideMap[guide] = guides.find((_g) => _g._id === guide)),
+    );
+    return {
+      type: UPDATE_GUIDES,
+      payload: Object.values(guideMap),
+    };
+  }
+
+  return {
+    type: UPDATE_GUIDES,
+    payload: guides,
   };
 }

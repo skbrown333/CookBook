@@ -9,11 +9,11 @@ import {
   Switch,
   Route,
   Redirect,
+  useParams,
 } from 'react-router-dom';
 
 /* Components */
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
-import { HeaderBar } from './components/Header/Header';
 import { GuideDetailView } from './components/GuideDetailView/GuideDetailView';
 import { HomePageView } from './components/HomePageView/HomePageView';
 import { AboutView } from './components/AboutView/AboutView';
@@ -24,7 +24,7 @@ import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 import { ToastService } from './services/ToastService';
 
 /* Constants */
-import { DISCORD, ENV, URL_UTILS } from './constants/constants';
+import { DISCORD, ENV } from './constants/constants';
 
 /* Store */
 import { Firebase, FirebaseContext } from './firebase';
@@ -34,58 +34,43 @@ import {
   updateToasts,
   updateCookbook,
   updateGame,
+  updateGuides,
 } from './store/actions';
 
 /* Styles */
 import '@elastic/eui/dist/eui_theme_amsterdam_dark.css';
 import './App.scss';
 import CookbookService from './services/CookbookService/CookbookService';
-import axios from './services/axios.instance';
 import GameService from './services/GameService/GameService';
-
-const firebaseInstance = new Firebase();
+import { Sidebar } from './components/Sidebar/Sidebar';
+import GuideService from './services/GuideService/GuideService';
+import { useLogin, useSignedInUser } from './services/AuthHooks';
 
 export const App: FunctionComponent = () => {
   const [state, dispatch] = useContext(Context);
   const [loading, setLoading] = useState(true);
   const [cookbooks, setCookbooks] = useState<any>([]);
-  const { toasts } = state;
+  const { toasts, game } = state;
   const toast = new ToastService();
-  const { game } = state;
   const cookbookService = new CookbookService();
   const gameService = new GameService();
+  const fetchSignedInUser = useSignedInUser();
+
+  const fetchGamesAndCookbooks = async () => {
+    try {
+      const games = await gameService.getBySubdomain();
+      setCookbooks(await cookbookService.getByGame(games[0]._id));
+      dispatch(updateGame(games[0]));
+    } catch (err: any) {
+      toast.errorToast('Error', err);
+    }
+  };
 
   useEffect(() => {
     async function init() {
-      try {
-        const games = await gameService.get({ subdomain: URL_UTILS.subdomain });
-        setCookbooks(
-          await cookbookService.get({ game: games[0]._id, preview: false }),
-        );
-
-        dispatch(updateGame(games[0]));
-      } catch (err) {
-        toast.errorToast('Error', err);
-      }
-
-      try {
-        const user = await firebaseInstance.getCurrentUser();
-        dispatch(updateUser(user));
-        setLoading(false);
-      } catch (err) {
-        try {
-          const res = await axios.get(`${ENV.base_url}/loginWithCookie`, {
-            withCredentials: true,
-          });
-          await firebaseInstance.signInWithCustomToken(res.data);
-          const user: any = await firebaseInstance.getCurrentUser();
-          dispatch(updateUser(user));
-        } catch (err) {
-          // Dont handle
-        } finally {
-          setLoading(false);
-        }
-      }
+      await fetchGamesAndCookbooks();
+      await fetchSignedInUser();
+      setLoading(false);
     }
     init();
   }, []);
@@ -97,108 +82,99 @@ export const App: FunctionComponent = () => {
   };
 
   return (
-    <FirebaseContext.Provider value={firebaseInstance}>
-      <Router>
-        <div id="cb-app">
-          {game && !loading && (
-            <>
-              <Route path="/" component={HeaderBar} />
-              <Switch>
-                <ProtectedRoute
-                  path="/admin/create"
-                  component={null}
-                ></ProtectedRoute>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <Route path="/logout">
-                  <Logout />
-                </Route>
-                <Route path="/about">
-                  <AboutView />
-                </Route>
-                <ProtectedRoute
-                  path="/:cookbook/settings"
-                  component={SettingsView}
-                />
-                <Route path="/:cookbook/recipes/:recipe">
-                  <GuideDetailWrapper />
-                </Route>
-                <Route path="/:cookbook/recipes">
-                  <HomePageView index={1} />
-                </Route>
-                <Route path="/:cookbook">
-                  <HomePageView />
-                </Route>
-                <Route path="/">
-                  {cookbooks && cookbooks.length > 0 && (
-                    <Redirect to={`/${cookbooks[0].name}`} />
-                  )}
-                </Route>
-              </Switch>
-            </>
-          )}
+    <Router>
+      <div id="cb-app">
+        {game && !loading && (
+          <>
+            <Route path="/:cookbook">
+              <GuideDetailWrapper>
+                <Sidebar />
+              </GuideDetailWrapper>
+            </Route>
+            <Switch>
+              <ProtectedRoute
+                path="/admin/create"
+                component={null}
+              ></ProtectedRoute>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/logout">
+                <Logout />
+              </Route>
+              <Route path="/about">
+                <AboutView />
+              </Route>
+              <ProtectedRoute
+                path="/:cookbook/settings"
+                component={SettingsView}
+              />
+              <Route path="/:cookbook/recipes/:recipe/section/:section">
+                <GuideDetailWrapper>
+                  <GuideDetailView />
+                </GuideDetailWrapper>
+              </Route>
+              <Route path="/:cookbook/recipes">
+                <HomePageView index={1} />
+              </Route>
+              <Route path="/:cookbook">
+                <HomePageView />
+              </Route>
+              <Route path="/">
+                {cookbooks && cookbooks.length > 0 && (
+                  <Redirect to={`/${cookbooks[0].name}`} />
+                )}
+              </Route>
+            </Switch>
+          </>
+        )}
 
-          <EuiGlobalToastList
-            toasts={toasts}
-            toastLifeTimeMs={6000}
-            dismissToast={removeToast}
-          />
-        </div>
-      </Router>
-    </FirebaseContext.Provider>
+        <EuiGlobalToastList
+          toasts={toasts}
+          toastLifeTimeMs={6000}
+          dismissToast={removeToast}
+        />
+      </div>
+    </Router>
   );
 };
 
-const GuideDetailWrapper: FunctionComponent = () => {
+const GuideDetailWrapper: FunctionComponent = ({ children }) => {
   const [state, dispatch] = useContext(Context);
   const { cookbook, game } = state;
   const cookbookService = new CookbookService();
+  const cookbookSlug = useParams().cookbook;
   const toast = new ToastService();
+
   useEffect(() => {
     async function init() {
-      if (!cookbook) {
+      if (cookbookSlug) {
         try {
-          const cookbooks = await cookbookService.get({ game: game._id });
-          dispatch(updateCookbook(cookbooks[0]));
-        } catch (err) {
+          const _cookbook = await cookbookService.getByName(
+            game._id,
+            cookbookSlug,
+          );
+          dispatch(updateCookbook(_cookbook));
+          const guideService = new GuideService(_cookbook._id);
+          const guides = await guideService.getByCookbook(_cookbook._id);
+          dispatch(updateGuides([...guides], _cookbook));
+        } catch (err: any) {
           toast.errorToast('Error Getting Cookbook', err.message);
         }
       }
     }
+
     init();
   }, []);
 
-  return <>{cookbook && game && <GuideDetailView />}</>;
+  return <>{cookbook && game ? children : null}</>;
 };
 
 export const Login: FunctionComponent = () => {
   const search = window.location.search;
   const params = new URLSearchParams(search);
   const code = params.get('code');
-  const baseUrl = window.location.origin;
-  const toast = new ToastService();
-
-  async function login() {
-    if (!code) return;
-    try {
-      const res: any = await axios.post(`${ENV.base_url}/login`, {
-        code,
-        redirectUrl: `${baseUrl}/login`,
-      });
-      await firebaseInstance.signInWithCustomToken(res.data);
-      const user: any = await firebaseInstance.getCurrentUser();
-      const token = await user.user.getIdToken();
-      await axios.get(`${ENV.base_url}/session`, {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      });
-    } catch (err) {
-      toast.errorToast('Error loggin in', err.message);
-    } finally {
-      window.location.replace(baseUrl);
-    }
-  }
+  const login = useLogin();
 
   useEffect(() => {
     if (!code) {
@@ -217,15 +193,16 @@ export const Login: FunctionComponent = () => {
 
 export const Logout: FunctionComponent = () => {
   const [, dispatch] = useContext(Context);
+  const firebase = useContext(FirebaseContext);
   const baseUrl = window.location.origin;
   const toast = new ToastService();
 
   useEffect(() => {
     async function init() {
       try {
-        await firebaseInstance.signOut();
+        await firebase?.signOut();
         dispatch(updateUser(null));
-      } catch (err) {
+      } catch (err: any) {
         toast.errorToast('Error logging out', err.message);
       } finally {
         window.location.replace(baseUrl);

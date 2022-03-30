@@ -14,7 +14,7 @@ import {
 } from '@elastic/eui';
 
 /* Constants */
-import { ROLES } from '../../constants/constants';
+import { canManage } from '../../constants/constants';
 
 /* Styles */
 import './_twitch-sidebar.scss';
@@ -49,7 +49,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
           dispatch(
             updateTwitch(await firebase.getTwitchStreams(cookbook.streams)),
           );
-        } catch (err) {
+        } catch (err: any) {
           toast.errorToast('Error Getting Streams', err.message);
         }
       }
@@ -61,22 +61,8 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
     window.open('https://www.twitch.tv/' + login, '_blank');
   };
 
-  const isAdmin = () => {
-    return (
-      user &&
-      (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin)
-    );
-  };
-
   const updateStreams = async (streams) => {
-    const token = await user.user.getIdToken();
-    await cookbookService.update(
-      cookbook._id,
-      { streams: streams },
-      {
-        Authorization: `Bearer ${token}`,
-      },
-    );
+    await cookbookService.update(cookbook._id, user, { streams: streams });
     if (firebase) {
       dispatch(updateTwitch(await firebase.getTwitchStreams(streams)));
     }
@@ -123,7 +109,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
     let offline = [];
 
     const deleteElem = (user_name) => {
-      return isAdmin() ? (
+      return canManage(user, cookbook) ? (
         <EuiButtonIcon
           className="stream__delete"
           aria-label={`Remove ${user_name}`}
@@ -203,7 +189,7 @@ export const TwitchSidebar: FunctionComponent<TwitchSidebarProps> = (props) => {
         <div className="twitch-sidebar__header">Twitch</div>
         <div className="twitch-sidebar__streams">
           <EuiListGroup gutterSize="none">{buildStreams()}</EuiListGroup>
-          {isAdmin() && (
+          {canManage(user, cookbook) && (
             <EuiFieldText
               className="twitch-sidebar__input"
               placeholder="new stream username"

@@ -20,23 +20,21 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
   const [saving, setSaving] = useState<boolean>(false);
   const [state, dispatch] = useContext(Context);
   const { user, cookbook } = state;
-  const [donate_temp, setDonateTemp] = useState('');
+  const [donate_temp, setDonateTemp] = useState(cookbook.donation_url || '');
+  const [banner_temp, setBannerTemp] = useState(cookbook.banner_url || '');
   const cookbookService = new CookbookService();
   const toast = new ToastService();
 
   const updateHelper = async (params) => {
     try {
-      const token = await user.user.getIdToken();
       const updatedCookbook = await cookbookService.update(
         cookbook._id,
+        user,
         params,
-        {
-          Authorization: `Bearer ${token}`,
-        },
       );
       dispatch(updateCookbook(updatedCookbook));
       toast.successToast('Successfully Updated Cookbook');
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Error Updating Cookbook', err.message);
     }
   };
@@ -49,7 +47,7 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
         ...(option === 'show_authors' ? { show_authors: checked } : {}),
       };
       await updateHelper(params);
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Error Updating Cookbook', err.message);
     } finally {
       setSaving(false);
@@ -106,7 +104,17 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
       try {
         const donate_url = transformUrl(donate_temp);
         await updateHelper({ donation_url: donate_url });
-        setDonateTemp('');
+      } catch (e) {
+        toast.errorToast('Invalid URL', e.message);
+      }
+    }
+  };
+
+  const bannerUpdate = async (e) => {
+    if (e.keyCode === 13) {
+      try {
+        const banner_url = banner_temp;
+        await updateHelper({ banner_url: banner_url });
       } catch (e) {
         toast.errorToast('Invalid URL', e.message);
       }
@@ -118,13 +126,7 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
       <div className="donation">
         <div className="donation__title">
           <EuiTitle size="m" className="donation__title__text">
-            <h1>
-              {cookbook.donation_url ? (
-                <h1>Donation URL: {cookbook.donation_url}</h1>
-              ) : (
-                <h1>No Donation URL Set</h1>
-              )}
-            </h1>
+            <h1>Donation URL</h1>
           </EuiTitle>
           {cookbook.donation_url && (
             <EuiButtonIcon
@@ -133,7 +135,10 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
               color="danger"
               iconType="cross"
               aria-label="remove donation URL"
-              onClick={() => updateHelper({ donation_url: '' })}
+              onClick={() => {
+                setDonateTemp('');
+                updateHelper({ donation_url: '' });
+              }}
             />
           )}
         </div>
@@ -148,12 +153,45 @@ export const GeneralView: FunctionComponent<GeneralViewProps> = () => {
     );
   };
 
+  const bannerSection = () => {
+    return (
+      <div className="banner">
+        <div className="banner__title">
+          <EuiTitle size="m" className="banner__title__text">
+            <h1>Banner URL</h1>
+          </EuiTitle>
+          {cookbook.banner_url && (
+            <EuiButtonIcon
+              className="banner__title__button"
+              display="fill"
+              color="danger"
+              iconType="cross"
+              aria-label="remove banner URL"
+              onClick={() => {
+                setBannerTemp('');
+                updateHelper({ banner_url: '' });
+              }}
+            />
+          )}
+        </div>
+        <EuiFieldText
+          className="banner__input"
+          placeholder="Set Banner URL"
+          value={banner_temp}
+          onChange={(e) => setBannerTemp(e.target.value)}
+          onKeyDown={bannerUpdate}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="general-view">
       <div className="general-view__header">General Options</div>
       <div className="general-view__content">
         {featureSection()}
         {donationSection()}
+        {bannerSection()}
       </div>
     </div>
   );

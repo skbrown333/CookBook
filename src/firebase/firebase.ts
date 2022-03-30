@@ -82,7 +82,7 @@ export class Firebase {
           try {
             const users = await userService.get({ uid: user.uid });
             resolve({ ...users[0], ...{ user } });
-          } catch (err) {
+          } catch (err: any) {
             resolve(user);
           }
         } else {

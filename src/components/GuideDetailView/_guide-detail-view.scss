@@ -1,18 +1,18 @@
 @import '../../styles/responsive';
+@import '@elastic/eui/src/themes/eui-amsterdam/eui_amsterdam_colors_dark.scss';
+@import '../../styles/general';
 
 #guide-detail {
-  padding: 8px 8px;
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 100vw;
   height: 100%;
-  overflow: visible;
-
-  @include respond-to(gt-sm) {
-    padding: 8px 24px 0 24px;
-  }
+  z-index: 2;
+  transition: margin 200ms;
 
   @include respond-to(gt-xs) {
+    min-width: unset;
     .guide-section__markdown_gifs {
       display: flex;
       & > div {
@@ -22,56 +22,163 @@
   }
 
   .guide-detail__header {
+    height: 60px;
+    border-bottom: 2px solid lighten($color: $euiColorEmptyShade, $amount: 4%);
     display: flex;
-    justify-content: center;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    background-color: lighten($euiColorEmptyShade, 2%);
+
+    .title {
+      display: flex;
+    }
+
+    .controls__button {
+      margin: 0 4px 0 4px;
+    }
+
+    .controls {
+      margin-right: 16px;
+    }
+
+    &__title {
+      display: inherit;
+      align-items: inherit;
+      font-size: 24px;
+      font-weight: 600;
+      text-transform: capitalize;
+      margin-left: 12px;
+      margin-right: auto;
+    }
   }
 
   .guide-detail__content {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
     height: 100%;
-    padding-bottom: 64px;
-    justify-content: center;
+    padding: 18px;
+    overflow: auto;
+    background-color: $euiColorEmptyShade;
 
-    .guide-content {
-      &__droppable {
+    @include twitter-holder;
+
+    .euiAspectRatio {
+      width: 100%;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .euiMarkdownFormat {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 80px !important;
+
+      div {
         width: 100%;
       }
 
-      &__sections {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        height: 100%;
-        overflow: auto;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
+      table {
+        display: table;
 
-        @include respond-to(gt-md) {
-          margin-top: 48px;
+        th {
+          background-color: lighten($color: $euiColorEmptyShade, $amount: 4%);
         }
 
-        .euiPanel {
-          flex-grow: 0;
+        td {
+          background-color: darken($color: $euiColorEmptyShade, $amount: 2%);
+        }
+      }
+    }
 
-          &--paddingMedium {
-            padding: 0;
-          }
+    .guide-sidebar {
+      padding-left: 8vw;
+      width: 300px;
+      min-width: 300px;
+      display: none;
+
+      @include respond-to(gt-sm) {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .twitch-sidebar {
+        overflow: hidden;
+        width: 254px;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: unset;
+        right: unset;
+        padding-bottom: 48px;
+      }
+    }
+
+    .body {
+      max-width: 1200px;
+      flex: 1;
+      padding: 16px;
+
+      @include respond-to(gt-sm) {
+        position: relative;
+      }
+
+      .euiComboBox .euiComboBox__inputWrap {
+        border-radius: 0;
+      }
+
+      &.editing {
+        height: 100%;
+        padding: 0 !important;
+
+        .euiMarkdownEditorToolbar {
+          border-radius: 0;
+        }
+
+        .euiMarkdownEditorPreview,
+        .euiMarkdownEditorFooter {
+          border-radius: 0;
+        }
+
+        .euiMarkdownEditorFooter {
+          border-radius: 0;
         }
       }
 
-      &__right {
-        display: none;
+      @include respond-to(gt-xs) {
+        padding: 16px;
+      }
 
-        &.editing {
-          margin-top: 8px;
+      .euiMarkdownFormat {
+        p {
+          display: flex;
+          flex-direction: column;
+          font-size: 18px;
+
+          @include respond-to(gt-sm) {
+            flex-direction: row;
+            flex-wrap: wrap;
+          }
         }
 
-        @include respond-to(gt-sm) {
-          display: block;
+        img {
+          max-width: 1200px;
+          width: 100%;
+          margin: 4px auto;
+        }
+
+        .markdown__gifs {
+          display: flex;
+          justify-content: center;
+          max-width: 1200px;
+          margin: 0 auto;
+
+          &__gif {
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2px;
+            width: 100%;
+            max-width: 1200px;
+          }
         }
       }
     }

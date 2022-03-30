@@ -44,6 +44,7 @@ import { ToastService } from '../../services/ToastService';
 import { updateAddStatus } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
 import PostService from '../../services/PostService/PostService';
+import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 
 export interface ListViewProps {
   filters: any;
@@ -120,7 +121,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
       }
       setPage(page + 1);
       setPosts([...posts, ...newPosts]);
-    } catch (err) {
+    } catch (err: any) {
       toast.errorToast('Error Fetching Posts', err.message);
     } finally {
       setLoading(false);
@@ -138,32 +139,26 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
     event.preventDefault();
     try {
       const newPosts = [...posts];
-      const token = await user.user.getIdToken();
-      const updatedPost = await postService.update(post._id, post, {
-        Authorization: `Bearer ${token}`,
-      });
+      const updatedPost = await postService.update(post._id, user, post);
       newPosts[index] = updatedPost;
       setPosts([...newPosts]);
       cancelModal();
       toast.successToast('Edit successful');
-    } catch (error) {
-      toast.errorToast('failed to edit post', error.message);
+    } catch (err: any) {
+      toast.errorToast('failed to edit post', err.message);
     }
   };
 
   const handleNewPost = async (event) => {
     event.preventDefault();
     try {
-      const token = await user.user.getIdToken();
-      const newPost = await postService.create(post, {
-        Authorization: `Bearer ${token}`,
-      });
+      const newPost = await postService.create(post, user);
       cancelModal();
       setPosts([...[newPost], ...posts]);
       dispatch(updateAddStatus(false));
       toast.successToast('Added new post');
-    } catch (error) {
-      toast.errorToast('Failed adding post', error.message);
+    } catch (err: any) {
+      toast.errorToast('Failed adding post', err.message);
     }
   };
 
@@ -175,15 +170,12 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
 
   const handleDelete = async () => {
     try {
-      const token = await user.user.getIdToken();
-      await postService.delete(post._id, {
-        Authorization: `Bearer ${token}`,
-      });
+      await postService.delete(post._id, user);
       posts.splice(index, 1);
       setPosts([...posts]);
       cancelModal();
       toast.successToast('Deleted post');
-    } catch (error) {
+    } catch (err: any) {
       toast.errorToast('Failed to Delete Post');
     }
   };
@@ -316,6 +308,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
               <div ref={sentryRef} />
               {loading && <EuiLoadingSpinner size="xl" />}
             </div>
+            <TwitchSidebar className="post-sidebar" />
           </div>
 
           {showAdd && Modal('New Post', handleNewPost)}
