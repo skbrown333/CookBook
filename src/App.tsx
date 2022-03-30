@@ -61,7 +61,9 @@ export const App: FunctionComponent = () => {
       const games = await gameService.getBySubdomain();
       setCookbooks(await cookbookService.getByGame(games[0]._id));
       dispatch(updateGame(games[0]));
-    } catch (err: any) {}
+    } catch (err: any) {
+      console.log('err ', err.message);
+    }
   };
 
   useEffect(() => {
@@ -156,7 +158,9 @@ const GuideDetailWrapper: FunctionComponent = ({ children }) => {
           const guideService = new GuideService(_cookbook._id);
           const guides = await guideService.getByCookbook(_cookbook._id);
           dispatch(updateGuides([...guides], _cookbook));
-        } catch (err: any) {}
+        } catch (err: any) {
+          console.log('err ', err.message);
+        }
       }
     }
 
