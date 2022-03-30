@@ -118,6 +118,8 @@
       flex: 1;
       padding: 16px;
       max-width: 900px;
+      width: 100%;
+      overflow: hidden;
 
       @include respond-to(gt-sm) {
         position: relative;
