@@ -41,6 +41,22 @@
     display: flex;
     margin-left: 10px;
 
+    &__like {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+
+      .count {
+        margin-right: 4px;
+        margin-top: 2px;
+        font-weight: normal;
+      }
+
+      .like {
+        font-size: 18px;
+      }
+    }
+
     .euiButtonIcon {
       flex-grow: 1;
       width: 30px;

@@ -45,6 +45,7 @@ import { updateAddStatus } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
 import PostService from '../../services/PostService/PostService';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import { URL_UTILS } from '../../constants/constants';
 
 export interface ListViewProps {
   filters: any;
@@ -279,6 +280,17 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
             setPost(post);
             setIndex(index);
             setShowDelete(true);
+          }}
+          handleLike={async () => {
+            if (!user) {
+              const { protocol, domain } = URL_UTILS;
+              window.location.href = `${protocol}://${domain}/login`;
+              return;
+            }
+            const newPosts = [...posts];
+            const newPost = await postService.like(post._id, user._id);
+            newPosts[index] = newPost;
+            setPosts([...newPosts]);
           }}
         />
       );

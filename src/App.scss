@@ -15,12 +15,6 @@
     position: relative;
   }
 
-  @include respond-to(gt-md) {
-    overflow: hidden;
-    max-height: 100%;
-    position: relative;
-  }
-
   .login {
     display: flex;
     justify-content: center;

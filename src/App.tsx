@@ -62,7 +62,7 @@ export const App: FunctionComponent = () => {
       setCookbooks(await cookbookService.getByGame(games[0]._id));
       dispatch(updateGame(games[0]));
     } catch (err: any) {
-      toast.errorToast('Error', err);
+      console.log('err ', err.message);
     }
   };
 
@@ -159,7 +159,7 @@ const GuideDetailWrapper: FunctionComponent = ({ children }) => {
           const guides = await guideService.getByCookbook(_cookbook._id);
           dispatch(updateGuides([...guides], _cookbook));
         } catch (err: any) {
-          toast.errorToast('Error Getting Cookbook', err.message);
+          console.log('err ', err.message);
         }
       }
     }
