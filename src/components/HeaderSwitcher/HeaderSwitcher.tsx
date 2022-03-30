@@ -30,7 +30,7 @@ import CookbookService from '../../services/CookbookService/CookbookService';
 
 /* Constants */
 import { CHARACTERS } from '../../constants/CharacterIcons';
-import { URL_UTILS } from '../../constants/constants';
+import { canManage, URL_UTILS } from '../../constants/constants';
 
 export interface HeaderSwitcherProps {}
 
@@ -74,10 +74,21 @@ export const HeaderSwitcher: FunctionComponent<HeaderSwitcherProps> = () => {
     async function getCharacters() {
       setLoadingCharacters(true);
       try {
-        const characters = await cookbookService.get({
+        let characters = await cookbookService.get({
           game: selectedGame,
-          ...(user ? {} : { preview: false }),
         });
+        let showPreview = false;
+        for (let i = 0; i < characters.length; i++) {
+          if (canManage(user, characters[i])) {
+            showPreview = true;
+            break;
+          }
+        }
+        if (!showPreview) {
+          characters = characters.filter(
+            (character) => character.preview === false,
+          );
+        }
         setCookbooks(characters);
       } catch (err: any) {
         toast.errorToast('Error Getting Cookbooks', err.message);

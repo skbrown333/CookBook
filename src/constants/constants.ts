@@ -171,7 +171,8 @@ export const newSection = {
 export const canManage = (user, cookbook) =>
   cookbook &&
   user &&
-  (ROLES.admin.includes(cookbook.roles[user.uid]) || user.super_admin);
+  ((cookbook.roles && ROLES.admin.includes(cookbook.roles[user.uid])) ||
+    user.super_admin);
 
 export const shallowCopy = (params) => {
   return JSON.parse(JSON.stringify(params));
