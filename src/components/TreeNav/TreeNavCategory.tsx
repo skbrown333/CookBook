@@ -20,7 +20,7 @@ import GuideService from '../../services/GuideService/GuideService';
 import { updateGuides } from '../../store/actions';
 import { ConfirmationModal } from '../ConfirmationModal/ConfirmationModal';
 
-export const TreeNavCategory = ({ guide, index }) => {
+export const TreeNavCategory = ({ guide, index, open }) => {
   const history = useHistory();
   const [state, dispatch] = useContext(Context);
   const { cookbook, user, guides } = state;
@@ -28,7 +28,7 @@ export const TreeNavCategory = ({ guide, index }) => {
   const [sectionModal, setSectionModal] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [popover, setPopover] = useState<boolean>(false);
-  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(!open);
   const deleteGuide = useDeleteGuide();
   const guideService = new GuideService(cookbook._id);
   const isDragDisabled = !canManage(user, cookbook);
@@ -146,7 +146,6 @@ export const TreeNavCategory = ({ guide, index }) => {
                   button={
                     <EuiButtonIcon
                       iconType="boxesVertical"
-                      color="ghost"
                       onClick={(event) => {
                         event.stopPropagation();
                         setPopover(!popover);

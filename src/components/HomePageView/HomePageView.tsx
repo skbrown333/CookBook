@@ -144,7 +144,7 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
           {/* <ContributorSideBar /> */}
           <div
             className="home-view"
-            style={{ marginLeft: isOpen ? 300 : 0 }}
+            style={{ marginLeft: isOpen ? 600 : 0 }}
             {...handlers}
           >
             <div className="home-view__header">

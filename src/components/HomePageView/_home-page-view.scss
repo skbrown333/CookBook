@@ -11,7 +11,7 @@
   display: flex;
   justify-content: center;
   flex: 1;
-  background-color: $euiPageBackgroundColor;
+  background-color: #22242c;
 
   .search-controls {
     max-width: 900px !important;
@@ -41,8 +41,9 @@
     overflow: hidden;
     height: 100%;
     width: 100%;
+    min-width: 100%;
     z-index: 2;
-    background-color: $euiPageBackgroundColor;
+    background-color: #22242c;
     transition: margin 200ms;
 
     &__header {
