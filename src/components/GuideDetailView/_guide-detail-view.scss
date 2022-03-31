@@ -55,9 +55,12 @@
 
   .guide-detail__content {
     display: flex;
+    justify-content: center;
     height: 100%;
     padding: 18px;
+    padding-bottom: 0;
     overflow: auto;
+    overflow-x: hidden;
     background-color: #22242c;
 
     @include twitter-holder;
@@ -91,31 +94,39 @@
     }
 
     .guide-sidebar {
-      padding-left: 8vw;
       width: 300px;
       min-width: 300px;
       display: none;
+      position: relative;
 
-      @include respond-to(gt-sm) {
+      @include respond-to(gt-md) {
         display: flex;
         justify-content: flex-end;
       }
 
-      .twitch-sidebar {
-        overflow: hidden;
-        width: 254px;
+      .sidebar-items {
+        position: fixed;
         display: flex;
         flex-direction: column;
-        position: fixed;
-        top: unset;
-        right: unset;
-        padding-bottom: 48px;
+        padding-left: 12px;
+
+        .twitch-sidebar {
+          overflow: hidden;
+          width: 254px;
+          display: flex;
+          flex-direction: column;
+          position: unset;
+          padding-bottom: 48px;
+        }
       }
     }
 
     .body {
       flex: 1;
       padding: 16px;
+      padding-bottom: 0;
+      max-width: 900px;
+      width: 100%;
 
       @include respond-to(gt-sm) {
         position: relative;
@@ -148,7 +159,7 @@
       }
 
       .euiMarkdownFormat {
-        max-width: 1200px;
+        max-width: 900px;
         p {
           display: flex;
           flex-direction: column;
@@ -160,16 +171,25 @@
           }
         }
 
-        img {
-          max-width: 600px;
-          width: 100%;
-          margin: 4px 0;
+        h1,
+        h2,
+        h3,
+        h4 {
+          font-weight: 600;
+          color: #a5b6e9;
         }
 
+        img {
+          width: 100%;
+          margin: 4px 0;
+          padding: 18px;
+        }
+
+        .markdown__video,
         .markdown__gifs {
           display: flex;
           justify-content: center;
-          max-width: 600px;
+          padding: 18px;
 
           &__gif {
             margin-left: auto;
