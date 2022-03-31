@@ -94,25 +94,30 @@
     }
 
     .guide-sidebar {
-      padding-left: 8vw;
       width: 300px;
       min-width: 300px;
       display: none;
+      position: relative;
 
-      @include respond-to(gt-sm) {
+      @include respond-to(gt-md) {
         display: flex;
         justify-content: flex-end;
       }
 
-      .twitch-sidebar {
-        overflow: hidden;
-        width: 254px;
+      .sidebar-items {
+        position: fixed;
         display: flex;
         flex-direction: column;
-        position: fixed;
-        top: unset;
-        right: unset;
-        padding-bottom: 48px;
+        padding-left: 12px;
+
+        .twitch-sidebar {
+          overflow: hidden;
+          width: 254px;
+          display: flex;
+          flex-direction: column;
+          position: unset;
+          padding-bottom: 48px;
+        }
       }
     }
 

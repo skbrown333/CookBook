@@ -8,17 +8,14 @@
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    position: fixed;
-    top: 100px;
-    left: calc(50vw - 700px);
   }
 
   .contributor-sidebar {
     display: flex;
     flex-direction: column;
-    max-height: calc(100% - 54px);
     overflow: hidden;
     width: 300px;
+    padding-left: 18px;
 
     &__header {
       display: flex;
@@ -37,6 +34,7 @@
 
     &__chefs {
       overflow: auto;
+      padding-left: 12px;
 
       .chef {
         display: flex;

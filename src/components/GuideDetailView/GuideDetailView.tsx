@@ -37,6 +37,7 @@ import {
   useDeleteSection,
   useSaveGuide,
 } from '../../services/GuideService/GuideHooks';
+import { ContributorSideBar } from '../ContributorSideBar/ContributorSideBar';
 
 export interface GuideDetailViewProps {}
 
@@ -240,7 +241,12 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                   </>
                 )}
               </div>
-              <TwitchSidebar className="guide-sidebar" />
+              <div className="guide-sidebar">
+                <div className="sidebar-items">
+                  <ContributorSideBar />
+                  <TwitchSidebar className="twitch-sidebar" />
+                </div>
+              </div>
             </div>
           </>
         )}
