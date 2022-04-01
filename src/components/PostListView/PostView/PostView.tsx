@@ -8,7 +8,7 @@ import {
   EuiButtonIcon,
   EuiAvatar,
 } from '@elastic/eui';
-import { AiOutlineLike } from 'react-icons/ai';
+import { MdContentCopy } from 'react-icons/md';
 
 /* Styles */
 import './_post-view.scss';
@@ -65,13 +65,13 @@ export const PostView: FunctionComponent<PostProps> = ({
           </div>
           <div className="post__controls">
             <div className="post__controls__like">
-              {likes != null && likes > 0 && (
+              {/* {likes != null && likes > 0 && (
                 <div className="count">{likes}</div>
-              )}
+              )} */}
               <EuiButtonIcon
                 aria-label="edit"
                 className="like"
-                iconType={() => <AiOutlineLike />}
+                iconType={() => <MdContentCopy />}
                 color="primary"
                 onClick={handleLike}
               />

@@ -25,6 +25,7 @@ import {
   EuiLoadingSpinner,
 } from '@elastic/eui';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
+import { MdContentCopy } from 'react-icons/md';
 
 /* Styles */
 import './_post-list-view.scss';
@@ -45,7 +46,6 @@ import { updateAddStatus } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
 import PostService from '../../services/PostService/PostService';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
-import { URL_UTILS } from '../../constants/constants';
 
 export interface ListViewProps {
   filters: any;
@@ -282,15 +282,14 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
             setShowDelete(true);
           }}
           handleLike={async () => {
-            if (!user) {
-              const { protocol, domain } = URL_UTILS;
-              window.location.href = `${protocol}://${domain}/login`;
-              return;
-            }
-            const newPosts = [...posts];
-            const newPost = await postService.like(post._id, user._id);
-            newPosts[index] = newPost;
-            setPosts([...newPosts]);
+            const url = `${window.location.hostname}/${encodeURI(
+              cookbook.name,
+            )}/posts/${post._id}`;
+            navigator.clipboard.writeText(url).then(() => {
+              toast.successToast('Copied to clipboard!', undefined, () => (
+                <MdContentCopy />
+              ));
+            });
           }}
         />
       );
