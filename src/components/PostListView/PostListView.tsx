@@ -46,6 +46,7 @@ import { updateAddStatus } from '../../store/actions';
 import { UserInput } from '../UserInput/UserInput';
 import PostService from '../../services/PostService/PostService';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
+import { URL_UTILS } from '../../constants/constants';
 
 export interface ListViewProps {
   filters: any;
@@ -282,9 +283,9 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
             setShowDelete(true);
           }}
           handleLike={async () => {
-            const url = `${window.location.hostname}/${encodeURI(
-              cookbook.name,
-            )}/posts/${post._id}`;
+            const url = `${URL_UTILS.protocol}://${
+              window.location.hostname
+            }/${encodeURI(cookbook.name)}/posts/${post._id}`;
             navigator.clipboard.writeText(url).then(() => {
               toast.successToast('Copied to clipboard!', undefined, () => (
                 <MdContentCopy />
