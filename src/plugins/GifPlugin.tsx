@@ -196,30 +196,37 @@ const GifMarkdownRenderer = ({ gif }) => {
 
   return (
     <div className="markdown__gifs" ref={ref}>
-      {isVisible && urls != null ? (
+      {urls != null ? (
         urls.map((url) => (
           <div>
             <EuiAspectRatio width={16} height={9} className="gif-container">
-              {url.thumbnail ? (
+              {isVisible ? (
                 <>
-                  <EuiHideFor sizes={['xs', 's']}>
-                    <video
-                      className="markdown__gifs__gif"
-                      autoPlay
-                      loop
-                      muted
-                      disableRemotePlayback
-                    >
-                      <source src={url.thumbnail} type="video/mp4"></source>
-                    </video>
-                  </EuiHideFor>
-                  <EuiHideFor sizes={['m', 'l', 'xl']}>
-                    <img className="markdown__gifs__gif" src={url.gif}></img>
-                  </EuiHideFor>
+                  {url.thumbnail ? (
+                    <>
+                      <EuiHideFor sizes={['xs', 's']}>
+                        <video
+                          className="markdown__gifs__gif"
+                          autoPlay
+                          loop
+                          muted
+                          disableRemotePlayback
+                        >
+                          <source src={url.thumbnail} type="video/mp4"></source>
+                        </video>
+                      </EuiHideFor>
+                      <EuiHideFor sizes={['m', 'l', 'xl']}>
+                        <img
+                          className="markdown__gifs__gif"
+                          src={url.gif}
+                        ></img>
+                      </EuiHideFor>
+                    </>
+                  ) : (
+                    <img className="markdown__gifs__gif" src={url}></img>
+                  )}
                 </>
-              ) : (
-                <img className="markdown__gifs__gif" src={url}></img>
-              )}
+              ) : null}
             </EuiAspectRatio>
           </div>
         ))
