@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/agripparc-1.3.json",
+  "styling": "none",
+  "baseDir": "./src/components",
+  "typescript": true,
+  "importReact": false,
+  "stylingModule": false,
+  "postCommand": "sh ./scripts/agrippa.sh <component-name> <dirPath> <componentPath>"
+}
