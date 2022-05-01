@@ -13,12 +13,12 @@ import {
   EuiAvatar,
   EuiBreadcrumbs,
   EuiButtonIcon,
-  EuiMarkdownEditor,
   EuiMarkdownFormat,
 } from '@elastic/eui';
 import { parsingList, processingList, uiList } from '../../plugins';
 import { TwitchSidebar } from '../TwitchSidebar/TwitchSidebar';
 import { ConfirmationModal } from '../ConfirmationModal/ConfirmationModal';
+import { MarkdownEditor } from '../MarkdownEditor';
 
 /* Styles */
 import '../GuideDetailView/_guide-detail-view.scss';
@@ -220,7 +220,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
               >
                 {editing ? (
                   <>
-                    <EuiMarkdownEditor
+                    <MarkdownEditor
                       aria-label="Body markdown editor"
                       value={body}
                       onChange={(value) => updateSection('body', value)}

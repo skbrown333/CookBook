@@ -9,6 +9,7 @@ import React, {
 import { TagInput } from '../TagInput/TagInput';
 import { PostView } from './PostView/PostView';
 import { CharacterSelect } from '../CharacterSelect/CharacterSelect';
+import { MarkdownEditor } from '../MarkdownEditor';
 import {
   EuiModal,
   EuiModalHeader,
@@ -17,7 +18,6 @@ import {
   EuiModalHeaderTitle,
   EuiButton,
   EuiButtonEmpty,
-  EuiMarkdownEditor,
   EuiFieldText,
   EuiConfirmModal,
   EuiForm,
@@ -227,7 +227,7 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
             </EuiFormRow>
             <EuiFormRow fullWidth>
               <>
-                <EuiMarkdownEditor
+                <MarkdownEditor
                   aria-label="Body markdown editor"
                   value={body}
                   onChange={(value) => updateSection('body', value)}
