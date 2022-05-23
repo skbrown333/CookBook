@@ -175,5 +175,9 @@ export const canManage = (user, cookbook) =>
     user.super_admin);
 
 export const shallowCopy = (params) => {
-  return JSON.parse(JSON.stringify(params));
+  try {
+    return JSON.parse(JSON.stringify(params));
+  } catch (err) {
+    console.log(err);
+  }
 };

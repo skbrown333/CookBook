@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { EuiAspectRatio, EuiHideFor } from '@elastic/eui';
+import { ENV } from '../constants/constants';
+import axios from 'axios';
 
 // const GifPlugin = {
 //   name: "GifPlugin",
@@ -128,40 +130,111 @@ const GifMarkdownRenderer = ({ gif }) => {
 
     return isIntersecting;
   }
+  const [urls, setUrls] = useState<any>(null);
   const ref: any = useRef();
   const isVisible = useOnScreen(ref);
 
-  const gifs = gif.urls.map((url) => (
-    <div ref={ref}>
-      {isVisible ? (
-        <EuiAspectRatio width={16} height={9} className="gif-container">
-          {url.thumbnail ? (
-            <>
-              <EuiHideFor sizes={['xs', 's']}>
-                <video
-                  className="markdown__gifs__gif"
-                  autoPlay
-                  loop
-                  muted
-                  disableRemotePlayback
-                >
-                  <source src={url.thumbnail} type="video/mp4"></source>
-                </video>
-              </EuiHideFor>
-              <EuiHideFor sizes={['m', 'l', 'xl']}>
-                <img className="markdown__gifs__gif" src={url.gif}></img>
-              </EuiHideFor>
-            </>
-          ) : (
-            <img className="markdown__gifs__gif" src={url}></img>
-          )}
-        </EuiAspectRatio>
+  const gfyTransform = (url) => {
+    const urlObject = { thumbnail: url, giant: url, gif: url };
+    const [thumb, size, mobile, mp4, giant] = [
+      'thumbs.',
+      '-size_restricted.gif',
+      '-mobile.mp4',
+      '.mp4',
+      'giant.',
+    ];
+
+    if (url.includes(thumb)) {
+      urlObject.giant = url.replace(thumb, giant);
+    }
+
+    if (url.includes(size)) {
+      urlObject.thumbnail = urlObject.thumbnail.replace(size, mobile);
+      urlObject.giant = urlObject.giant.replace(size, mp4);
+    }
+
+    if (url.includes(mp4) && !url.includes(mobile)) {
+      urlObject.thumbnail = urlObject.thumbnail.replace(mp4, mobile);
+      urlObject.gif = urlObject.gif.replace(mp4, size);
+    } else if (url.includes(mobile)) {
+      urlObject.giant = urlObject.giant.replace(mobile, mp4);
+      urlObject.gif = urlObject.gif.replace(mobile, size);
+    }
+
+    if (url.includes(giant)) {
+      urlObject.thumbnail = url.replace(giant, thumb);
+      urlObject.gif = urlObject.gif.replace(giant, thumb);
+    }
+
+    return urlObject;
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      const newUrls: any = [];
+      for (let i = 0; i < gif.urls.length; i++) {
+        const url = gif.urls[i];
+        if (
+          url.gif &&
+          url.gif.includes('gfy') &&
+          !url.gif.includes('.mp4') &&
+          !url.gif.includes('.gif')
+        ) {
+          const res = await axios.post(`${ENV.base_url}/gfycat`, {
+            url: url.gif,
+          });
+
+          newUrls.push(gfyTransform(res.data));
+          continue;
+        }
+        newUrls.push(url);
+      }
+      setUrls([...newUrls]);
+    };
+    init();
+  }, []);
+
+  return (
+    <div className="markdown__gifs" ref={ref}>
+      {urls != null ? (
+        urls.map((url) => (
+          <div>
+            <EuiAspectRatio width={16} height={9} className="gif-container">
+              {isVisible ? (
+                <>
+                  {url.thumbnail ? (
+                    <>
+                      <EuiHideFor sizes={['xs', 's']}>
+                        <video
+                          className="markdown__gifs__gif"
+                          autoPlay
+                          loop
+                          muted
+                          disableRemotePlayback
+                        >
+                          <source src={url.thumbnail} type="video/mp4"></source>
+                        </video>
+                      </EuiHideFor>
+                      <EuiHideFor sizes={['m', 'l', 'xl']}>
+                        <img
+                          className="markdown__gifs__gif"
+                          src={url.gif}
+                        ></img>
+                      </EuiHideFor>
+                    </>
+                  ) : (
+                    <img className="markdown__gifs__gif" src={url}></img>
+                  )}
+                </>
+              ) : null}
+            </EuiAspectRatio>
+          </div>
+        ))
       ) : (
         <EuiAspectRatio width={16} height={9} />
       )}
     </div>
-  ));
-  return <div className="markdown__gifs">{gifs}</div>;
+  );
 };
 
 export const gifPlug = {

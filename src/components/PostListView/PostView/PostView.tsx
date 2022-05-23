@@ -8,13 +8,13 @@ import {
   EuiButtonIcon,
   EuiAvatar,
 } from '@elastic/eui';
-import { AiOutlineLike } from 'react-icons/ai';
+import { MdContentCopy } from 'react-icons/md';
 
 /* Styles */
 import './_post-view.scss';
 
 /* Constants */
-import { canManage, CHARACTERS } from '../../../constants/constants';
+import { canManage, CHARACTERS, DISCORD } from '../../../constants/constants';
 
 /* Plugins */
 import { parsingList, processingList } from '../../../plugins';
@@ -45,33 +45,31 @@ export const PostView: FunctionComponent<PostProps> = ({
         <div className="post__title">
           <EuiAvatar
             className="post__title__avatar"
-            name={title}
+            name={cre_account?.username}
             color={null}
-            iconType={
-              character
-                ? CHARACTERS[cookbook.game.name][character.name]
-                : CHARACTERS.melee.sandbag
-            }
-            iconSize="xl"
+            imageUrl={DISCORD.getAvatarUrl(
+              cre_account?.discord_id,
+              cre_account?.avatar,
+            )}
             size="l"
           ></EuiAvatar>
           <div className="post__title--text">
-            {title}
-            <div className="post__title--text author">
+            {cre_account?.username}
+            {/* <div className="post__title--text author">
               {cre_account &&
                 cookbook.show_authors &&
                 `@${cre_account.username}`}
-            </div>
+            </div> */}
           </div>
           <div className="post__controls">
             <div className="post__controls__like">
-              {likes != null && likes > 0 && (
+              {/* {likes != null && likes > 0 && (
                 <div className="count">{likes}</div>
-              )}
+              )} */}
               <EuiButtonIcon
                 aria-label="edit"
                 className="like"
-                iconType={() => <AiOutlineLike />}
+                iconType={() => <MdContentCopy />}
                 color="primary"
                 onClick={handleLike}
               />
@@ -107,7 +105,11 @@ export const PostView: FunctionComponent<PostProps> = ({
         </div>
         <div className="post__footer">
           {tags.map((tag, index) => (
-            <EuiBadge key={index} className="tag" color={tag.color || 'hollow'}>
+            <EuiBadge
+              key={index}
+              className="tag"
+              color={tag.color || '#3b3f4c'}
+            >
               #{tag.label}
             </EuiBadge>
           ))}

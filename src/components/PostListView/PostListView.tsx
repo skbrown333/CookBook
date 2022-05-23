@@ -25,6 +25,7 @@ import {
   EuiLoadingSpinner,
 } from '@elastic/eui';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
+import { MdContentCopy } from 'react-icons/md';
 
 /* Styles */
 import './_post-list-view.scss';
@@ -282,15 +283,14 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
             setShowDelete(true);
           }}
           handleLike={async () => {
-            if (!user) {
-              const { protocol, domain } = URL_UTILS;
-              window.location.href = `${protocol}://${domain}/login`;
-              return;
-            }
-            const newPosts = [...posts];
-            const newPost = await postService.like(post._id, user._id);
-            newPosts[index] = newPost;
-            setPosts([...newPosts]);
+            const url = `${URL_UTILS.protocol}://${
+              window.location.hostname
+            }/${encodeURI(cookbook.name)}/posts/${post._id}`;
+            navigator.clipboard.writeText(url).then(() => {
+              toast.successToast('Copied to clipboard!', undefined, () => (
+                <MdContentCopy />
+              ));
+            });
           }}
         />
       );

@@ -18,5 +18,5 @@ REACT_APP_API_URL = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
 ```
 
 ### `yarn` to install dependencies
+
 ### `yarn start` to start the application
-### `yarn sass` to watch sass changes
