@@ -37,7 +37,10 @@ export const TagInput: FunctionComponent<TagInputProps> = ({
   const [loading, setLoading] = useState(false);
   const { cookbook, user } = state;
   const toast = new ToastService();
-  const tagService = new TagService(cookbook._id);
+  const tagService = React.useMemo(
+    () => new TagService(cookbook._id),
+    [cookbook],
+  );
 
   useEffect(() => {
     handleUpdate(selected);

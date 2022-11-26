@@ -13,11 +13,22 @@
   flex: 1;
   background-color: #22242c;
 
+  .menu-icon {
+    @include respond-to(gt-sm) {
+      display: none;
+    }
+  }
   .search-controls {
     max-width: 900px !important;
   }
 
   @include respond-to(xs) {
+    .search-controls {
+      padding: 8px;
+    }
+  }
+
+  @include respond-to(sm) {
     .search-controls {
       padding: 8px;
     }

@@ -9,7 +9,7 @@
   width: 300px;
   min-width: 300px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: lighten($euiColorEmptyShade, 2%);
   user-select: none;
 
@@ -33,13 +33,22 @@
     }
   }
 
+  .sidebar-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 236px;
+  }
+
   &__content {
     display: flex;
     flex-direction: column;
     color: #a6a9ba;
 
     img {
-      width: 100%;
+      width: calc(100% - 8px);
+      margin: 4px;
+      border-radius: 4px;
     }
     overflow: auto;
 

@@ -8,6 +8,7 @@ import { HeaderSwitcher } from '../HeaderSwitcher/HeaderSwitcher';
 import { DISCORD, canManage } from '../../constants/constants';
 import { TreeNav } from '../TreeNav/TreeNav';
 import { GuideModal } from '../GuideModal/GuideModal';
+import { SidebarCookbooks } from '../SidebarCookbooks/SidebarCookbooks';
 
 interface SidebarProps {}
 
@@ -18,45 +19,47 @@ export const Sidebar: FunctionComponent<SidebarProps> = () => {
 
   return (
     <div className="sidebar">
-      <div className="sidebar__header">{cookbook && <HeaderSwitcher />}</div>
-      <div className="sidebar__content">
-        {cookbook.banner_url && <img src={cookbook.banner_url} />}
-        {canManage(user, cookbook) ? (
-          <EuiButton
-            iconType="plus"
-            color="ghost"
-            onClick={() => setShowModal(true)}
-            className="add-guide"
-          >
-            Add folder
-          </EuiButton>
-        ) : null}
-        <TreeNav />
-
-        <GuideModal
-          open={showModal}
-          onClose={() => setShowModal(false)}
-          title="Add Guide"
-        />
-      </div>
-      {cookbook && user && (
-        <div className="sidebar__footer">
-          <EuiAvatar
-            imageUrl={DISCORD.getAvatarUrl(user.discord_id, user.avatar)}
-            name={`${user.username}#${user.discriminator}`}
-            size="m"
-          />
-          <span className="username">{`${user.username}#${user.discriminator}`}</span>
-
+      <SidebarCookbooks />
+      <div className="sidebar-main">
+        <div className="sidebar__content">
+          {cookbook.banner_url && <img src={cookbook.banner_url} />}
           {canManage(user, cookbook) ? (
-            <span className="settings">
-              <Link to={`/${cookbook.name}/settings`}>
-                <EuiIcon type="gear" size="m" color="ghost" />
-              </Link>
-            </span>
+            <EuiButton
+              iconType="plus"
+              color="ghost"
+              onClick={() => setShowModal(true)}
+              className="add-guide"
+            >
+              Add folder
+            </EuiButton>
           ) : null}
+          <TreeNav />
+
+          <GuideModal
+            open={showModal}
+            onClose={() => setShowModal(false)}
+            title="Add Guide"
+          />
         </div>
-      )}
+        {cookbook && user && (
+          <div className="sidebar__footer">
+            <EuiAvatar
+              imageUrl={DISCORD.getAvatarUrl(user.discord_id, user.avatar)}
+              name={`${user.username}#${user.discriminator}`}
+              size="m"
+            />
+            <span className="username">{`${user.username}#${user.discriminator}`}</span>
+
+            {canManage(user, cookbook) ? (
+              <span className="settings">
+                <Link to={`/${cookbook.name}/settings`}>
+                  <EuiIcon type="gear" size="m" color="ghost" />
+                </Link>
+              </span>
+            ) : null}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

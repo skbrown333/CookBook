@@ -25,6 +25,7 @@ import { updateAddStatus, updateCookbook } from '../../store/actions';
 import './_home-page-view.scss';
 import CookbookService from '../../services/CookbookService/CookbookService';
 import { useSwipeable } from 'react-swipeable';
+import { EuiIcon } from '@elastic/eui';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -148,6 +149,13 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
             {...handlers}
           >
             <div className="home-view__header">
+              <EuiIcon
+                type={isOpen ? 'menuLeft' : 'menuRight'}
+                className="menu-icon"
+                onClick={() => setIsOpen(!isOpen)}
+                size="xl"
+                color="success"
+              />
               <SearchCreateBar
                 handleSearch={handleSearch}
                 handleFilterChange={handleFilterChange}

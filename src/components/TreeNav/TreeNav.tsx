@@ -7,11 +7,12 @@ import {
   EuiDroppable,
   EuiIcon,
 } from '@elastic/eui';
-import { updateCookbook, updateGuides } from '../../store/actions';
+import { updateGuides } from '../../store/actions';
 
 import './_tree-nav.scss';
 import CookbookService from '../../services/CookbookService/CookbookService';
 import { TreeNavCategory } from './TreeNavCategory';
+import { ToastService } from '../../services/ToastService';
 
 interface TreeNavProps {}
 
@@ -20,14 +21,19 @@ export const TreeNav: FunctionComponent<TreeNavProps> = () => {
   const history = useHistory();
   const { cookbook, user, guides } = state;
   const cookbookService = new CookbookService();
+  const toast = new ToastService();
 
   const onDragEnd = async ({ source, destination }: any) => {
     if (source && destination) {
       const items = euiDragDropReorder(guides, source.index, destination.index);
       dispatch(updateGuides([...items]));
-      await cookbookService.update(cookbook._id, user, {
-        guides: items.map((item) => item?._id),
-      });
+      try {
+        await cookbookService.update(cookbook._id, user, {
+          guides: items.map((item) => item?._id),
+        });
+      } catch (error: any) {
+        toast.errorToast(error.message);
+      }
     }
   };
 

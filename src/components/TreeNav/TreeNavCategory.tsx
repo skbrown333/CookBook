@@ -30,8 +30,14 @@ export const TreeNavCategory = ({ guide, index, open }) => {
   const [popover, setPopover] = useState<boolean>(false);
   const [collapsed, setCollapsed] = useState<boolean>(!open);
   const deleteGuide = useDeleteGuide();
-  const guideService = new GuideService(cookbook._id);
+  const [guideService, setGuideService] = React.useState(
+    new GuideService(cookbook._id),
+  );
   const isDragDisabled = !canManage(user, cookbook);
+
+  React.useEffect(() => {
+    setGuideService(new GuideService(cookbook._id));
+  }, [cookbook]);
 
   const menuItems = (index) => [
     <EuiContextMenuItem
@@ -132,6 +138,9 @@ export const TreeNavCategory = ({ guide, index, open }) => {
                 setCollapsed(!collapsed);
               }}
             >
+              {collapsed && (
+                <span className="section-count">{guide.sections.length}</span>
+              )}
               <span {...provided.dragHandleProps}>
                 <EuiIcon
                   type={!collapsed ? 'folderOpen' : 'folderClosed'}
@@ -204,7 +213,9 @@ export const TreeNavCategory = ({ guide, index, open }) => {
                                 <span {...provided.dragHandleProps}>
                                   <EuiIcon type="document" className="icon" />
                                 </span>
-                                <span className="title">{section.title}</span>
+                                <span className="title">
+                                  {section.title.replace(/\s+/g, '-')}
+                                </span>
                               </div>
                             );
                           }}

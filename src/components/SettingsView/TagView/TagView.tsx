@@ -41,7 +41,10 @@ export const TagView: FunctionComponent<TagViewProps> = () => {
   const [searchText, setSearchText] = useState('');
   const [state, dispatch] = useContext(Context);
   const { user, cookbook } = state;
-  const tagService = new TagService(cookbook._id);
+  const tagService = React.useMemo(
+    () => new TagService(cookbook._id),
+    [cookbook],
+  );
   const toast = new ToastService();
 
   useEffect(() => {

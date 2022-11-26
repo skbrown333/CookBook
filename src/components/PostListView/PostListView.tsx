@@ -79,12 +79,15 @@ export const PostListView: FunctionComponent<ListViewProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const [page, setPage] = useState(1);
-  const postService = new PostService(cookbook._id);
+  const postService = React.useMemo(
+    () => new PostService(cookbook._id),
+    [cookbook],
+  );
 
   useEffect(() => {
     setHasNextPage(true);
     setPosts([]);
-  }, [filters, searchText]);
+  }, [filters, searchText, cookbook]);
 
   useEffect(() => {
     if (!hasNextPage) return;

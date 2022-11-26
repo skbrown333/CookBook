@@ -54,7 +54,10 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<any>([]);
   const [searchText, setSearchText] = useState('');
-  const tagService = new TagService(cookbook._id);
+  const tagService = React.useMemo(
+    () => new TagService(cookbook._id),
+    [cookbook],
+  );
   const toast = new ToastService();
 
   useEffect(() => {

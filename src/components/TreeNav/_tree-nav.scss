@@ -31,6 +31,7 @@
 
     .item {
       cursor: pointer;
+      position: relative;
 
       &.inner:hover {
         color: white;
@@ -54,6 +55,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: inline;
+        text-transform: lowercase;
       }
 
       &.inner {
@@ -77,6 +79,22 @@
   .droppable {
     background-color: transparent !important;
   }
+}
+
+.section-count {
+  font-size: 8px;
+  background: #a7a9bb;
+  border-radius: 50%;
+  padding: 2px;
+  width: 10px;
+  height: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: -8px;
+  color: #191a1f;
+  font-weight: 500;
 }
 
 .add-section {
