@@ -6,7 +6,7 @@ import { Context } from '../../store/Store';
 import { MELEE } from '../../constants/MeleeIcons';
 import { Link } from 'react-router-dom';
 import CookbookService from '../../services/CookbookService/CookbookService';
-import { canManage } from '../../constants/constants';
+import { canManage, CHARACTERS } from '../../constants/constants';
 import { ToastService } from '../../services/ToastService';
 import { updateCookbook, updateGuides } from '../../store/actions';
 import GuideService from '../../services/GuideService/GuideService';
@@ -35,7 +35,7 @@ const CookbookItem = ({ cookbook }: { cookbook: Cookbook }) => {
   return (
     <Link to={`/${cookbook.name}`} onClick={handleOnClick}>
       <img
-        src={MELEE[cookbook.name] || MELEE.fox}
+        src={CHARACTERS[game.name][cookbook.character.name] || MELEE.sandbag}
         alt={cookbook.name}
         className="cookbook"
         style={
