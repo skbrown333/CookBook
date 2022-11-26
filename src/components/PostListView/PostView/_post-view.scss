@@ -31,10 +31,6 @@
 
   &__content {
     flex-grow: 1;
-
-    @include respond-to(gt-xs) {
-      background-color: #3b3f4c;
-    }
   }
 
   &__controls {

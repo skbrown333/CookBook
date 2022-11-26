@@ -61,7 +61,7 @@
     padding-bottom: 0;
     overflow: auto;
     overflow-x: hidden;
-    background-color: #22242c;
+    background-color: lighten($euiColorEmptyShade, 2%);
 
     @include twitter-holder;
 
@@ -216,6 +216,7 @@
           margin-top: 10px;
           position: relative;
           overflow: hidden;
+          width: 100%;
 
           // flicker
           &::after {

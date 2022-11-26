@@ -10,7 +10,7 @@
   min-width: 364px;
   display: flex;
   flex-direction: row;
-  background-color: lighten($euiColorEmptyShade, 2%);
+  background-color: lighten($euiColorEmptyShade, 1%);
   user-select: none;
 
   @include respond-to(gt-sm) {

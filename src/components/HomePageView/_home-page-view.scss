@@ -19,7 +19,7 @@
     }
   }
   .search-controls {
-    max-width: 900px !important;
+    max-width: 770px !important;
   }
 
   @include respond-to(xs) {
@@ -54,7 +54,7 @@
     width: 100%;
     min-width: 100%;
     z-index: 2;
-    background-color: #22242c;
+    background-color: lighten($euiColorEmptyShade, 2%);
     transition: margin 200ms;
 
     &__header {
