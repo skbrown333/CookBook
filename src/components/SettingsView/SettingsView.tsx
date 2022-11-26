@@ -77,7 +77,7 @@ export const SettingsView: FunctionComponent<SettingsViewProps> = () => {
       {cookbook && (
         <div
           className="settings-view"
-          style={{ marginLeft: isOpen ? 300 : 0 }}
+          style={{ marginLeft: isOpen ? 364 : 0 }}
           {...handlers}
         >
           <div className="settings-view__nav">

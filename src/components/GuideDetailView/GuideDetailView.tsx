@@ -122,7 +122,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       <div
         id="guide-detail"
         className="guide-detail"
-        style={{ marginLeft: isOpen ? 300 : 0 }}
+        style={{ marginLeft: isOpen ? 364 : 0 }}
         {...handlers}
       >
         {guide && (
@@ -148,6 +148,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
                       },
                       {
                         text: findSection(guide.sections)?.title,
+                        truncate: true,
                       },
                     ]}
                     truncate={true}
