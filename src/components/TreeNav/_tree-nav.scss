@@ -56,6 +56,18 @@
         text-overflow: ellipsis;
         display: inline;
         text-transform: lowercase;
+        color: #b9bbcf;
+      }
+
+      .guide-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline;
+        text-transform: uppercase;
+        color: #b9bbcf;
+        font-size: 12px;
+        font-weight: bold;
       }
 
       &.inner {
@@ -83,16 +95,16 @@
 
 .section-count {
   font-size: 8px;
-  background: #a7a9bb;
+  background: #b9bbcf;
   border-radius: 50%;
   padding: 2px;
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: -8px;
+  left: -11px;
   color: #191a1f;
   font-weight: 500;
 }
@@ -100,6 +112,6 @@
 .add-section {
   margin-left: auto;
   .euiButtonIcon--primary {
-    color: #a6a9ba;
+    color: #b9bbcf;
   }
 }

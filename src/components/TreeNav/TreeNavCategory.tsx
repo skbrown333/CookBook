@@ -147,7 +147,7 @@ export const TreeNavCategory = ({ guide, index, open }) => {
                   className="icon"
                 />
               </span>
-              <span className="title">{guide.title}</span>
+              <span className="guide-title">{guide.title}</span>
               {canManage(user, cookbook) ? (
                 <EuiPopover
                   id={`popover-${index}`}
