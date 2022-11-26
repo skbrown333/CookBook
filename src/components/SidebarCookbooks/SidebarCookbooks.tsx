@@ -40,7 +40,7 @@ const CookbookItem = ({ cookbook }: { cookbook: Cookbook }) => {
         className="cookbook"
         style={
           currentCookbook?.name === cookbook.name
-            ? { filter: 'grayscale(0%)' }
+            ? { filter: 'grayscale(0%)', opacity: 1 }
             : {}
         }
       />
