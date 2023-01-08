@@ -9,10 +9,18 @@
   z-index: 2;
   transition: margin 200ms;
   background-color: $euiColorEmptyShade;
+  max-height: 100%;
+  overflow-y: scroll;
 
   @include respond-to(gt-xs) {
     justify-content: center;
     flex-direction: row;
+  }
+
+  .menu-icon {
+    @include respond-to(gt-sm) {
+      display: none;
+    }
   }
 
   &__content {
@@ -22,7 +30,7 @@
     justify-content: center;
     margin-top: 12px;
 
-    @include respond-to(gt-xs) {
+    @include respond-to(gt-sm) {
       margin-top: 64px;
     }
 

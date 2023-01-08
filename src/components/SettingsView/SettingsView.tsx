@@ -24,7 +24,7 @@ import { updateCookbook } from '../../store/actions';
 
 /* Styles */
 import './_settings-view.scss';
-import { EuiPanel } from '@elastic/eui';
+import { EuiIcon, EuiPanel } from '@elastic/eui';
 
 const GENERAL_INDEX = 0;
 const ACCESS_INDEX = 1;
@@ -77,10 +77,17 @@ export const SettingsView: FunctionComponent<SettingsViewProps> = () => {
       {cookbook && (
         <div
           className="settings-view"
-          style={{ marginLeft: isOpen ? 664 : 0 }}
+          style={{ marginLeft: isOpen ? 332 : 0 }}
           {...handlers}
         >
           <div className="settings-view__nav">
+            <EuiIcon
+              type={isOpen ? 'menuLeft' : 'menuRight'}
+              className="menu-icon"
+              onClick={() => setIsOpen(!isOpen)}
+              size="xl"
+              color="success"
+            />
             <SettingsNav handleNavigate={handleNavigate} />
           </div>
           <div className="settings-view__content">

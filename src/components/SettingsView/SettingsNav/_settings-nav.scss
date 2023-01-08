@@ -1,10 +1,16 @@
+@import '../../../styles/responsive';
+
 .settings-nav {
   flex: 1;
-  margin-top: 64px;
+  margin-top: 24px;
   display: flex;
   flex-direction: column;
   margin-right: 64px;
   margin-left: 12px;
+
+  @include respond-to(gt-sm) {
+    margin-top: 64px;
+  }
 
   &__header {
     font-size: 24px;
