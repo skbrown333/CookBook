@@ -6,8 +6,8 @@
   position: fixed;
   height: 100vh;
   max-height: 100vh;
-  width: 364px;
-  min-width: 364px;
+  width: 332px;
+  min-width: 332px;
   display: flex;
   flex-direction: row;
   background-color: lighten($euiColorEmptyShade, 1%);
@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-width: 300px;
+    min-width: 268px;
   }
 
   &__content {

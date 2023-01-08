@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 
 /* Component */
-import { EuiAvatar, EuiButton, EuiHorizontalRule } from '@elastic/eui';
+import { EuiAvatar, EuiButton, EuiHorizontalRule, EuiIcon } from '@elastic/eui';
 import {
   RiTwitterLine,
   RiPatreonLine,
@@ -24,12 +24,20 @@ import { DISCORD } from '../../constants/constants';
 
 /* Styles */
 import './_about-view.scss';
+import { useSwipeable } from 'react-swipeable';
 
 export interface AboutViewProps {}
 
 export const AboutView: FunctionComponent<AboutViewProps> = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const userService = new UserService();
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setIsOpen(false),
+    onSwipedRight: () => setIsOpen(true),
+    delta: 1,
+  });
 
   useEffect(() => {
     async function init() {
@@ -127,12 +135,21 @@ export const AboutView: FunctionComponent<AboutViewProps> = () => {
   };
 
   return (
-    <div id="about-view">
+    <div id="about-view" style={{ marginLeft: isOpen ? 332 : 0 }} {...handlers}>
       <div className="about-view">
         <div className="about-view__header"></div>
         <div className="about-view__content">
           <div className="about-view__bio">
-            <h1>Cookbook.gg</h1>
+            <h1>
+              <EuiIcon
+                type={isOpen ? 'menuLeft' : 'menuRight'}
+                className="menu-icon"
+                onClick={() => setIsOpen(!isOpen)}
+                size="xl"
+                color="success"
+              />
+              Cookbook.gg
+            </h1>
             <EuiHorizontalRule />
             <div>
               Cookbook.gg is trying to consolidate character specific content

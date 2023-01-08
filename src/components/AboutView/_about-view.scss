@@ -5,11 +5,26 @@
   display: flex;
   justify-content: center;
   flex: 1;
+  min-width: 100vw;
   background-color: $euiColorEmptyShade;
   padding: 24px;
   color: lighten($euiColorEmptyShade, 60%);
   font-weight: 600;
   font-size: 16px;
+  overflow-y: scroll;
+  z-index: 2;
+  transition: margin 200ms;
+
+  @include respond-to(gt-xs) {
+    min-width: unset;
+  }
+
+  .menu-icon {
+    margin-right: 8px;
+    @include respond-to(gt-sm) {
+      display: none;
+    }
+  }
 
   h1 {
     font-size: 32px;

@@ -13,6 +13,7 @@ import {
   EuiAvatar,
   EuiBreadcrumbs,
   EuiButtonIcon,
+  EuiIcon,
   EuiMarkdownEditor,
   EuiMarkdownFormat,
 } from '@elastic/eui';
@@ -122,13 +123,20 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
       <div
         id="guide-detail"
         className="guide-detail"
-        style={{ marginLeft: isOpen ? 364 : 0 }}
+        style={{ marginLeft: isOpen ? 332 : 0 }}
         {...handlers}
       >
         {guide && (
           <>
             {
               <div className="guide-detail__header">
+                <EuiIcon
+                  type={isOpen ? 'menuLeft' : 'menuRight'}
+                  className="menu-icon"
+                  onClick={() => setIsOpen(!isOpen)}
+                  size="xl"
+                  color="success"
+                />
                 <div className="title">
                   <EuiAvatar
                     size="xl"

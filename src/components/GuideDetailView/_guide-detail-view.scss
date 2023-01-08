@@ -29,6 +29,13 @@
     align-items: center;
     justify-content: space-between;
     background-color: lighten($euiColorEmptyShade, 2%);
+    padding: 8px;
+
+    .menu-icon {
+      @include respond-to(gt-sm) {
+        display: none;
+      }
+    }
 
     .title {
       display: flex;
