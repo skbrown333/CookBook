@@ -83,9 +83,11 @@ export const SidebarCookbooks: React.FC = () => {
 
   return (
     <div className="cookbooks">
-      <div className="logo">
-        <img src={logo} alt="" className="logo" />
-      </div>
+      <Link to="/about">
+        <div className="logo">
+          <img src={logo} alt="" className="logo" />
+        </div>
+      </Link>
       <EuiSpacer className="spacer" size="xs" />
       {cookbooks.map((cb, i) => (
         <CookbookItem key={i} cookbook={cb} />
