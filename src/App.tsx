@@ -11,6 +11,7 @@ import {
   Redirect,
   useParams,
 } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 /* Components */
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
@@ -24,7 +25,7 @@ import { EuiLoadingSpinner, EuiGlobalToastList } from '@elastic/eui';
 import { ToastService } from './services/ToastService';
 
 /* Constants */
-import { DISCORD, ENV } from './constants/constants';
+import { DISCORD, ENV, GA_ID } from './constants/constants';
 
 /* Store */
 import { Firebase, FirebaseContext } from './firebase';
@@ -68,6 +69,7 @@ export const App: FunctionComponent = () => {
 
   useEffect(() => {
     async function init() {
+      ReactGA.initialize(GA_ID);
       await fetchGamesAndCookbooks();
       await fetchSignedInUser();
       setLoading(false);

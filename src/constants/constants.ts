@@ -181,3 +181,5 @@ export const shallowCopy = (params) => {
     console.log(err);
   }
 };
+
+export const GA_ID: string = process.env.REACT_APP_GOOGLE_ANALYTICS_ID ?? '';
