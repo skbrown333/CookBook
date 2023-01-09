@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import ReactGA from 'react-ga';
 
 /* Component */
 import { EuiAvatar, EuiButton, EuiHorizontalRule, EuiIcon } from '@elastic/eui';
@@ -41,6 +42,7 @@ export const AboutView: FunctionComponent<AboutViewProps> = () => {
 
   useEffect(() => {
     async function init() {
+      ReactGA.pageview(window.location.pathname + window.location.search);
       setUsers(await userService.get({ super_admin: true }));
     }
     init();

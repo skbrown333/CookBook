@@ -6,6 +6,7 @@ import React, {
   useContext,
 } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 /* Components */
 import { useSwipeable } from 'react-swipeable';
@@ -82,6 +83,7 @@ export const GuideDetailView: FunctionComponent<GuideDetailViewProps> =
 
     useEffect(() => {
       const init = async () => {
+        ReactGA.pageview(window.location.pathname + window.location.search);
         getGuide();
       };
       init();

@@ -5,6 +5,7 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
+import ReactGA from 'react-ga';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 /* Components */
@@ -95,6 +96,8 @@ export const HomePageView: FunctionComponent<HomePageViewProps> = ({
 
   useEffect(() => {
     async function init() {
+      ReactGA.pageview(window.location.pathname + window.location.search);
+
       try {
         const cookbooks = await cookbookService.get({
           game: game._id,
