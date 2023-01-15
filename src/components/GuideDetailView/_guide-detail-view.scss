@@ -207,93 +207,14 @@
           }
         }
 
-        $screen-background: #22242c;
-
-        @keyframes flicker {
-          $steps: 20;
-          @for $i from 0 through $steps {
-            #{percentage($i*(1/$steps))} {
-              opacity: random();
-            }
-          }
-        }
+        $screen-background: #272932;
         .gif-container {
-          background: $screen-background;
+          background-color: $screen-background;
           border-radius: 8px;
           margin-top: 10px;
           position: relative;
           overflow: hidden;
           width: 100%;
-
-          // flicker
-          &::after {
-            content: ' ';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: transparentize($screen-background, 0.9);
-            opacity: 0;
-            z-index: 2;
-            pointer-events: none;
-          }
-          // scanlines
-          &::before {
-            content: ' ';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(
-                transparentize($screen-background, 1) 50%,
-                transparentize(darken($screen-background, 10), 0.75) 50%
-              ),
-              linear-gradient(
-                90deg,
-                transparentize(#ff0000, 0.94),
-                transparentize(#00ff00, 0.98),
-                transparentize(#0000ff, 0.94)
-              );
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-          }
-        }
-        .gif-container::after {
-          animation: flicker 0.15s infinite;
-        }
-
-        @keyframes overlay-anim {
-          0% {
-            visibility: hidden;
-          }
-          20% {
-            visibility: hidden;
-          }
-          21% {
-            visibility: visible;
-          }
-          100% {
-            visibility: hidden;
-          }
-        }
-        .overlay {
-          color: #00ff00;
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          font-size: 60px;
-          //text-shadow:2px 2px black,-2px -2px black, -2px 2px black, 2px -2px black;
-          visibility: hidden;
-          pointer-events: none;
-        }
-        .gif-container .overlay {
-          animation: overlay-anim 5s linear;
-          animation-fill-mode: forwards;
         }
       }
     }
