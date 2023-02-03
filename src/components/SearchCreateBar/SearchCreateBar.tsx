@@ -95,7 +95,7 @@ export const SearchCreateBar: FunctionComponent<SearchCreateBarProp> = ({
       }
     }
     init();
-  }, []);
+  }, [cookbook]);
 
   const handleSearchFilter = (event) => {
     const value = event.target.value.toUpperCase();
