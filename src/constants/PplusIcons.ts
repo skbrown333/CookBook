@@ -1,6 +1,5 @@
 import bowser from '../images/pm/bowser.png';
 import donkey_kong from '../images/pm/donkeykong.png';
-import dr_mario from '../images/pm/drmario.png';
 import falco from '../images/pm/falco.png';
 import falcon from '../images/pm/falcon.png';
 import fox from '../images/pm/fox.png';
@@ -16,13 +15,11 @@ import marth from '../images/pm/marth.png';
 import mew_two from '../images/pm/mewtwo.png';
 import ness from '../images/pm/ness.png';
 import peach from '../images/pm/peach.png';
-import pichu from '../images/pm/pichu.png';
 import pikachu from '../images/pm/pikachu.png';
 import roy from '../images/pm/roy.png';
 import samus from '../images/pm/samus.png';
 import sheik from '../images/pm/sheik.png';
 import yoshi from '../images/pm/yoshi.png';
-import young_link from '../images/pm/younglink.png';
 import zelda from '../images/pm/zelda.png';
 import charizard from '../images/pm/charizard.png';
 import diddy_kong from '../images/pm/diddykong.png';
@@ -66,7 +63,6 @@ export const PPLUS = {
   zero_suit,
   bowser,
   donkey_kong,
-  dr_mario,
   falco,
   falcon,
   fox,
@@ -82,13 +78,11 @@ export const PPLUS = {
   mew_two,
   ness,
   peach,
-  pichu,
   pikachu,
   roy,
   samus,
   sheik,
   yoshi,
-  young_link,
   zelda,
   wireframe,
   sandbag,
