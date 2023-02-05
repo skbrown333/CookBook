@@ -4,7 +4,7 @@ import falco from '../images/pm/falco.png';
 import falcon from '../images/pm/falcon.png';
 import fox from '../images/pm/fox.png';
 import game_and_watch from '../images/pm/game&watch.png';
-import ganon from '../images/pm/ganondorf.png';
+import ganon from '../images/pm/ganon.png';
 import ice_climbers from '../images/pm/iceclimbers.png';
 import jiggly_puff from '../images/pm/jigglypuff.png';
 import kirby from '../images/pm/kirby.png';
